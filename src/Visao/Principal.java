@@ -22,10 +22,13 @@ public class Principal extends javax.swing.JFrame {
      * Creates new form Principal
      */
     public Principal() {
-        initComponents();
-        jDialog1.setVisible(true);
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension scrnsize = toolkit.getScreenSize();
+        System.out.println(scrnsize);
+        initComponents();
+        jDialog1.setVisible(true);      
+        
+        this.setSize(scrnsize);
     }
 
     /**
@@ -84,6 +87,8 @@ public class Principal extends javax.swing.JFrame {
         jDialog1.getContentPane().add(jPasswordFieldSenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(74, 75, 146, -1));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jDesktopPane1.setBackground(new java.awt.Color(82, 144, 180));
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
