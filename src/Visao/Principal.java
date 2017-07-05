@@ -8,7 +8,8 @@ package Visao;
 import Connection.ConnectionFactory;
 import Controle.VariaveisDeControle;
 import DAO.CodigoDAO;
-import java.sql.Connection;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 
 /**
@@ -23,6 +24,8 @@ public class Principal extends javax.swing.JFrame {
     public Principal() {
         initComponents();
         jDialog1.setVisible(true);
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Dimension scrnsize = toolkit.getScreenSize();
     }
 
     /**
@@ -60,12 +63,16 @@ public class Principal extends javax.swing.JFrame {
         jMenu4 = new javax.swing.JMenu();
         jMenuItem12 = new javax.swing.JMenuItem();
 
-        jDialog1.setMinimumSize(new java.awt.Dimension(400, 233));
+        jDialog1.setMinimumSize(new java.awt.Dimension(256, 183));
         jDialog1.setModal(true);
+        jDialog1.getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Usuário:");
+        jDialog1.getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 40, -1, -1));
 
         jLabel2.setText("Senha:");
+        jDialog1.getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 78, -1, -1));
+        jDialog1.getContentPane().add(jTextFieldUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(74, 37, 146, -1));
 
         jButton2.setText("Logar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -73,43 +80,8 @@ public class Principal extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
-        jDialog1.getContentPane().setLayout(jDialog1Layout);
-        jDialog1Layout.setHorizontalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jDialog1Layout.createSequentialGroup()
-                .addGap(49, 49, 49)
-                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jDialog1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextFieldUser, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jDialog1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPasswordFieldSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(74, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialog1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
-                .addGap(121, 121, 121))
-        );
-        jDialog1Layout.setVerticalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jDialog1Layout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextFieldUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jPasswordFieldSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
-                .addComponent(jButton2)
-                .addContainerGap(27, Short.MAX_VALUE))
-        );
+        jDialog1.getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 110, -1, -1));
+        jDialog1.getContentPane().add(jPasswordFieldSenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(74, 75, 146, -1));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -257,15 +229,15 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-    InternalFrameVendas ifr = new InternalFrameVendas();
-    jDesktopPane1.add(ifr);
-    ifr.setVisible(true);// TODO add your handling code here:
+        InternalFrameVendas ifr = new InternalFrameVendas();
+        jDesktopPane1.add(ifr);
+        ifr.setVisible(true);// TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        VariaveisDeControle.user = jTextFieldUser.getText();
+        VariaveisDeControle.user = jTextFieldUser.getText().toUpperCase();
         VariaveisDeControle.senha = jPasswordFieldSenha.getText();
-         VariaveisDeControle.CON = new ConnectionFactory().getConnection();// TODO add your handling code here:
+        VariaveisDeControle.CON = new ConnectionFactory().getConnection();// TODO add your handling code here:
         jDialog1.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -296,51 +268,51 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem9ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-InternalFrameAnaliseVendaPendentes ifr = new InternalFrameAnaliseVendaPendentes(); 
-jDesktopPane1.add(ifr);
-    ifr.setVisible(true);// TODO add your handling code here:
+        InternalFrameAnaliseVendaPendentes ifr = new InternalFrameAnaliseVendaPendentes();
+        jDesktopPane1.add(ifr);
+        ifr.setVisible(true);// TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
-InternalEnviosManuais ifr = new InternalEnviosManuais();
-jDesktopPane1.add(ifr);
-    ifr.setVisible(true);// TODO add your handling code here:
+        InternalEnviosManuais ifr = new InternalEnviosManuais();
+        jDesktopPane1.add(ifr);
+        ifr.setVisible(true);// TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-InternalCadastroVendaOutrosMeios ifr = new InternalCadastroVendaOutrosMeios();
-jDesktopPane1.add(ifr);
-    ifr.setVisible(true);// TODO add your handling code here:
+        InternalCadastroVendaOutrosMeios ifr = new InternalCadastroVendaOutrosMeios();
+        jDesktopPane1.add(ifr);
+        ifr.setVisible(true);// TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-InternalEnviosManuais ifr = new InternalEnviosManuais();
-jDesktopPane1.add(ifr);
-    ifr.setVisible(true);// TODO add your handling code here:
+        InternalEnviosManuais ifr = new InternalEnviosManuais();
+        jDesktopPane1.add(ifr);
+        ifr.setVisible(true);// TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-InternalModificarCodigoVenda ifr = new InternalModificarCodigoVenda();
-jDesktopPane1.add(ifr);
-    ifr.setVisible(true);// TODO add your handling code here:
+        InternalModificarCodigoVenda ifr = new InternalModificarCodigoVenda();
+        jDesktopPane1.add(ifr);
+        ifr.setVisible(true);// TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
-InternalFrameCodigos ifr = new InternalFrameCodigos();
-jDesktopPane1.add(ifr);
-    ifr.setVisible(true);// TODO add your handling code here:
+        InternalFrameCodigos ifr = new InternalFrameCodigos();
+        jDesktopPane1.add(ifr);
+        ifr.setVisible(true);// TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
-InternalCadastrarCliente ifr = new InternalCadastrarCliente();
-jDesktopPane1.add(ifr);
-    ifr.setVisible(true);// TODO add your handling code here:
+        InternalCadastrarCliente ifr = new InternalCadastrarCliente();
+        jDesktopPane1.add(ifr);
+        ifr.setVisible(true);// TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
-InternalCadastrarJSon ifr = new InternalCadastrarJSon(); 
-jDesktopPane1.add(ifr);
-    ifr.setVisible(true);// TODO add your handling code here:
+        InternalCadastrarJSon ifr = new InternalCadastrarJSon();
+        jDesktopPane1.add(ifr);
+        ifr.setVisible(true);// TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem12ActionPerformed
 
     /**
@@ -354,20 +326,16 @@ jDesktopPane1.add(ifr);
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        
         //</editor-fold>
 
         /* Create and display the form */
