@@ -60,7 +60,7 @@ public class VendaDAO {
         }
     }
 
-    public void insertVenda(ArrayList<Vendas> set) throws ParseException {
+    public void insertVenda(ArrayList<Vendas> set) {
         ProdutosDAO prodDAO = new ProdutosDAO();
 
         for (Vendas v : set) {

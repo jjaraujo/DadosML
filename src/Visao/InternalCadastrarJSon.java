@@ -15,15 +15,13 @@ import javax.swing.JOptionPane;
  *
  * @author Joao
  */
-public class InternalCadastroJSon extends javax.swing.JInternalFrame {
-
-    private String tipoObjetoDeCadastro;
+public class InternalCadastrarJSon extends javax.swing.JInternalFrame {
 
     /**
-     * Creates new form CadastroJSon
+     * Creates new form InternalCadastrarJSon
      */
-    public InternalCadastroJSon() {
-                initComponents();
+    public InternalCadastrarJSon() {
+        initComponents();
     }
 
     /**
@@ -35,20 +33,20 @@ public class InternalCadastroJSon extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton2 = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
         jTextAreaJson = new javax.swing.JTextArea();
-
-        jButton2.setText("Cadastrar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+        jButton1 = new javax.swing.JButton();
 
         jTextAreaJson.setColumns(20);
         jTextAreaJson.setRows(5);
-        jScrollPane2.setViewportView(jTextAreaJson);
+        jScrollPane1.setViewportView(jTextAreaJson);
+
+        jButton1.setText("Cadastrar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -56,27 +54,33 @@ public class InternalCadastroJSon extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2)
+                .addComponent(jScrollPane1)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(159, 159, 159)
-                .addComponent(jButton2)
+                .addComponent(jButton1)
                 .addContainerGap(154, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-                .addComponent(jButton2)
-                .addGap(31, 31, 31))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String tipoObjetoDeCadastro = "";
+        if (jTextAreaJson.getText().contains("anuncio")) {
+            tipoObjetoDeCadastro = "vendas";
+        } else {
+            tipoObjetoDeCadastro = "cliente";
+        }
         LeituraJson json = new LeituraJson();
         if (tipoObjetoDeCadastro.equals("cliente")) {
             ClienteDAO clienteDAO = new ClienteDAO();
@@ -85,13 +89,13 @@ public class InternalCadastroJSon extends javax.swing.JInternalFrame {
             VendaDAO vendaDAO = new VendaDAO();
             vendaDAO.insertVenda(json.lerJsonVendas("[" + jTextAreaJson.getText() + "]"));
         }
-        jTextAreaJson.setText("");
-    }//GEN-LAST:event_jButton2ActionPerformed
+        jTextAreaJson.setText("");        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton2;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextAreaJson;
     // End of variables declaration//GEN-END:variables
 }
