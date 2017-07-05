@@ -117,6 +117,9 @@
       <SubComponents>
         <Component class="javax.swing.JRadioButton" name="jRadioButton14">
           <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroupDiaDesbloqueio"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Hoje"/>
           </Properties>
           <Events>
@@ -125,6 +128,9 @@
         </Component>
         <Component class="javax.swing.JRadioButton" name="jRadioButton15">
           <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroupDiaDesbloqueio"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Outro dia"/>
           </Properties>
           <Events>
@@ -182,6 +188,9 @@
         </Container>
         <Component class="javax.swing.JRadioButton" name="jRadioButton16">
           <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroupLocalDesbloquei"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Por liga&#xe7;&#xe3;o"/>
           </Properties>
           <Events>
@@ -190,6 +199,9 @@
         </Component>
         <Component class="javax.swing.JRadioButton" name="jRadioButton17">
           <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroupLocalDesbloquei"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Pelo MyKaspersky"/>
           </Properties>
           <Events>
@@ -210,6 +222,9 @@
         </Component>
         <Component class="javax.swing.JRadioButton" name="jRadioButton18">
           <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroupLocalDesbloquei"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Pelo Chat"/>
           </Properties>
           <Events>

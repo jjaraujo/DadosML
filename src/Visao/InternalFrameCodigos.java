@@ -106,6 +106,7 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
         jDialogsetDesbloqueio.setMinimumSize(new java.awt.Dimension(700, 500));
         jDialogsetDesbloqueio.setModal(true);
 
+        buttonGroupDiaDesbloqueio.add(jRadioButton14);
         jRadioButton14.setText("Hoje");
         jRadioButton14.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -113,6 +114,7 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
             }
         });
 
+        buttonGroupDiaDesbloqueio.add(jRadioButton15);
         jRadioButton15.setText("Outro dia");
         jRadioButton15.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -146,6 +148,7 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
         jTextArea1.setRows(5);
         jScrollPane5.setViewportView(jTextArea1);
 
+        buttonGroupLocalDesbloquei.add(jRadioButton16);
         jRadioButton16.setText("Por ligação");
         jRadioButton16.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -153,6 +156,7 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
             }
         });
 
+        buttonGroupLocalDesbloquei.add(jRadioButton17);
         jRadioButton17.setText("Pelo MyKaspersky");
         jRadioButton17.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -164,6 +168,7 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
 
         jLabel17.setText("Resolvido:");
 
+        buttonGroupLocalDesbloquei.add(jRadioButton18);
         jRadioButton18.setText("Pelo Chat");
         jRadioButton18.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -618,7 +623,6 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
         try {
             new DesbloqueioDAO().setDesbloqueio(des);
             JOptionPane.showMessageDialog(null, "Dados salvos com sucesso!");
-            idCodigo = 0;
             jDialogsetDesbloqueio.dispose();
         } catch (SQLException ex) {
             Logger.getLogger(TelaCodigos.class.getName()).log(Level.SEVERE, null, ex);

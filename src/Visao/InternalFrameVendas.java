@@ -58,6 +58,7 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroupPesquisarVendaPor = new javax.swing.ButtonGroup();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableVendas = new javax.swing.JTable();
         jPanel8 = new javax.swing.JPanel();
@@ -111,6 +112,7 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
 
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Pesquisar por:"));
 
+        buttonGroupPesquisarVendaPor.add(jRadioButton3);
         jRadioButton3.setText("Numero da Compra");
         jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -118,6 +120,7 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
             }
         });
 
+        buttonGroupPesquisarVendaPor.add(jRadioButton2);
         jRadioButton2.setText("Email");
         jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -125,6 +128,7 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
             }
         });
 
+        buttonGroupPesquisarVendaPor.add(jRadioButton1);
         jRadioButton1.setText("Nome");
         jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -132,6 +136,7 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
             }
         });
 
+        buttonGroupPesquisarVendaPor.add(jRadioButton4);
         jRadioButton4.setText("Apelido");
         jRadioButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -237,6 +242,7 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroupPesquisarVendaPor;
     private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JRadioButton jRadioButton1;

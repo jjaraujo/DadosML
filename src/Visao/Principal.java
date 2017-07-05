@@ -16,6 +16,7 @@ import Entidades.Vendas;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.ArrayList;
+import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -62,17 +63,17 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem14 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem13 = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenu8 = new javax.swing.JMenu();
         jMenuItem10 = new javax.swing.JMenuItem();
         jMenuItem11 = new javax.swing.JMenuItem();
         jMenuItem9 = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
-        jMenuItem13 = new javax.swing.JMenuItem();
-        jMenuItem8 = new javax.swing.JMenuItem();
-        jMenu4 = new javax.swing.JMenu();
 
+        jDialog1.setAlwaysOnTop(true);
         jDialog1.setMinimumSize(new java.awt.Dimension(256, 183));
         jDialog1.setModal(true);
         jDialog1.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -184,6 +185,26 @@ public class Principal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
+        jMenu3.setText("Clientes");
+
+        jMenuItem13.setText("Cadastrar JSon");
+        jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem13ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem13);
+
+        jMenuItem8.setText("Cadastrar Manualmente");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem8);
+
+        jMenuBar1.add(jMenu3);
+
         jMenu2.setText("Codigos");
 
         jMenuItem7.setText("Pesquisar");
@@ -224,29 +245,6 @@ public class Principal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
-        jMenu3.setText("Clientes");
-
-        jMenuItem13.setText("Cadastrar JSon");
-        jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem13ActionPerformed(evt);
-            }
-        });
-        jMenu3.add(jMenuItem13);
-
-        jMenuItem8.setText("Cadastrar Manualmente");
-        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem8ActionPerformed(evt);
-            }
-        });
-        jMenu3.add(jMenuItem8);
-
-        jMenuBar1.add(jMenu3);
-
-        jMenu4.setText("Cadastros");
-        jMenuBar1.add(jMenu4);
-
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -264,13 +262,8 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-
-        if (!VariaveisDeControle.frameVendasAberto) {
-            InternalFrameVendas ifr = new InternalFrameVendas();
-            jDesktopPane1.add(ifr);
-            ifr.setVisible(true);
-            VariaveisDeControle.frameVendasAberto = true;
-        }
+        verificaFrameAberto(new InternalFrameVendas(), VariaveisDeControle.frameVendasAberto);
+         VariaveisDeControle.frameVendasAberto = true;
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
@@ -308,12 +301,8 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem9ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        if (!VariaveisDeControle.frameAnaliseVendasAberto) {
-            InternalFrameAnaliseVendaPendentes ifr = new InternalFrameAnaliseVendaPendentes();
-            jDesktopPane1.add(ifr);
-            ifr.setVisible(true);// TODO add your handling code here:
-            VariaveisDeControle.frameAnaliseVendasAberto = true;
-        }
+        verificaFrameAberto(new InternalFrameAnaliseVendaPendentes(), VariaveisDeControle.frameAnaliseVendasAberto);
+        VariaveisDeControle.frameAnaliseVendasAberto = true;
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
@@ -347,63 +336,36 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        if (!VariaveisDeControle.frameCadVenOutroMeioAberto) {
-            InternalCadastroVendaOutrosMeios ifr = new InternalCadastroVendaOutrosMeios();
-            jDesktopPane1.add(ifr);
-            ifr.setVisible(true);
-            VariaveisDeControle.frameCadVenOutroMeioAberto = true;
-        }// TODO add your handling code here:
+        verificaFrameAberto(new InternalCadastroVendaOutrosMeios(), VariaveisDeControle.frameCadVenOutroMeioAberto);
+        VariaveisDeControle.frameCadVenOutroMeioAberto = true;
+        // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        if (!VariaveisDeControle.frameEnvioManualAberto) {
-            InternalEnviosManuais ifr = new InternalEnviosManuais();
-            jDesktopPane1.add(ifr);
-            ifr.setVisible(true);
-            VariaveisDeControle.frameEnvioManualAberto = true;
-        }// TODO add your handling code here:
+        verificaFrameAberto(new InternalEnviosManuais(), VariaveisDeControle.frameEnvioManualAberto);
+        VariaveisDeControle.frameEnvioManualAberto = true;
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-        if (!VariaveisDeControle.frameModificarVendaAberto) {
-            InternalModificarCodigoVenda ifr = new InternalModificarCodigoVenda();
-            jDesktopPane1.add(ifr);
-            ifr.setVisible(true);
-            VariaveisDeControle.frameModificarVendaAberto = true;
-        }// TODO add your handling code here:
+        verificaFrameAberto(new InternalModificarCodigoVenda(), VariaveisDeControle.frameModificarVendaAberto);
+        VariaveisDeControle.frameModificarVendaAberto = true;
+// TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
-        if (!VariaveisDeControle.frameCodigosAberto) {
-            InternalFrameCodigos ifr = new InternalFrameCodigos();
-            jDesktopPane1.add(ifr);
-            ifr.setVisible(true);
-            VariaveisDeControle.frameCodigosAberto = true;
-        }// TODO add your handling code here:
+        verificaFrameAberto(new InternalFrameCodigos(), VariaveisDeControle.frameCodigosAberto);
+        VariaveisDeControle.frameCodigosAberto = true;
+// TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
-    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
-        InternalCadastrarCliente ifr = new InternalCadastrarCliente();
-        jDesktopPane1.add(ifr);
-        ifr.setVisible(true);// TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem8ActionPerformed
-
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
-        if (!VariaveisDeControle.frameJsonAberto) {
-            InternalJSon ifr = new InternalJSon();
-            jDesktopPane1.add(ifr);
-            ifr.setVisible(true);// TODO add your handling code here:
-            VariaveisDeControle.frameJsonAberto = true;
-        }
+        verificaFrameAberto(new InternalJSon(), VariaveisDeControle.frameJsonAberto);  
+        VariaveisDeControle.frameJsonAberto = true;
     }//GEN-LAST:event_jMenuItem12ActionPerformed
 
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
-        if (!VariaveisDeControle.frameJsonAberto) {
-            InternalJSon ifr = new InternalJSon();
-            jDesktopPane1.add(ifr);
-            ifr.setVisible(true);// TODO add your handling code here:
-            VariaveisDeControle.frameJsonAberto = true;
-        }   // TODO add your handling code here:
+        verificaFrameAberto(new InternalJSon(), VariaveisDeControle.frameJsonAberto);        
+        VariaveisDeControle.frameJsonAberto = true;
     }//GEN-LAST:event_jMenuItem13ActionPerformed
 
     private void jDialog1WindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialog1WindowClosed
@@ -429,6 +391,11 @@ public class Principal extends javax.swing.JFrame {
             }
         }).start();          // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem14ActionPerformed
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        verificaFrameAberto(new InternalCadastrarCliente(), VariaveisDeControle.frameCadastroClienteAberto);
+        VariaveisDeControle.frameCadastroClienteAberto = true;
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -470,7 +437,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu8;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
@@ -493,5 +459,11 @@ public class Principal extends javax.swing.JFrame {
 
     public void dialogAutenticacao() {
         jDialog1.setVisible(true);
+    }
+    private void verificaFrameAberto(JInternalFrame ifr, boolean aberto){
+        if (!aberto) {            
+            jDesktopPane1.add(ifr);
+            ifr.setVisible(true);// TODO add your handling code here:            
+        }
     }
 }
