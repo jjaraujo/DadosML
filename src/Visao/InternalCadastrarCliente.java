@@ -20,7 +20,6 @@ public class InternalCadastrarCliente extends javax.swing.JInternalFrame {
      * Creates new form InternalCadastrarCliente
      */
     public InternalCadastrarCliente() {
-        VariaveisDeControle.frameCadastroCliente = true;
         initComponents();
     }
 
@@ -49,6 +48,23 @@ public class InternalCadastrarCliente extends javax.swing.JInternalFrame {
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameClosing(evt);
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
         jPanelCadastraVenda_cadastroCliente.setBorder(javax.swing.BorderFactory.createTitledBorder("Cadastrar Cliente"));
 
@@ -161,6 +177,10 @@ public class InternalCadastrarCliente extends javax.swing.JInternalFrame {
         new ClienteDAO().cadastrarCliente(cl);
         JOptionPane.showMessageDialog(null, "Cliente cadastrado");    // TODO add your handling code here:
     }//GEN-LAST:event_jButton11ActionPerformed
+
+    private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
+VariaveisDeControle.frameCadastroClienteAberto = false;       // TODO add your handling code here:
+    }//GEN-LAST:event_formInternalFrameClosing
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

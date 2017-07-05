@@ -300,6 +300,7 @@ public class Principal extends javax.swing.JFrame {
             InternalFrameAnaliseVendaPendentes ifr = new InternalFrameAnaliseVendaPendentes();
             jDesktopPane1.add(ifr);
             ifr.setVisible(true);// TODO add your handling code here:
+            VariaveisDeControle.frameAnaliseVendasAberto = true;
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
@@ -334,15 +335,21 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        if(!VariaveisDeControle.frameCadVenOutroMeioAberto){
         InternalCadastroVendaOutrosMeios ifr = new InternalCadastroVendaOutrosMeios();
         jDesktopPane1.add(ifr);
-        ifr.setVisible(true);// TODO add your handling code here:
+        ifr.setVisible(true);
+        VariaveisDeControle.frameCadVenOutroMeioAberto = true;
+        }// TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        InternalEnviosManuais ifr = new InternalEnviosManuais();
+if(!VariaveisDeControle.frameEnvioManualAberto){        
+    InternalEnviosManuais ifr = new InternalEnviosManuais();
         jDesktopPane1.add(ifr);
-        ifr.setVisible(true);// TODO add your handling code here:
+        ifr.setVisible(true);
+        VariaveisDeControle.frameEnvioManualAberto = true;
+}// TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
@@ -364,9 +371,12 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
+        if(!VariaveisDeControle.frameJsonAberto){
         InternalJSon ifr = new InternalJSon();
         jDesktopPane1.add(ifr);
         ifr.setVisible(true);// TODO add your handling code here:
+        VariaveisDeControle.frameJsonAberto = true;
+        }
     }//GEN-LAST:event_jMenuItem12ActionPerformed
 
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed

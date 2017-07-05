@@ -80,6 +80,23 @@ public class InternalCadastroVendaOutrosMeios extends javax.swing.JInternalFrame
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameClosing(evt);
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
         jPanelCadastroVenda_quatidade.setBorder(javax.swing.BorderFactory.createTitledBorder("Quantidade"));
 
@@ -546,7 +563,7 @@ public class InternalCadastroVendaOutrosMeios extends javax.swing.JInternalFrame
             jPanelCadastroVenda_quatidade.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Quantidade", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
             ok = true;
         }
-        if (VariaveisDeControle.frameCadastroCliente) {
+        if (VariaveisDeControle.frameCadastroClienteAberto) {
 
         }
         if (ok) {
@@ -613,6 +630,10 @@ public class InternalCadastroVendaOutrosMeios extends javax.swing.JInternalFrame
     private void jRadioButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton6ActionPerformed
         venCadOutAquisicoes.setData(JOptionPane.showInputDialog("Qual dia? 'AAAA-MM-DD'"));        // TODO add your handling code here:
     }//GEN-LAST:event_jRadioButton6ActionPerformed
+
+    private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
+VariaveisDeControle.frameCadVenOutroMeioAberto = false;        // TODO add your handling code here:
+    }//GEN-LAST:event_formInternalFrameClosing
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

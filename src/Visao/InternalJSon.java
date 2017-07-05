@@ -5,6 +5,7 @@
  */
 package Visao;
 
+import Controle.VariaveisDeControle;
 import DAO.ClienteDAO;
 import DAO.VendaDAO;
 import JSON.LeituraJson;
@@ -43,6 +44,23 @@ public class InternalJSon extends javax.swing.JInternalFrame {
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameClosing(evt);
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
         jButton4.setText("Cadastrar");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -98,10 +116,12 @@ public class InternalJSon extends javax.swing.JInternalFrame {
         jTextAreaJson.setText("");
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
+VariaveisDeControle.frameJsonAberto = false;        // TODO add your handling code here:
+    }//GEN-LAST:event_formInternalFrameClosing
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextAreaJson;

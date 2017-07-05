@@ -26,8 +26,12 @@ public class VariaveisDeControle {
     public static boolean carregamentoCodigoManual;
     public static boolean frameVendasAberto;
     public static boolean frameAnaliseVendasAberto;
-    public static boolean frameCadastroCliente;
-    public static boolean cadastrandoVendas;
+    public static boolean frameCadastroClienteAberto;
+    public static boolean frameJsonAberto;
+    public static boolean frameEnvioManualAberto;
+    public static boolean frameCodigosAberto;
+    public static boolean frameModificarVendaAberto;
+    public static boolean frameCadVenOutroMeioAberto;
     public static String user = "";
     public static String senha = "";
     public static Connection CON ;
