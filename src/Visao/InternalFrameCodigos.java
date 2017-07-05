@@ -5,6 +5,7 @@
  */
 package Visao;
 
+import Controle.VariaveisDeControle;
 import DAO.AtendentesDAO;
 import DAO.CodigoDAO;
 import DAO.DesbloqueioDAO;
@@ -294,6 +295,25 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
+        setTitle("Códigos");
+        setToolTipText("");
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameClosing(evt);
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
         jTable1.setModel(modelo1);
         jTable1.setColumnSelectionAllowed(true);
@@ -616,6 +636,10 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
     private void jRadioButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton18ActionPerformed
         local = "Chat";        // TODO add your handling code here:
     }//GEN-LAST:event_jRadioButton18ActionPerformed
+
+    private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
+VariaveisDeControle.frameCodigosAberto = false;        // TODO add your handling code here:
+    }//GEN-LAST:event_formInternalFrameClosing
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

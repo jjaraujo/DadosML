@@ -10,8 +10,12 @@ import Controle.EnviarCodigos;
 import Controle.InsereCodigoNasVendasParaEnvio;
 import Controle.VariaveisDeControle;
 import DAO.CodigoDAO;
+import DAO.Codigos_has_vendasDAO;
+import DAO.VendaDAO;
+import Entidades.Vendas;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
@@ -19,7 +23,6 @@ import javax.swing.JOptionPane;
  * @author Joao
  */
 public class Principal extends javax.swing.JFrame {
-
 
     /**
      * Creates new form Principal
@@ -58,6 +61,7 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem14 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenu8 = new javax.swing.JMenu();
@@ -170,6 +174,14 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem5);
 
+        jMenuItem14.setText("Reenviar");
+        jMenuItem14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem14ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem14);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Codigos");
@@ -258,7 +270,7 @@ public class Principal extends javax.swing.JFrame {
             jDesktopPane1.add(ifr);
             ifr.setVisible(true);
             VariaveisDeControle.frameVendasAberto = true;
-        } 
+        }
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
@@ -335,33 +347,39 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        if(!VariaveisDeControle.frameCadVenOutroMeioAberto){
-        InternalCadastroVendaOutrosMeios ifr = new InternalCadastroVendaOutrosMeios();
-        jDesktopPane1.add(ifr);
-        ifr.setVisible(true);
-        VariaveisDeControle.frameCadVenOutroMeioAberto = true;
+        if (!VariaveisDeControle.frameCadVenOutroMeioAberto) {
+            InternalCadastroVendaOutrosMeios ifr = new InternalCadastroVendaOutrosMeios();
+            jDesktopPane1.add(ifr);
+            ifr.setVisible(true);
+            VariaveisDeControle.frameCadVenOutroMeioAberto = true;
         }// TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-if(!VariaveisDeControle.frameEnvioManualAberto){        
-    InternalEnviosManuais ifr = new InternalEnviosManuais();
-        jDesktopPane1.add(ifr);
-        ifr.setVisible(true);
-        VariaveisDeControle.frameEnvioManualAberto = true;
-}// TODO add your handling code here:
+        if (!VariaveisDeControle.frameEnvioManualAberto) {
+            InternalEnviosManuais ifr = new InternalEnviosManuais();
+            jDesktopPane1.add(ifr);
+            ifr.setVisible(true);
+            VariaveisDeControle.frameEnvioManualAberto = true;
+        }// TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-        InternalModificarCodigoVenda ifr = new InternalModificarCodigoVenda();
-        jDesktopPane1.add(ifr);
-        ifr.setVisible(true);// TODO add your handling code here:
+        if (!VariaveisDeControle.frameModificarVendaAberto) {
+            InternalModificarCodigoVenda ifr = new InternalModificarCodigoVenda();
+            jDesktopPane1.add(ifr);
+            ifr.setVisible(true);
+            VariaveisDeControle.frameModificarVendaAberto = true;
+        }// TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
-        InternalFrameCodigos ifr = new InternalFrameCodigos();
-        jDesktopPane1.add(ifr);
-        ifr.setVisible(true);// TODO add your handling code here:
+        if (!VariaveisDeControle.frameCodigosAberto) {
+            InternalFrameCodigos ifr = new InternalFrameCodigos();
+            jDesktopPane1.add(ifr);
+            ifr.setVisible(true);
+            VariaveisDeControle.frameCodigosAberto = true;
+        }// TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
@@ -371,25 +389,46 @@ if(!VariaveisDeControle.frameEnvioManualAberto){
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
-        if(!VariaveisDeControle.frameJsonAberto){
-        InternalJSon ifr = new InternalJSon();
-        jDesktopPane1.add(ifr);
-        ifr.setVisible(true);// TODO add your handling code here:
-        VariaveisDeControle.frameJsonAberto = true;
+        if (!VariaveisDeControle.frameJsonAberto) {
+            InternalJSon ifr = new InternalJSon();
+            jDesktopPane1.add(ifr);
+            ifr.setVisible(true);// TODO add your handling code here:
+            VariaveisDeControle.frameJsonAberto = true;
         }
     }//GEN-LAST:event_jMenuItem12ActionPerformed
 
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
-        // TODO add your handling code here:
+        if (!VariaveisDeControle.frameJsonAberto) {
+            InternalJSon ifr = new InternalJSon();
+            jDesktopPane1.add(ifr);
+            ifr.setVisible(true);// TODO add your handling code here:
+            VariaveisDeControle.frameJsonAberto = true;
+        }   // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem13ActionPerformed
 
     private void jDialog1WindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialog1WindowClosed
-        
+
     }//GEN-LAST:event_jDialog1WindowClosed
 
     private void jDialog1WindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialog1WindowClosing
         System.exit(0);        // TODO add your handling code here:
     }//GEN-LAST:event_jDialog1WindowClosing
+
+    private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String idVenda = JOptionPane.showInputDialog("Informe o ID da venda");
+                if(idVenda == null){
+                    
+                } else{
+                    System.out.println("reenviando email venda " + idVenda);
+                ArrayList listChv = new Codigos_has_vendasDAO().getCodigoHasVendas(idVenda);
+                new EnviarCodigos().reenviarEmail(new VendaDAO().getUmaVenda(idVenda), listChv);
+                }
+            }
+        }).start();          // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem14ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -439,6 +478,7 @@ if(!VariaveisDeControle.frameEnvioManualAberto){
     private javax.swing.JMenuItem jMenuItem11;
     private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem13;
+    private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;

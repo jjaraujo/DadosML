@@ -80,6 +80,7 @@ public class InternalCadastroVendaOutrosMeios extends javax.swing.JInternalFrame
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
+        setTitle("Cadastrar Venda");
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
             }

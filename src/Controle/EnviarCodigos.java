@@ -6,6 +6,7 @@
 package Controle;
 
 import DAO.ClienteDAO;
+import DAO.CodigoDAO;
 import DAO.Codigos_has_vendasDAO;
 import DAO.ProdutosDAO;
 import DAO.VendasPendentesDAO;
@@ -13,6 +14,7 @@ import EmailConfig.MensagensEmail;
 import Entidades.Cliente;
 import Entidades.Codigos;
 import Entidades.Produtos;
+import Entidades.Vendas;
 import Entidades.VendasPendentes;
 import Entidades.codigos_has_vendas;
 import Visao.TelaVendas;
@@ -121,5 +123,27 @@ public class EnviarCodigos {
                 }
             }).start();
         }
+    }
+
+    public void reenviarEmail(Vendas v,ArrayList<codigos_has_vendas> list) {
+        MensagensEmail msgEmail = new MensagensEmail();
+        Produtos p = new ProdutosDAO().retornaProduto(v.getIdProduto());
+        Cliente c = new ClienteDAO().buscaCliente(v.getApelido_comprador());
+        int qtd = p.getQtd() * v.getQtd();
+        String codigo = "";
+        for(codigos_has_vendas chv : list){
+            codigo = codigo + new CodigoDAO().buscaUmCodigo(chv.getId_codigo()).getCodigo() + "\n";
+        }
+        String corpo = msgEmail.verificaQualOCorpoDOEmail(p.getTipo(), qtd, codigo);
+        String assunto = "Código de ativação - " + p.getTipo() + " " + qtd + " Dispositivo(s)" + p.getAnos()  +" Ano(s) - " + v.getApelido_comprador()+ " - " + v.getId();
+        try {
+          EmailService email =   new EmailService(c.getEmail(),assunto , corpo);
+          email.sendEmail();
+        } catch (IOException ex) {
+            Logger.getLogger(EnviarCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MessagingException ex) {
+            Logger.getLogger(EnviarCodigos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 }
