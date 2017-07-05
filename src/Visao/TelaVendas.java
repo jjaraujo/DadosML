@@ -2259,11 +2259,7 @@ public class TelaVendas extends javax.swing.JFrame {
             clienteDAO.cadastrarCliente(json.lerJsonClientes("[" + jTextAreaJson.getText() + "]"));
         } else if (tipoObjetoDeCadastro.equals("vendas")) {
             VendaDAO vendaDAO = new VendaDAO();
-            try {
-                vendaDAO.insertVenda(json.lerJsonVendas("[" + jTextAreaJson.getText() + "]"));
-            } catch (ParseException ex) {
-                JOptionPane.showMessageDialog(null, "Erro na leitura do JSON no botao cadastrar");
-            }
+            vendaDAO.insertVenda(json.lerJsonVendas("[" + jTextAreaJson.getText() + "]"));
         }
         jDialogCadastroJSON.dispose();
         jTextAreaJson.setText("");

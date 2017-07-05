@@ -256,9 +256,9 @@ public class VendaDAO {
 
     public void cancelaVenda(String id) {
         try {
-            PreparedStatement stmt = con.prepareCall("update vendas set cancelada ='SIM' where id like ?; ");
+            PreparedStatement stmt = con.prepareCall("update vendas set cancelada = 'SIM' where id like ?; ");
             stmt.setString(1, id);
-            stmt.execute();
+            stmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(VendaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }

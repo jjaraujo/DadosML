@@ -27,14 +27,25 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
      * Creates new form InternalFrameVendas
      */
     public InternalFrameVendas() {
-         modelo = new DefaultTableModel(null, new String[]{"ID Venda", "Apelido", "Nome",
-            "Email", "Codigo", "Codigos Antigos", "Tipo", "Dispositivos",
-            "Anos", "Data", "Pagamento", "Cancelada", "Suspeito", "Inativo"}) {
-            @Override
-            public boolean isCellEditable(int i, int i1) {
-                return false;//To change body of generated methods, choose Tools | Templates.
-            }
-        };
+        if (VariaveisDeControle.user.equals("JOAO")) {
+            modelo = new DefaultTableModel(null, new String[]{"ID Venda", "Apelido", "Nome",
+                "Email", "Codigo", "Codigos Antigos", "Tipo", "Dispositivos",
+                "Anos", "Valor", "Data", "Pagamento", "Cancelada", "Suspeito", "Inativo"}) {
+                @Override
+                public boolean isCellEditable(int i, int i1) {
+                    return false;//To change body of generated methods, choose Tools | Templates.
+                }
+            };
+        } else {
+            modelo = new DefaultTableModel(null, new String[]{"ID Venda", "Apelido", "Nome",
+                "Email", "Codigo", "Codigos Antigos", "Tipo", "Dispositivos",
+                "Anos", "Data", "Pagamento", "Cancelada", "Suspeito", "Inativo"}) {
+                @Override
+                public boolean isCellEditable(int i, int i1) {
+                    return false;//To change body of generated methods, choose Tools | Templates.
+                }
+            };
+        }
         initComponents();
     }
 
@@ -57,19 +68,43 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
         jTextFieldInformacaoVenda = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
 
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
+        setTitle("Buscar Vendas");
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameClosed(evt);
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameClosing(evt);
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
+
         jTableVendas.setModel(modelo);
         jTableVendas.setCellSelectionEnabled(true);
         jScrollPane1.setViewportView(jTableVendas);
         jTableVendas.getColumnModel().getColumn(0).setPreferredWidth(100);
-        jTableVendas.getColumnModel().getColumn(1).setPreferredWidth(180);
-        jTableVendas.getColumnModel().getColumn(2).setPreferredWidth(260);
-        jTableVendas.getColumnModel().getColumn(3).setPreferredWidth(260);
+        jTableVendas.getColumnModel().getColumn(1).setPreferredWidth(140);
+        jTableVendas.getColumnModel().getColumn(2).setPreferredWidth(200);
+        jTableVendas.getColumnModel().getColumn(3).setPreferredWidth(230);
         jTableVendas.getColumnModel().getColumn(4).setPreferredWidth(260);
         jTableVendas.getColumnModel().getColumn(5).setPreferredWidth(50);
-        jTableVendas.getColumnModel().getColumn(6).setPreferredWidth(80);
+        jTableVendas.getColumnModel().getColumn(6).setPreferredWidth(50);
         jTableVendas.getColumnModel().getColumn(7).setPreferredWidth(80);
-        jTableVendas.getColumnModel().getColumn(8).setPreferredWidth(120);
-        jTableVendas.getColumnModel().getColumn(9).setPreferredWidth(100);
+        jTableVendas.getColumnModel().getColumn(8).setPreferredWidth(80);
+        jTableVendas.getColumnModel().getColumn(9).setPreferredWidth(60);
         jTableVendas.getColumnModel().getColumn(10).setPreferredWidth(100);
         jTableVendas.getColumnModel().getColumn(11).setPreferredWidth(80);
         jTableVendas.getColumnModel().getColumn(12).setPreferredWidth(80);
@@ -149,7 +184,7 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
                 .addComponent(jTextFieldInformacaoVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(652, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -166,6 +201,8 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
                             .addComponent(jButton1))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        getAccessibleContext().setAccessibleDescription("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -187,8 +224,16 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jRadioButton4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        pesquisarVendasPorVariavel(modelo);
+        pesquisarVendasPorVariavel();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void formInternalFrameClosed(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosed
+
+    }//GEN-LAST:event_formInternalFrameClosed
+
+    private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
+        VariaveisDeControle.frameVendasAberto = false;        // TODO add your handling code here:
+    }//GEN-LAST:event_formInternalFrameClosing
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -203,9 +248,9 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
     private javax.swing.JTextField jTextFieldInformacaoVenda;
     // End of variables declaration//GEN-END:variables
 
- public void pesquisarVendasPorVariavel(DefaultTableModel modelo) {
+    public void pesquisarVendasPorVariavel() {
         try {
-            Connection con = VariaveisDeControle.CON;
+
             modelo.setNumRows(0);
             String entrada = jTextFieldInformacaoVenda.getText().replaceAll("^\\s+", "");
             entrada = entrada.replaceAll("\\s+$", "");
@@ -213,7 +258,7 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
             ResultSet rs;
             String script = "select chv.id_venda id_venda, cl.apelido apelido,cl.nome nome,cl.email email,"
                     + " cd.codigo codigo,chv.codigos_antigos codigos_antigos,"
-                    + "cd.tipo tipo, chv.qtd_dispositivos qtd_dispositivos, "
+                    + "cd.tipo tipo, chv.qtd_dispositivos qtd_dispositivos, v.valor, "
                     + "cd.duracao duracao,v.data data, v.forma_pagamento pagamento"
                     + ",v.cancelada cancelada,cl.suspeito suspeito,cl.inativo inativo "
                     + "from codigos_has_vendas chv "
@@ -235,7 +280,8 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
             String suspeito = "";
             String inativo = "";
             String codigosAntigos = "";
-            stmt = con.prepareStatement(script);
+            Double valor = 0.0;
+            stmt = VariaveisDeControle.CON.prepareStatement(script);
             stmt.setString(1, "%" + entrada + "%");
             rs = stmt.executeQuery();
             while (rs.next()) {
@@ -248,17 +294,21 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
                 tipo = rs.getString("tipo");
                 qtd_dispositivos = rs.getInt("qtd_dispositivos");
                 duracao = rs.getInt("duracao");
+                valor = rs.getDouble("valor");
                 data = rs.getString("data");
                 pagamento = rs.getString("pagamento");
                 cancelada = rs.getString("cancelada");
                 suspeito = rs.getString("suspeito");
                 inativo = rs.getString("inativo");
-                modelo.addRow(new Object[]{id_venda, apelidoClientePesquisado, nome, email, codigo, codigosAntigos, tipo, qtd_dispositivos, duracao, data, pagamento, cancelada, suspeito, inativo});
-
+                if (VariaveisDeControle.user.equals("JOAO")) {
+                    modelo.addRow(new Object[]{id_venda, apelidoClientePesquisado, nome, email, codigo, codigosAntigos, tipo, qtd_dispositivos, duracao, valor, data, pagamento, cancelada, suspeito, inativo});
+                } else {
+                    modelo.addRow(new Object[]{id_venda, apelidoClientePesquisado, nome, email, codigo, codigosAntigos, tipo, qtd_dispositivos, duracao, data, pagamento, cancelada, suspeito, inativo});
+                }
             }
         } catch (SQLException ex) {
-           
+
         }
     }
-    
+
 }

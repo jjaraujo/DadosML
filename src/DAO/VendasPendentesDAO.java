@@ -30,6 +30,7 @@ public class VendasPendentesDAO {
     }
 
     public void insereVendas(VendasPendentes ven) {
+        
         try {
             PreparedStatement stmt = con.prepareStatement("insert into vendas_pendentes(id_venda,apelido_comprador,qtd,"
                     + "id_produto,email,forma_pagamento) values(?,?,?,?,?,?);");

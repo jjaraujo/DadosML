@@ -27,6 +27,7 @@ public class VariaveisDeControle {
     public static boolean frameVendasAberto;
     public static boolean frameAnaliseVendasAberto;
     public static boolean frameCadastroCliente;
+    public static boolean cadastrandoVendas;
     public static String user = "";
     public static String senha = "";
     public static Connection CON ;

@@ -5,10 +5,11 @@
  */
 package DAO;
 
-import Connection.ConnectionFactory;
 import Controle.VariaveisDeControle;
 import Entidades.Cliente;
+import Visao.Principal;
 import com.email.EmailService;
+import com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -33,14 +34,13 @@ public class ClienteDAO {
     private ResultSet rs;
 
     public ClienteDAO() {
-            con = VariaveisDeControle.CON;
+        con = VariaveisDeControle.CON;
     }
 
     public Cliente buscaCliente(String apelido) {
 
         try {
             stmt = con.prepareStatement("select email,inativo,confirmado from clientes_ml where apelido like '" + apelido + "';");
-
             rs = stmt.executeQuery();
             Cliente cliente = new Cliente();
             while (rs.next()) {
@@ -69,22 +69,22 @@ public class ClienteDAO {
             return true;
         }
     }
-    
-        public boolean verificaClienteRevendedor(String apelido) {
+
+    public boolean verificaClienteRevendedor(String apelido) {
         try {
             stmt = con.prepareStatement("select revendedor_assistencia from clientes_ml where apelido like ?");
             stmt.setString(1, "" + apelido + "");
             rs = stmt.executeQuery();
             String i = null;
-            while(rs.next()){
+            while (rs.next()) {
                 i = rs.getString("revendedor_assistencia");
-                
+
             }
-            if(i != null){
-                    return true;
-                } else {
-                    return false;
-                }
+            if (i != null) {
+                return true;
+            } else {
+                return false;
+            }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao verificar se cliente já está cadastrado");
             return true;
@@ -102,7 +102,6 @@ public class ClienteDAO {
             @Override
             public void run() {
                 try {
-                    con.setAutoCommit(false);
                     for (Cliente clt : c) {
                         if (!verificaClienteCadastrado(clt.getApelido())) {
                             stmt = con.prepareStatement("insert into clientes_ml(apelido,nome,email,cpf,estado,telefone) values(?,?,?,?,?,?);");
@@ -116,34 +115,12 @@ public class ClienteDAO {
                         }
                     }
                     JOptionPane.showMessageDialog(null, "Clientes cadastrados com sucesso");
-                    con.commit();
-                } catch (SQLException ex) {
-                    if (con != null) {
-                        try {
-                            System.err.print("Rollback efetuado na transação de DAO.ClienteDAO().cadastrarCliente: " + ex.getMessage());
-                            con.rollback();
-                        } catch (SQLException e2) {
-                            JOptionPane.showMessageDialog(null, "Erro na transação! Erro: " + e2);
-                        }
-                    }
-                } finally {
-                    if (stmt != null) {
-                        try {
-                            stmt.close();
-                        } catch (SQLException ex) {
-                            JOptionPane.showMessageDialog(null, "Errou ao finalizar stmt de "
-                                    + "DAO.ClienteDAO().cadastrarCliente \n Erro: " + ex.getMessage());
-                        }
-                    }
-                }
-                //Coloca a conexão como autoCommit
-                try {
-                    con.setAutoCommit(true);
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "Errou ao mudar con para autoCommit de "
-                            + "DAO.ClienteDAO().cadastrarCliente \n Erro: " + ex.getMessage());
 
-                }
+                } catch (MySQLNonTransientConnectionException ex) {
+                    new Principal().dialogAutenticacao();
+                } catch (SQLException ex) {
+                   JOptionPane.showMessageDialog(null, "Erro na transação! DAO.ClienteDAO().cadastrarCliente: " + ex.getMessage());
+                } 
             }
         }).start();
     }
@@ -176,19 +153,19 @@ public class ClienteDAO {
                             + "Você pode verificar o regulamento aqui no Google Driver: https://drive.google.com/open?id=0B1fHjqINGZdoWHpLSDFGQktWcHM (se não conseguir, informe-nos). Qualquer dúvida, estamos a disposição!";
                     try {
                         EmailService email = new EmailService(c.getEmail(), "Novo programa de fidelidade para revendedores Kaspersky ", corpo);
-                        email.sendEmail();        
+                        email.sendEmail();
                     } catch (IOException ex) {
                         Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (MessagingException ex) {
                         Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-            }).start();           
+            }).start();
         }
         return set;
     }
-    
-    public void setNumeroConfimado(String apelido){
+
+    public void setNumeroConfimado(String apelido) {
         try {
             PreparedStatement stmt = con.prepareStatement("UPDATE clientes_ml SET confirmado ='sim' WHERE apelido like ?;");
             stmt.setString(1, apelido);
