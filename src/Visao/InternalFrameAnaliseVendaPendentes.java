@@ -75,7 +75,6 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
         setIconifiable(true);
-        setMaximizable(true);
         setResizable(true);
         setTitle("Análise de Vendas");
         setOpaque(true);
@@ -450,8 +449,11 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
                 int i = JOptionPane.showConfirmDialog(null, "Deseja carregar a lista novamente?", "Confirmar", JOptionPane.YES_NO_OPTION);
                 if (i == 0) {
                     VariaveisDeControle.carregarVendasPendentesECodigos();
-                }
+                } 
             }
+        }
+        if(VariaveisDeControle.listVen.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Não há vendas pendentes no momento!");
         }
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem1ActionPerformed

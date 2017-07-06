@@ -52,6 +52,9 @@ public class ClienteDAO {
             rs.close();
             stmt.close();
             return cliente;
+        } catch (MySQLNonTransientConnectionException e) {
+            new Principal().dialogAutenticacao();
+            return null;
         } catch (SQLException ex) {
             Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
             return null;
@@ -64,8 +67,11 @@ public class ClienteDAO {
             stmt.setString(1, "%" + apelido + "%");
             rs = stmt.executeQuery();
             return rs.first();
+        } catch (MySQLNonTransientConnectionException e) {
+            new Principal().dialogAutenticacao();
+            return true;
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao verificar se cliente já está cadastrado");
+            JOptionPane.showMessageDialog(null, "Erro ao verificar se cliente já está cadastrado " + ex.getMessage());
             return true;
         }
     }
@@ -85,6 +91,9 @@ public class ClienteDAO {
             } else {
                 return false;
             }
+        } catch (MySQLNonTransientConnectionException e) {
+            new Principal().dialogAutenticacao();
+            return true;
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao verificar se cliente já está cadastrado");
             return true;
@@ -119,8 +128,8 @@ public class ClienteDAO {
                 } catch (MySQLNonTransientConnectionException ex) {
                     new Principal().dialogAutenticacao();
                 } catch (SQLException ex) {
-                   JOptionPane.showMessageDialog(null, "Erro na transação! DAO.ClienteDAO().cadastrarCliente: " + ex.getMessage());
-                } 
+                    JOptionPane.showMessageDialog(null, "Erro na transação! DAO.ClienteDAO().cadastrarCliente: " + ex.getMessage());
+                }
             }
         }).start();
     }
@@ -138,6 +147,9 @@ public class ClienteDAO {
 
                 set.add(c1);
             }
+        } catch (MySQLNonTransientConnectionException e) {
+            new Principal().dialogAutenticacao();
+            return null;
         } catch (SQLException ex) {
             Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
 //        } catch (IOException ex) {
@@ -170,6 +182,8 @@ public class ClienteDAO {
             PreparedStatement stmt = con.prepareStatement("UPDATE clientes_ml SET confirmado ='sim' WHERE apelido like ?;");
             stmt.setString(1, apelido);
             stmt.executeUpdate();
+        } catch (MySQLNonTransientConnectionException e) {
+            new Principal().dialogAutenticacao();
         } catch (SQLException ex) {
             System.err.println("Erro ao adicionar numero confirmado no cliente " + apelido);
         }

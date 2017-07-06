@@ -13,6 +13,8 @@ import Entidades.Produtos;
 import Entidades.QtdUsoCodigos;
 import Entidades.Vendas;
 import Entidades.codigos_has_vendas;
+import Visao.Principal;
+import com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -63,7 +65,9 @@ public class CodigoDAO {
                 cod.setDiasMaxSmall2A(rs.getInt("diasMaxSmall2A"));
 
             }
-        } catch (SQLException ex) {
+        } catch(MySQLNonTransientConnectionException e){
+            new Principal().dialogAutenticacao();
+        }catch (SQLException ex) {
             Logger.getLogger(CodigoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -85,7 +89,9 @@ public class CodigoDAO {
             stmt.setInt(8, QtdDiasMaxSmall2A);
             stmt.executeUpdate();
             stmt.close();
-        } catch (SQLException ex) {
+        } catch(MySQLNonTransientConnectionException e){
+            new Principal().dialogAutenticacao();
+        }catch (SQLException ex) {
             Logger.getLogger(CodigoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -103,6 +109,8 @@ public class CodigoDAO {
             rs.close();
             stmt.close();
             return codigo;
+        }catch(MySQLNonTransientConnectionException e){
+            new Principal().dialogAutenticacao();
         } catch (SQLException ex) {
             Logger.getLogger(CodigoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -126,7 +134,10 @@ public class CodigoDAO {
                 stmt.close();
             }
             return listCod;
-        } catch (SQLException e) {
+        } catch(MySQLNonTransientConnectionException e){
+            new Principal().dialogAutenticacao();
+            return null;
+        }catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
@@ -164,7 +175,10 @@ public class CodigoDAO {
             stmt.close();
             rs.close();
             return listCod;
-        } catch (SQLException e) {
+        }catch(MySQLNonTransientConnectionException e){
+            new Principal().dialogAutenticacao();
+            return null;
+        }catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
@@ -196,6 +210,9 @@ public class CodigoDAO {
             rs.close();
             stmt.close();
             return cod;
+        }catch(MySQLNonTransientConnectionException e){
+            new Principal().dialogAutenticacao();
+            return null;
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -234,7 +251,9 @@ public class CodigoDAO {
                     listCodUtilizaveis.add(c);
                 }
             }
-        } catch (SQLException e) {
+        } catch(MySQLNonTransientConnectionException e){
+            new Principal().dialogAutenticacao();
+        }catch (SQLException e) {
             e.printStackTrace();
         }
         return listCodUtilizaveis;
@@ -248,6 +267,8 @@ public class CodigoDAO {
             stmt.executeUpdate();
             stmt.close();
 
+        }catch(MySQLNonTransientConnectionException e){
+            new Principal().dialogAutenticacao();
         } catch (SQLException ex) {
 
                     JOptionPane.showMessageDialog(null, "Erro na transação em ClienteDAO.adicionar_qtd_usada_codigo! Erro: " + ex);
@@ -272,6 +293,8 @@ public class CodigoDAO {
             stmt.setInt(3, id);
             stmt.executeUpdate();
             stmt2.executeUpdate();
+        } catch(MySQLNonTransientConnectionException e){
+            new Principal().dialogAutenticacao();
         } catch (SQLException ex) {
             Logger.getLogger(CodigoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -369,24 +392,14 @@ public class CodigoDAO {
             stmt.setInt(2, id);
             stmt.executeUpdate();
 
+        } catch(MySQLNonTransientConnectionException e){
+            new Principal().dialogAutenticacao();
         } catch (SQLException ex) {
             System.err.println("Erro em CodigoDQAO.setSituacaoCodigo: " + ex.getMessage());
-            if (con != null) {
-                try {
-                    System.err.print("Rollback efetuado na transação de DAO.ClienteDAO().adicionar_qtd_usada_codigo: " + ex.getMessage());
-                    con.rollback();
-                } catch (SQLException e2) {
-                    JOptionPane.showMessageDialog(null, "Erro na transação em ClienteDAO.adicionar_qtd_usada_codigo! Erro: " + e2);
-                }
-            }
+            
         }
         //Coloca a conexão como autoCommit    
-        try {
-            con.setAutoCommit(true);
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Errou ao mudar con para autoCommit de "
-                    + "DAO.ClienteDAO().atualizaSituacaoCodigo \n Erro: " + ex.getMessage());
-        }
+        
     }
 
     // metodo para verificar se a quantidade de usos do código é compativel com a quantidade de desbloqueios
@@ -404,7 +417,9 @@ public class CodigoDAO {
                 stmt2.executeUpdate();
             }
             System.out.println("Atualização concluida");
-        } catch (SQLException ex1) {
+        } catch(MySQLNonTransientConnectionException e){
+            new Principal().dialogAutenticacao();
+        }catch (SQLException ex1) {
             System.err.println("Erro na transação de adicionar qtd do código " + id + ":" + ex1.getMessage());
             ex1.printStackTrace();
         }
@@ -429,7 +444,9 @@ public class CodigoDAO {
                 }
             }
             JOptionPane.showMessageDialog(null, "Atualização concluida");
-        } catch (SQLException ex1) {
+        } catch(MySQLNonTransientConnectionException e){
+            new Principal().dialogAutenticacao();
+        }catch (SQLException ex1) {
             System.err.println("Erro na transação de adicionar qtd do código " + id + ":" + ex1.getMessage());
             ex1.printStackTrace();
         }

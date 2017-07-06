@@ -5,13 +5,9 @@
  */
 package Controle;
 
-import Connection.ConnectionFactory;
-import DAO.ProdutosDAO;
-import Entidades.Produtos;
 import Entidades.VendasPendentes;
 import java.sql.Connection;
 import java.util.ArrayList;
-import java.util.HashMap;
 import javax.swing.DefaultComboBoxModel;
 
 /**

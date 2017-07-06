@@ -5,18 +5,16 @@
  */
 package DAO;
 
-import Connection.ConnectionFactory;
 import Controle.VariaveisDeControle;
 import Entidades.Codigos;
 import Entidades.codigos_has_vendas;
+import Visao.Principal;
+import com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -50,7 +48,10 @@ public class Codigos_has_vendasDAO {
                 stmt.close();
             }
             return cod;
-        } catch (SQLException e) {
+        } catch(MySQLNonTransientConnectionException e){
+            new Principal().dialogAutenticacao();
+            return null;
+        }catch (SQLException e) {
             e.printStackTrace();
             return null;
         }

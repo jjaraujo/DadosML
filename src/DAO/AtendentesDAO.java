@@ -8,6 +8,8 @@ package DAO;
 import Connection.ConnectionFactory;
 import Controle.VariaveisDeControle;
 import Entidades.Atendentes;
+import Visao.Principal;
+import com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -47,9 +49,11 @@ public class AtendentesDAO {
             }
             rs.close();
             stmt.close();
+        } catch(MySQLNonTransientConnectionException e){
+            new Principal().dialogAutenticacao();
         } catch (SQLException ex) {
             Logger.getLogger(AtendentesDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
         return list;
     }
 

@@ -299,7 +299,7 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
 
         setClosable(true);
         setIconifiable(true);
-        setMaximizable(true);
+        setResizable(true);
         setTitle("Códigos");
         setToolTipText("");
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {

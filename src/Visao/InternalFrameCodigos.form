@@ -302,7 +302,7 @@
   <Properties>
     <Property name="closable" type="boolean" value="true"/>
     <Property name="iconifiable" type="boolean" value="true"/>
-    <Property name="maximizable" type="boolean" value="true"/>
+    <Property name="resizable" type="boolean" value="true"/>
     <Property name="title" type="java.lang.String" value="C&#xf3;digos"/>
     <Property name="toolTipText" type="java.lang.String" value=""/>
   </Properties>

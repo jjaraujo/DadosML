@@ -65,7 +65,6 @@ public class InternalEnviosManuais extends javax.swing.JInternalFrame {
 
         setClosable(true);
         setIconifiable(true);
-        setMaximizable(true);
         setResizable(true);
         setTitle("Envio de Código");
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {

@@ -5,9 +5,7 @@
  */
 package Visao;
 
-import Connection.ConnectionFactory;
 import Controle.VariaveisDeControle;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,7 +15,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Joao
  */
-public class InternalFrameVendas extends javax.swing.JInternalFrame {
+public class InternalFrameClientes extends javax.swing.JInternalFrame {
 
     private String tipoDePesquisa;
     private final DefaultTableModel modelo;
@@ -26,7 +24,7 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
     /**
      * Creates new form InternalFrameVendas
      */
-    public InternalFrameVendas() {
+    public InternalFrameClientes() {
         if (VariaveisDeControle.user.equals("JOAO")) {
             modelo = new DefaultTableModel(null, new String[]{"ID Venda", "Apelido", "Nome",
                 "Email", "Codigo", "Codigos Antigos", "Tipo", "Dispositivos",
@@ -261,15 +259,7 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
             entrada = entrada.replaceAll("\\s+$", "");
             PreparedStatement stmt;
             ResultSet rs;
-            String script = "select chv.id_venda id_venda, cl.apelido apelido,cl.nome nome,cl.email email,"
-                    + " cd.codigo codigo,chv.codigos_antigos codigos_antigos,"
-                    + "cd.tipo tipo, chv.qtd_dispositivos qtd_dispositivos, v.valor, "
-                    + "cd.duracao duracao,v.data data, v.forma_pagamento pagamento"
-                    + ",v.cancelada cancelada,cl.suspeito suspeito,cl.inativo inativo "
-                    + "from codigos_has_vendas chv "
-                    + "join vendas v on v.id like chv.id_venda "
-                    + " join clientes_ml cl on v.apelido_comprador like cl.apelido "
-                    + "join codigos cd on cd.id = chv.id_codigo "
+            String script = "select apelido,nome,email,"
                     + " where "
                     + tipoDePesquisa + " like ? order by v.data;";
             String id_venda = null;
