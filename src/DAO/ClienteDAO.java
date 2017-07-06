@@ -95,7 +95,7 @@ public class ClienteDAO {
             new Principal().dialogAutenticacao();
             return true;
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao verificar se cliente já está cadastrado");
+            JOptionPane.showMessageDialog(null, "Erro ao verificar se cliente já está cadastrado","Erro",JOptionPane.ERROR);
             return true;
         }
     }

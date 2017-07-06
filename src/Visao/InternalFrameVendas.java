@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -312,7 +313,12 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
                 }
             }
         } catch (SQLException ex) {
-
+            if (ex.getMessage().contains("MySQLNonTransientConnectionException")) {
+                new Principal().dialogAutenticacao();
+            } else {
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro",JOptionPane.WARNING_MESSAGE);
+                ex.printStackTrace();
+            }
         }
     }
 

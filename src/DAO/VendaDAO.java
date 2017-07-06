@@ -203,6 +203,7 @@ public class VendaDAO {
             vp.setId_venda(v.getId());
             new VendasPendentesDAO().insereVendas(vp);
             stmt.close();
+            JOptionPane.showMessageDialog(null, "Venda " + v.getId() + " cadastrada");
         } catch (SQLException ex) {
             System.err.println("Erro ao adicionar a venda " + v.getId() + ": " + ex.getMessage());
             ex.printStackTrace();

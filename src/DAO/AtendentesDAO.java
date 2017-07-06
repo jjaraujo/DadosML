@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -50,9 +51,15 @@ public class AtendentesDAO {
             rs.close();
             stmt.close();
         } catch(MySQLNonTransientConnectionException e){
-            new Principal().dialogAutenticacao();
+            
         } catch (SQLException ex) {
-            Logger.getLogger(AtendentesDAO.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex.getMessage().contains("MySQLNonTransientConnectionException")){
+                new Principal().dialogAutenticacao();
+            } else{
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+                ex.printStackTrace();
+            }
+            
         } 
         return list;
     }

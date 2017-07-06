@@ -174,8 +174,7 @@ public class InternalCadastrarCliente extends javax.swing.JInternalFrame {
         if (jCheckBoxTelefoneConfirmado.isSelected()) {
             cl.setConfirmado("SIM");
         }
-        new ClienteDAO().cadastrarCliente(cl);
-        JOptionPane.showMessageDialog(null, "Cliente cadastrado");    // TODO add your handling code here:
+        new ClienteDAO().cadastrarCliente(cl);   // TODO add your handling code here:
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
