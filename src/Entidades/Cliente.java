@@ -73,7 +73,7 @@ public class Cliente {
             return "DF";
         } else if (dd == 85 || dd == 88) {
             return "CE";
-        } else if (dd > 26 || dd < 29) {
+        } else if (dd > 26 && dd < 29) {
             return "ES";
         } else if (dd == 64 || (dd > 60 && dd < 63)) {
             return "GO";

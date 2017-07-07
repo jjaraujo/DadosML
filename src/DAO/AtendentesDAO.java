@@ -50,15 +50,10 @@ public class AtendentesDAO {
             }
             rs.close();
             stmt.close();
-        } catch(MySQLNonTransientConnectionException e){
-            
-        } catch (SQLException ex) {
-            if(ex.getMessage().contains("MySQLNonTransientConnectionException")){
-                new Principal().dialogAutenticacao();
-            } else{
-                JOptionPane.showMessageDialog(null, ex.getMessage());
+        }  catch (SQLException ex) {
+                            JOptionPane.showMessageDialog(null, ex.getMessage()+"\n Abra o programa novamente!","Erro",JOptionPane.WARNING_MESSAGE);
                 ex.printStackTrace();
-            }
+                System.exit(0);  
             
         } 
         return list;

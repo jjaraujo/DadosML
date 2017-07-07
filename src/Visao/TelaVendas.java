@@ -88,6 +88,7 @@ public class TelaVendas extends javax.swing.JFrame {
      * Creates new form TelaVendas
      */
     public TelaVendas() throws ClassNotFoundException {
+        new Principal().dialogAutenticacao();
         this.jComboBoxModelDialogVendasPendentes = new javax.swing.DefaultComboBoxModel<VendasPendentes>();
 
         con = new ConnectionFactory().getConnection();
