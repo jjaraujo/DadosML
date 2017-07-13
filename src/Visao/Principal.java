@@ -11,8 +11,8 @@ import Controle.InsereCodigoNasVendasParaEnvio;
 import Controle.VariaveisDeControle;
 import DAO.CodigoDAO;
 import DAO.Codigos_has_vendasDAO;
+import DAO.ProdutosDAO;
 import DAO.VendaDAO;
-import Entidades.Vendas;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.ArrayList;
@@ -33,6 +33,7 @@ public class Principal extends javax.swing.JFrame {
         Dimension scrnsize = toolkit.getScreenSize();
         initComponents();
         dialogAutenticacao();
+        VariaveisDeControle.mapProd = new ProdutosDAO().getProdutosMap();
 
         this.setSize(scrnsize);
     }
@@ -72,6 +73,8 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem9 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem13 = new javax.swing.JMenuItem();
+        jMenu5 = new javax.swing.JMenu();
+        jMenuItem12 = new javax.swing.JMenuItem();
 
         jDialog1.setAlwaysOnTop(true);
         jDialog1.setMinimumSize(new java.awt.Dimension(256, 183));
@@ -159,7 +162,7 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem4);
 
-        jMenuItem5.setText("Modificar Código Venda");
+        jMenuItem5.setText("Modificar Venda");
         jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem5ActionPerformed(evt);
@@ -240,6 +243,18 @@ public class Principal extends javax.swing.JFrame {
         jMenu4.add(jMenuItem13);
 
         jMenuBar1.add(jMenu4);
+
+        jMenu5.setText("Produtos");
+
+        jMenuItem12.setText("Visualizar Produtos");
+        jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem12ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem12);
+
+        jMenuBar1.add(jMenu5);
 
         setJMenuBar(jMenuBar1);
 
@@ -388,6 +403,12 @@ public class Principal extends javax.swing.JFrame {
         VariaveisDeControle.frameCadastroClienteAberto = true;
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
+    private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
+        InternalProdutos i = new InternalProdutos();
+        jDesktopPane1.add(i);
+i.setVisible(true);        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem12ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -429,11 +450,13 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu8;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem11;
+    private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem13;
     private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem2;

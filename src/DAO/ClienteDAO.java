@@ -40,14 +40,15 @@ public class ClienteDAO {
     public Cliente buscaCliente(String apelido) {
 
         try {
-            stmt = con.prepareStatement("select email,inativo,confirmado from clientes_ml where apelido like '" + apelido + "';");
+            stmt = con.prepareStatement("select email,telefone,inativo,confirmado,revendedor_assistencia from clientes_ml where apelido like '" + apelido + "';");
             rs = stmt.executeQuery();
             Cliente cliente = new Cliente();
             while (rs.next()) {
                 cliente.setEmail(rs.getString("email"));
                 cliente.setInativo(rs.getString("inativo"));
                 cliente.setConfirmado(rs.getString("confirmado"));
-                cliente.setRevendedor_assitencia("revendedor_assistencia");
+                cliente.setRevendedor_assitencia(rs.getString("revendedor_assistencia"));
+                cliente.setTelefone(rs.getString("telefone"));
             }
             rs.close();
             stmt.close();
@@ -171,13 +172,14 @@ public class ClienteDAO {
         return set;
     }
 
-    public void setNumeroConfimado(String apelido) {
+    public void setNumeroConfimado(String apelido, String telefone) {
         try {
-            PreparedStatement stmt = con.prepareStatement("UPDATE clientes_ml SET confirmado ='sim' WHERE apelido like ?;");
-            stmt.setString(1, apelido);
+            PreparedStatement stmt = con.prepareStatement("UPDATE clientes_ml SET telefone = concat(telefone,?)  WHERE apelido like ?;");
+            stmt.setString(1,telefone);
+            stmt.setString(2, apelido);
             stmt.executeUpdate();
         }  catch (SQLException ex) {
-            System.err.println("Erro ao adicionar numero confirmado no cliente " + apelido + ex.getMessage());
+            System.err.println("Erro ao adicionar numero confirmado no cliente " + apelido +"\n" + ex.getMessage());
             System.exit(0);
         }
     }

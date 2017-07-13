@@ -24,7 +24,7 @@ public class InternalJSon extends javax.swing.JInternalFrame {
      * Creates new form InternalJSon
      */
     public InternalJSon() {
-        
+
         initComponents();
     }
 
@@ -101,23 +101,18 @@ public class InternalJSon extends javax.swing.JInternalFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         LeituraJson json = new LeituraJson();
-        if(jTextAreaJson.getText().contains("anuncio")){
-            tipoObjetoDeCadastro = "vendas";
-        } else {
-             tipoObjetoDeCadastro = "cliente";
-        }
-        if (tipoObjetoDeCadastro.equals("cliente")) {
-            ClienteDAO clienteDAO = new ClienteDAO();
-            clienteDAO.cadastrarCliente(json.lerJsonClientes("[" + jTextAreaJson.getText() + "]"));
-        } else if (tipoObjetoDeCadastro.equals("vendas")) {
+        if (jTextAreaJson.getText().contains("anuncio")) {
             VendaDAO vendaDAO = new VendaDAO();
             vendaDAO.insertVenda(json.lerJsonVendas("[" + jTextAreaJson.getText() + "]"));
-        }                
+        } else {
+            ClienteDAO clienteDAO = new ClienteDAO();
+            clienteDAO.cadastrarCliente(json.lerJsonClientes("[" + jTextAreaJson.getText() + "]"));
+        }
         jTextAreaJson.setText("");
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
-VariaveisDeControle.frameJsonAberto = false;        // TODO add your handling code here:
+        VariaveisDeControle.frameJsonAberto = false;        // TODO add your handling code here:
     }//GEN-LAST:event_formInternalFrameClosing
 
 

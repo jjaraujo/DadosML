@@ -92,7 +92,7 @@ public class InsereCodigoNasVendasParaEnvio {
     }
 
     private void setCodigoNaVendaParaEnvio() {
-        HashMap<Integer, Produtos> mapProd = new ProdutosDAO().getProdutos();
+        HashMap<Integer, Produtos> mapProd = VariaveisDeControle.mapProd;
         for (VendasPendentes v : VariaveisDeControle.listVen) {
             Produtos prod = mapProd.get(v.getIdProduto());
             System.out.println("for VendasPendentes: " + v.getId_venda() + ". Tipo: " + prod.getTipo() + " Anos " + prod.getAnos());

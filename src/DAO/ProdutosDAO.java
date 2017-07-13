@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -129,7 +130,7 @@ public class ProdutosDAO {
             if (p.contains("1 ano")) {
                 if (p.contains("1 server - kaspersky small office") || p.contains("1 dispositivo")) {
                     produto = 56;
-                } else if (p.contains("5 pcs") || p.contains("5 dispositivos")) {
+                } else if ((p.contains("5 pcs")&&!p.contains("15 pcs")) || (p.contains("5 dispositivos")&&!p.contains("15 dispositivos"))) {
                     produto = 48;
                 } else if (p.contains("10 pcs") || p.contains("10 dispositivos")) {
                     produto = 52;
@@ -141,7 +142,7 @@ public class ProdutosDAO {
             } else if (p.contains("2 anos")) {
                 if (p.contains("1 dispositivo") || p.contains("1 server - kaspersky small office") || p.contains("1 server 2 anos¹ - kaspersky small office security")) {
                     produto = 45;
-                } else if (p.contains("5 pcs") || p.contains("5 dispositivos")) {
+                } else if (p.contains("5 pcs")&&(p.contains("5 pcs")&&!p.contains("15 pcs")) || p.contains("5 dispositivos")) {
                     produto = 40;
                 } else if (p.contains("10 pcs") || p.contains("10 dispositivos")) {
                     produto = 44;
@@ -173,7 +174,7 @@ public class ProdutosDAO {
         }
     }
 
-    public HashMap<Integer, Produtos> getProdutos() {
+    public HashMap<Integer, Produtos> getProdutosMap() {
         Produtos p;
         HashMap<Integer, Produtos> mapProd = new HashMap<>();
         try {
@@ -192,6 +193,28 @@ public class ProdutosDAO {
                 }
                 return mapProd;
             }
+        } catch (SQLException ex) {
+            System.out.println("Erro ao buscar tipo do produto em ProdutoDAO.retornaProduto: " + ex.getMessage());
+            return null;
+        }
+    }
+     public ArrayList<Produtos> getProdutosList() {
+        Produtos p;
+        ArrayList<Produtos> listProd = new ArrayList<>();
+        try {
+                PreparedStatement stmt = VariaveisDeControle.CON.prepareStatement("select * from produtos order by tipo, qtd,duracao;");
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    p = new Produtos();
+                    p.setId(rs.getInt("id"));
+                    p.setTipo(rs.getString("tipo"));
+                    p.setAnos(rs.getInt("duracao"));
+                    p.setQtd(rs.getInt("qtd"));
+                    p.setValor(rs.getDouble("valor"));
+                    listProd.add(p);
+                }
+                return listProd;
+            
         } catch (SQLException ex) {
             System.out.println("Erro ao buscar tipo do produto em ProdutoDAO.retornaProduto: " + ex.getMessage());
             return null;

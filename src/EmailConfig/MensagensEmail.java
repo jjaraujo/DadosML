@@ -5,41 +5,35 @@ package EmailConfig;
  * @author HP
  */
 public class MensagensEmail {
+
     private String mensagensAdicionais = "\n Em alguns casos pode aparecer as seguintes mensagens:\n "
             + "\n\"Certificado de servidor não confiável\" - caso ocorra, reinicie o computador. Se persistir o probrema, desinstale o antivirus e instale novamente.\n"
             + "\n\"Você excedeu o limite de ativações\" - neste caso, entre em contato conosco para desbloquearmos o código. \n"
             + "\n\"Código inválido\" - neste caso você está inserindo algum caracter do código errado. Sugerimos copiar e colar o código na primeira caixa de texto na tela de ativação.";
-    
-    
-    public String verificaQualOCorpoDOEmail(String tipo, int qtd, String codigo) {
+
+    public String verificaQualOCorpoDOEmail(String tipo, int qtdDispositivos, String codigo, int qtdVenda) {
         switch (tipo.toLowerCase()) {
             case "total":
-                return corpoTotal(qtd, codigo);
+                return corpoTotal(qtdDispositivos, codigo);
             case "kis":
-                return corpoKIS(qtd, codigo);
+                return corpoKIS(qtdDispositivos, codigo);
             case "android":
-                return corpoKIS(qtd, codigo);
+                return corpoKIS(qtdDispositivos, codigo);
             case "small":
-                return corpoSMALL(qtd, codigo);
+                return corpoSMALL(qtdDispositivos, codigo, qtdVenda);
             default:
                 return null;
         }
     }
 
     public String corpoTotal(int qtd, String codigo) {
-        String dispositivos = null;
-        if (qtd == 1) {
-            dispositivos = "1 dispositivo";
-        } else {
-            dispositivos = qtd + " dispositivos";
-        }
 
-        return "Segue seu código para " + dispositivos + ". Não ative em mais de " + qtd + " senão o seu código será bloqueado. Após ativação, efetue a qualificação da venda.\n"
+        return "Segue seu(s) código(s). Não ative em mais que o informado ao lado senão poderá haver bloqueio. Após ativação, efetue a qualificação da venda.\n"
                 + "\n"
                 + "Código de ativação: " + codigo + "\n"
                 + "\n"
                 + " Total 2017 versão português Windows: http://products.kaspersky-labs.com/portuguese/homeuser/kts2017/kts17.0.0.611pt_11117.exe"
-                + "Versão MAC, iPhone e Android: https://www.kaspersky.com.br/downloads/thank-you/internet-security-free-trial"
+                + "\nVersão MAC, iPhone e Android: https://www.kaspersky.com.br/downloads/thank-you/internet-security-free-trial"
                 + "\n\n\nKaspersky Total Security – multidispositivos 2017 é a solução de segurança fácil de usar com uma licença para diversas plataformas que protege praticamente qualquer tipo de PC, Mac, smartphone Android e tablet Android contra malwares, criminosos virtuais e ameaças da Internet. Independentemente do tipo de dispositivo que você usa, a Kaspersky pode protegê-los: e as informações sigilosas armazenadas neles. \n"
                 + "\n"
                 + mensagensAdicionais
@@ -53,16 +47,10 @@ public class MensagensEmail {
     }
 
     public String corpoKIS(int qtd, String codigo) {
-        String dispositivos = null;
-        if (qtd == 1) {
-            dispositivos = "1 dispositivo";
-        } else {
-            dispositivos = qtd + " dispositivos";
-        }
 
-        return "Segue seu código para " + dispositivos + ". Não ative em mais de " + qtd + " senão o seu código será bloqueado. Após ativação, efetue a qualificação da venda.\n"
+        return "Segue seu(s) código(s). Não ative em mais de o informado ao lado senão poderá haver bloqueio. Após ativação, efetue a qualificação da venda.\n"
                 + "\n"
-                + "Código de ativação: " + codigo + "\n"
+                + "Código(s) de ativação: " + codigo + "\n"
                 + "\n"
                 + "KIS 2017 versão português: http://products.kaspersky-labs.com/portuguese/homeuser/kis2017/kis17.0.0.611pt_11260.exe\n"
                 + "Versão MAC, iPhone e Android: https://www.kaspersky.com.br/downloads/thank-you/internet-security-free-trial"
@@ -79,15 +67,9 @@ public class MensagensEmail {
                 + "Esperamos que você fique satisfeito com seu novo produto e oferecemos àqueles que já são nossos clientes um desconto nas renovações de licença.\n";
     }
 
-    public String corpoSMALL(int qtd, String codigo) {
-        String dispositivos = null;
-        if (qtd == 1) {
-            dispositivos = "1 servidor";
-        } else {
-            dispositivos = qtd + " dispositivos, 1 servidor";
-        }
-
-        return "Segue seu código para " + dispositivos + ". Não ative em mais de " + qtd + " senão o seu código será bloqueado. Após ativação, efetue a qualificação da venda.\n"
+    public String corpoSMALL(int qtd, String codigo, int servidor) {
+        
+        return "Não ative seu(s) código(s) em mais dipositivos que o informado ao lado senão o seu código será bloqueado. Após ativação, efetue a qualificação da venda.\n"
                 + "\n"
                 + "Código de ativação: " + codigo + "\n"
                 + "Versão 2017: http://brazil.kaspersky.com/downloads/versoes-de-teste/small-office-security \n"
@@ -116,4 +98,5 @@ public class MensagensEmail {
                 + "\n"
                 + "http://brazil.kaspersky.com/comprar/como-instalar-kaspersky-small-office-security\n";
     }
+
 }

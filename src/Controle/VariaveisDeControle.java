@@ -5,9 +5,11 @@
  */
 package Controle;
 
+import Entidades.Produtos;
 import Entidades.VendasPendentes;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.DefaultComboBoxModel;
 
 /**
@@ -31,6 +33,7 @@ public class VariaveisDeControle {
     public static String user = "";
     public static String senha = "";
     public static Connection CON ;
+    public static HashMap<Integer,Produtos> mapProd;
     public static ArrayList<VendasPendentes> listVen = new ArrayList<>();
     
     public static DefaultComboBoxModel jComboBoxModelDialogVendasPendentes = new DefaultComboBoxModel<VendasPendentes>();

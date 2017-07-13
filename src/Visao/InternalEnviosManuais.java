@@ -9,11 +9,14 @@ import Controle.EnviarCodigos;
 import Controle.VariaveisDeControle;
 import DAO.CodigoDAO;
 import DAO.Codigos_has_vendasDAO;
+import DAO.ProdutosDAO;
 import DAO.VendasPendentesDAO;
 import Entidades.Codigos;
+import Entidades.Produtos;
 import Entidades.VendasPendentes;
 import Entidades.codigos_has_vendas;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.JOptionPane;
 
 /**
@@ -29,6 +32,7 @@ public class InternalEnviosManuais extends javax.swing.JInternalFrame {
     private VendasPendentes ven = new VendasPendentes();
     ArrayList<codigos_has_vendas> listaCodigosHasVendasSelecionados = new ArrayList<>();
     private ArrayList<Codigos> codAdicionadoManualmente = new ArrayList<>();
+    private HashMap<Integer,Produtos> map = VariaveisDeControle.mapProd;
 
     public InternalEnviosManuais() {
         initComponents();
@@ -62,6 +66,8 @@ public class InternalEnviosManuais extends javax.swing.JInternalFrame {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jTextFieldApelidoEnvioManual = new javax.swing.JTextField();
+        jSpinnerQTDServer = new javax.swing.JSpinner();
+        jLabel34 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -97,13 +103,13 @@ public class InternalEnviosManuais extends javax.swing.JInternalFrame {
             }
         });
 
-        jSpinnerQTD.setValue(ven.getQtd());
+        jSpinnerQTD.setValue(ven.getQtd() * map.get(ven.getIdProduto()).getQtd());
 
         jLabel31.setText("Escolher venda:");
 
         jLabel36.setText("Apelido:");
 
-        jLabel33.setText("QTD:");
+        jLabel33.setText("Dispositivos:");
 
         jLabel35.setText("Observação:");
 
@@ -145,23 +151,37 @@ public class InternalEnviosManuais extends javax.swing.JInternalFrame {
             }
         });
 
+        jSpinnerQTDServer.setValue(ven.getQtd());
+
+        jLabel34.setText("Server:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jLabel31)
-                .addGap(18, 18, 18)
-                .addComponent(jComboBoxDialogCodigoManualmente, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(176, Short.MAX_VALUE)
+                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(137, 137, 137))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel31)
+                        .addGap(18, 18, 18)
+                        .addComponent(jComboBoxDialogCodigoManualmente, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonCarregar)
                 .addGap(9, 9, 9))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel37)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jTextFieldProdutoEnvioManual, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel35)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -169,32 +189,32 @@ public class InternalEnviosManuais extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel36)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextFieldApelidoEnvioManual, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel37)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextFieldProdutoEnvioManual, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel32)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextFieldIdCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel33)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jSpinnerQTD, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton2))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton4)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton1)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton3)
-                                .addGap(13, 13, 13)))
-                        .addGap(94, 94, 94))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(137, 137, 137))))
+                                .addComponent(jTextFieldApelidoEnvioManual, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel32)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldIdCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel33)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSpinnerQTD, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel34)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSpinnerQTDServer, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton2)
+                        .addGap(149, 149, 149))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(142, 142, 142)
+                .addComponent(jButton4)
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addGap(18, 18, 18)
+                .addComponent(jButton3)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -205,25 +225,28 @@ public class InternalEnviosManuais extends javax.swing.JInternalFrame {
                     .addComponent(jButtonCarregar)
                     .addComponent(jComboBoxDialogCodigoManualmente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel37)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jTextFieldProdutoEnvioManual, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldProdutoEnvioManual, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel37))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTextFieldObservacaoEnvioManual, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel35)
                         .addComponent(jLabel36)
                         .addComponent(jTextFieldApelidoEnvioManual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel32)
-                    .addComponent(jLabel33)
-                    .addComponent(jSpinnerQTD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldIdCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel32)
+                        .addComponent(jTextFieldIdCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel33)
+                        .addComponent(jSpinnerQTD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton2)
+                        .addComponent(jLabel34)
+                        .addComponent(jSpinnerQTDServer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(17, 17, 17)
                 .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -267,6 +290,7 @@ public class InternalEnviosManuais extends javax.swing.JInternalFrame {
                     ArrayList<Codigos> codAdicionadoManualmente2 = new ArrayList<>();
                     codAdicionadoManualmente2.addAll(codAdicionadoManualmente);
                     ven = (VendasPendentes) VariaveisDeControle.jComboBoxModelDialogVendasPendentes.getSelectedItem();
+                    ven.setCodigo(null);
                     codAdicionadoManualmente.clear();
                     listaCodigosHasVendasSelecionados.clear();
                     for (Codigos c : codAdicionadoManualmente2) {
@@ -279,8 +303,9 @@ public class InternalEnviosManuais extends javax.swing.JInternalFrame {
                     VendasPendentes v = ven;
                     VariaveisDeControle.listVen.remove(v);
                     VariaveisDeControle.jComboBoxModelDialogVendasPendentes.removeElement(v);
-
+                         
                     new EnviarCodigos().enviarCodigoUmaVenda(v, true, codAdicionadoManualmente2, listaCodigosHasVendasSelecionados2);
+                    
                     new VendasPendentesDAO().remove(v.getId_venda());
                 }
             }
@@ -288,11 +313,12 @@ public class InternalEnviosManuais extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jComboBoxDialogCodigoManualmenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxDialogCodigoManualmenteActionPerformed
+        
         VariaveisDeControle.carregamentoCodigoManual = true;
         ven = (VendasPendentes) jComboBoxDialogCodigoManualmente.getSelectedItem();
         if (ven == null) {
         } else {
-            jSpinnerQTD.setValue(ven.getQtd());
+            jSpinnerQTD.setValue(ven.getQtd() * map.get(ven.getIdProduto()).getQtd());
             jTextFieldApelidoEnvioManual.setText(ven.getApelido());
             jTextFieldObservacaoEnvioManual.setText(ven.getObservacoes());
             jTextFieldProdutoEnvioManual.setText(ven.getProduto());
@@ -302,10 +328,9 @@ public class InternalEnviosManuais extends javax.swing.JInternalFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         QtdSelecionadaDaVenda = QtdSelecionadaDaVenda + (int) jSpinnerQTD.getValue();
-        if (QtdSelecionadaDaVenda <= ven.getQtd()) {
-            jTextAreaCodigosSelecionados.setText(jTextAreaCodigosSelecionados.getText() + jTextFieldIdCodigo.getText() + " - " + jSpinnerQTD.getValue() + "\n");
-            inserirEAlterarCodigoVendaManualmente(Integer.parseInt(jTextFieldIdCodigo.getText()), (int) jSpinnerQTD.getValue());
-
+        if (QtdSelecionadaDaVenda <= ven.getQtd() * map.get(ven.getIdProduto()).getQtd()) {
+            jTextAreaCodigosSelecionados.setText(jTextAreaCodigosSelecionados.getText() + jTextFieldIdCodigo.getText() + " - " + jSpinnerQTD.getValue() + " - " + jSpinnerQTDServer.getValue()  + " server\n");
+            inserirEAlterarCodigoVendaManualmente(Integer.parseInt(jTextFieldIdCodigo.getText()), (int) jSpinnerQTD.getValue(), (int) jSpinnerQTDServer.getValue());
         } else {
             JOptionPane.showMessageDialog(null, "Quantidade de dispositivos maior que a da venda");
         }        // TODO add your handling code here:
@@ -354,22 +379,25 @@ VariaveisDeControle.frameEnvioManualAberto = false;        // TODO add your hand
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel37;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JSpinner jSpinnerQTD;
+    private javax.swing.JSpinner jSpinnerQTDServer;
     private javax.swing.JTextArea jTextAreaCodigosSelecionados;
     private javax.swing.JTextField jTextFieldApelidoEnvioManual;
     private javax.swing.JTextField jTextFieldIdCodigo;
     private javax.swing.JTextField jTextFieldObservacaoEnvioManual;
     private javax.swing.JTextField jTextFieldProdutoEnvioManual;
     // End of variables declaration//GEN-END:variables
-  private void inserirEAlterarCodigoVendaManualmente(int id, int qtd) {
+  private void inserirEAlterarCodigoVendaManualmente(int id, int qtd, int qtdServer) {
         codigos_has_vendas chv = new codigos_has_vendas();
         chv.setIdVenda(ven.getId_venda());
         chv.setId_codigo(id);
         chv.setQtd(qtd);
+        chv.setQtd_servidor(qtdServer);
         listaCodigosHasVendasSelecionados.add(chv);
         Codigos c = new CodigoDAO().buscaUmCodigo(id);
         codAdicionadoManualmente.add(c);

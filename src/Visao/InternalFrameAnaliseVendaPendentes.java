@@ -341,6 +341,7 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
                     limparCampos();
                     VariaveisDeControle.listVen.remove(ven);
                     jLabelMensagemProgresso.setText("");
+                    jComboBoxDialogVendasPendentes.removeItem(ven);
                     carregarDadosVendasPendentes(false);
                 }
             }
@@ -349,7 +350,7 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
             @Override
             public void run() {
                 try {
-                    new EmailService(ven.getEmail(), "Contato Pendente", "Para que seu código seja enviado, por favor entre em contato pelo whastapp 91980452185. Aguardo").sendEmail();
+                    new EmailService(ven.getEmail(), "Contato Pendente", "Para que seu código seja enviado, por favor entre em contato pelo whastapp 91980452185. Essa verificação está informada no anúncio e é bem rápida. Aguardo :)").sendEmail();
                 } catch (IOException ex) {
                     Logger.getLogger(TelaVendas.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (MessagingException ex) {
@@ -368,17 +369,20 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
             new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    new EnviarCodigos().setCodigoNaVenda(v);
                     new EnviarCodigos().enviarCodigoUmaVenda(v, false, null, null);
                 }
             }).start();
             jLabelMensagemProgresso.setText("");
-            Runnable rr = () -> {
-                VariaveisDeControle.listVen.remove(v);
-                VariaveisDeControle.jComboBoxModelDialogVendasPendentes.removeElement(v);
-                carregarDadosVendasPendentes(false);
-            };
-            Thread tt = new Thread(rr);
-            tt.start();
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {                    
+                    VariaveisDeControle.listVen.remove(v);
+                    VariaveisDeControle.jComboBoxModelDialogVendasPendentes.removeElement(v);
+                    carregarDadosVendasPendentes(false);
+                }
+            }).start();
         }
     }//GEN-LAST:event_jButtonEnviarActionPerformed
 
@@ -421,9 +425,18 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
     private void jCheckBoxNumeroConfirmadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxNumeroConfirmadoActionPerformed
         int i = JOptionPane.showConfirmDialog(null, "Deseja mesmo confirmar o número?", "Confirmar numero", JOptionPane.YES_NO_OPTION);        // TODO add your handling code here:
         if (i == 0) {
-            JOptionPane.showMessageDialog(null, "box selecionado");
-            System.out.println(ven.getApelido());
-            new ClienteDAO().setNumeroConfimado(ven.getApelido());
+            String s = JOptionPane.showInputDialog("Numero :" + new ClienteDAO().buscaCliente(ven.getApelido()).getTelefone()+ "\nDeseja adicionar outro?");
+            if(null == s){
+                
+            } else switch (s) {
+                case "":
+                    new ClienteDAO().setNumeroConfimado(ven.getApelido(),s);
+                    break;
+                default:
+                    new ClienteDAO().setNumeroConfimado(ven.getApelido(),"|"+s);
+                    break;
+            }
+            
         }
     }//GEN-LAST:event_jCheckBoxNumeroConfirmadoActionPerformed
 
@@ -449,10 +462,10 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
                 int i = JOptionPane.showConfirmDialog(null, "Deseja carregar a lista novamente?", "Confirmar", JOptionPane.YES_NO_OPTION);
                 if (i == 0) {
                     VariaveisDeControle.carregarVendasPendentesECodigos();
-                } 
+                }
             }
         }
-        if(VariaveisDeControle.listVen.isEmpty()){
+        if (VariaveisDeControle.listVen.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Não há vendas pendentes no momento!");
         }
         // TODO add your handling code here:

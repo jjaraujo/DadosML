@@ -9,7 +9,19 @@ package Entidades;
 public class codigos_has_vendas {
 
     private String id_venda;
+    private int id_codigo;
+    private int qtd_dispositivos;
+    private String codigos_antigos;
+    private int qtd_servidor;
 
+    public int getQtd_servidor() {
+        return qtd_servidor;
+    }
+
+    public void setQtd_servidor(int qtd_servidor) {
+        this.qtd_servidor = qtd_servidor;
+    }
+    
     public int getId_codigo() {
         return id_codigo;
     }
@@ -33,9 +45,6 @@ public class codigos_has_vendas {
     public void setCodigos_antigos(String codigos_antigos) {
         this.codigos_antigos = codigos_antigos;
     }
-    private int id_codigo;
-    private int qtd_dispositivos;
-    private String codigos_antigos;
     public String getIdVenda() {
         return id_venda;
     }

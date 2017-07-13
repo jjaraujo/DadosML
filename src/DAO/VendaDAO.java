@@ -5,7 +5,6 @@
  */
 package DAO;
 
-import Connection.ConnectionFactory;
 import Controle.VariaveisDeControle;
 import Entidades.Cliente;
 import Entidades.Produtos;
@@ -20,11 +19,9 @@ import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import com.email.EmailService;
 
 /**
  *
@@ -33,7 +30,6 @@ import com.email.EmailService;
 public class VendaDAO {
 
     private static Connection con;
-    private HashMap<Integer, String> map;
 
     public VendaDAO() {
         con = VariaveisDeControle.CON;
@@ -71,9 +67,14 @@ public class VendaDAO {
                     VendasPendentes vp = new VendasPendentes();
                     Cliente cliente = new ClienteDAO().buscaCliente(v.getApelido_comprador());
                     String anuncio = v.getAnuncio();
-                    double valor = v.getValor();
+                    double valor = v.getValor() * v.getQtd();
                     double valorpordispositivo;
-                    double valordesconto = (valor - (valor * 11) / 100);
+                    double valordesconto;
+                    if (valor < 40) {
+                        valordesconto = (valor - (valor * 11) / 100);
+                    } else {
+                        valordesconto = (valor - (valor * 16) / 100);
+                    }
                     int idProduto = prodDAO.pegaIDProduto(anuncio);
                     Produtos produto = prodDAO.retornaProduto(idProduto);
                     int qtddispproduto = produto.getQtd();
@@ -124,7 +125,7 @@ public class VendaDAO {
                         vp.setEmail(cliente.getEmail());
                         vp.setIdProduto(idProduto);
                         vp.setPagamento(v.getFormaPagamento());
-                        vp.setQtd(qtdTotalDispositivos);
+                        vp.setQtd(qtdProdutosVenda);
                         vp.setId_venda(v.getId());
                         //verifica se o cliente é inativo, se for não vai enviar para vendas pendentes
                         if (cliente.getInativo().equals("null")) {//
@@ -199,7 +200,7 @@ public class VendaDAO {
             vp.setEmail(cliente.getEmail());
             vp.setIdProduto(v.getIdProduto());
             vp.setPagamento(v.getFormaPagamento());
-            vp.setQtd(qtdTotalDispositivos);
+            vp.setQtd(qtdProdutosVenda);
             vp.setId_venda(v.getId());
             new VendasPendentesDAO().insereVendas(vp);
             stmt.close();
@@ -259,6 +260,28 @@ public class VendaDAO {
         try {
             PreparedStatement stmt = con.prepareCall("update vendas set cancelada = 'SIM' where id like ?; ");
             stmt.setString(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(VendaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void updateIdProdutoVenda(String id, int idProd) {
+        try {
+            PreparedStatement stmt = con.prepareCall("update vendas set id_produto = ? where id like ?; ");
+            stmt.setInt(1, idProd);
+            stmt.setString(2, id);
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(VendaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void updateQtdVenda(String id, int qtd) {
+        try {
+            PreparedStatement stmt = con.prepareCall("update vendas set qtd = ? where id like ?; ");
+            stmt.setInt(1, qtd);
+            stmt.setString(2, id);
             stmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(VendaDAO.class.getName()).log(Level.SEVERE, null, ex);

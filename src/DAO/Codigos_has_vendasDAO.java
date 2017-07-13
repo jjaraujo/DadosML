@@ -134,12 +134,13 @@ public class Codigos_has_vendasDAO {
         ResultSet rs;
         try {
             System.out.println("Entrou no try");
-            stmt = con.prepareStatement("insert into codigos_has_vendas (id_venda,id_codigo,qtd_dispositivos) values (?,?,?) ;");
+            stmt = con.prepareStatement("insert into codigos_has_vendas (id_venda,id_codigo,qtd_dispositivos,qtd_servidor) values (?,?,?,?) ;");
             stmt.setString(1, chv.getIdVenda());
             System.out.println(chv.getIdVenda());
             stmt.setInt(2, chv.getId_codigo());
             System.out.println(chv.getId_codigo());
             stmt.setInt(3, chv.getQtd());
+            stmt.setInt(4, chv.getQtd_servidor());
             stmt.executeUpdate();
             new CodigoDAO().setQtdUsadaCodigo(chv.getId_codigo(), chv.getQtd());
             return true;

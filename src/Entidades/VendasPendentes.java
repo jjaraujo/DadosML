@@ -112,12 +112,12 @@ public class VendasPendentes {
         String server = "";
         String tipo = p.getTipo();
         if(p.getTipo().toLowerCase().equals("small") && p.getQtd() > 1){
-            server = " 1 server ";
+            server = qtd + " server ";
         }
         if(p.getAnos() > 1 && !p.getTipo().toLowerCase().equals("small")){
             tipo = "Total";
         }
-        produto = tipo + " " + qtd + " Dispositivo(s) " + server + " " +  p.getAnos() + " ano(s)";
+        produto = tipo + " " + qtd * p.getQtd() + " Dispositivo(s) " + server + " " +  p.getAnos() + " ano(s)";
         return produto;
     }
 

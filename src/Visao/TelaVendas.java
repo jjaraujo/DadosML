@@ -2895,7 +2895,7 @@ public class TelaVendas extends javax.swing.JFrame {
         if (i == 0) {
             JOptionPane.showMessageDialog(null, "box selecionado");
             System.out.println(ven.getApelido());
-            new ClienteDAO().setNumeroConfimado(ven.getApelido());
+            new ClienteDAO().setNumeroConfimado(ven.getApelido(),null);
         }
     }//GEN-LAST:event_jCheckBoxNumeroConfirmadoActionPerformed
 
@@ -3325,7 +3325,7 @@ public class TelaVendas extends javax.swing.JFrame {
         ArrayList<Codigos> listCod = codDAO.getCodigosUtilizaveis();
         System.out.println("terminou a leitura dos codigos utilizaveis e vai iniciar a do maps produtos");
         ProdutosDAO produtosDAO = new ProdutosDAO();
-        mapProd = produtosDAO.getProdutos();
+        mapProd = produtosDAO.getProdutosMap();
         int ano;
         int idCod;
         String tipoCod;
@@ -3520,7 +3520,7 @@ public class TelaVendas extends javax.swing.JFrame {
                             new VendasPendentesDAO().marcaComoPendente(v.getId_venda(), "Análise Pendente");
                         } else if (v.getPendente() == null && v.getCodigo() != null) {
                             MensagensEmail msgEmail = new MensagensEmail();
-                            String corpo = msgEmail.verificaQualOCorpoDOEmail(mapProd.get(v.getIdProduto()).getTipo(), v.getQtd(), v.getCodigo());
+                            String corpo = msgEmail.verificaQualOCorpoDOEmail(mapProd.get(v.getIdProduto()).getTipo(), v.getQtd(), v.getCodigo(),0);
                             EmailService email = new EmailService(v.getEmail(),
                                     "Código de ativação - " + v.getProduto() + " - " + v.getApelido() + " - " + v.getId_venda(), corpo);
                             email.sendEmail();
@@ -3561,7 +3561,7 @@ public class TelaVendas extends javax.swing.JFrame {
                     System.out.println("for enviarCodigoUmaVenda:" + codigo);
                 }
             }
-            String corpo = msgEmail.verificaQualOCorpoDOEmail(mapProd.get(ven.getIdProduto()).getTipo(), ven.getQtd(), codigo);
+            String corpo = msgEmail.verificaQualOCorpoDOEmail(mapProd.get(ven.getIdProduto()).getTipo(), ven.getQtd(), codigo,0);
             EmailService email = new EmailService(ven.getEmail(),
                     "Código de ativação - " + ven.getProduto() + " - " + ven.getApelido() + " - " + ven.getId_venda(), corpo);
             email.sendEmail();
