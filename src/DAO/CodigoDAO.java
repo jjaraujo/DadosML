@@ -376,11 +376,11 @@ public class CodigoDAO {
             System.out.println("Id do código:" + c.getId() + " Qtd usada:" + c.getQtd_usada());
             if (c.getTipo().toLowerCase().equals("kis") || c.getTipo().toLowerCase().equals("android")) {
                 if (!map.containsKey(c.getId()) && c.getQtd_usada() > 100) {
-                    System.err.println("If kis - if 1");
-                } else if (map.containsKey(c.getId()) && (map.get(c.getId()) == 1 && c.getQtd_usada() > 120)) {
-                    System.err.println("If kis - if 2");
+                        // nao faz nada
+                } else if (map.containsKey(c.getId()) && (map.get(c.getId()) == 1 && c.getQtd_usada() > 140)) {
+                     // nao faz nada
                 } else if (map.containsKey(c.getId()) && map.get(c.getId()) == 2) {
-                    System.err.println("If kis - if 3");
+                     // nao faz nada
                 } else {
                     list2.add(c);
                 }
