@@ -5,6 +5,7 @@
  */
 package Visao;
 
+import Controle.EnviarCodigos;
 import Controle.VariaveisDeControle;
 import DAO.CodigoDAO;
 import DAO.Codigos_has_vendasDAO;
@@ -15,6 +16,9 @@ import Entidades.Vendas;
 import Entidades.VendasPendentes;
 import Entidades.codigos_has_vendas;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -74,6 +78,8 @@ public class InternalModificarCodigoVenda extends javax.swing.JInternalFrame {
         jScrollPane9 = new javax.swing.JScrollPane();
         jTextAreaCodigosAtualizarVendas = new javax.swing.JTextArea();
         jSeparator4 = new javax.swing.JSeparator();
+        jSpinnerQTDServer = new javax.swing.JSpinner();
+        jLabel42 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -166,6 +172,11 @@ public class InternalModificarCodigoVenda extends javax.swing.JInternalFrame {
                 jListCodigosAtuaisMouseClicked(evt);
             }
         });
+        jListCodigosAtuais.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                jListCodigosAtuaisValueChanged(evt);
+            }
+        });
         jScrollPane1.setViewportView(jListCodigosAtuais);
 
         jButton23.setText("Salvar");
@@ -187,50 +198,58 @@ public class InternalModificarCodigoVenda extends javax.swing.JInternalFrame {
         jTextAreaCodigosAtualizarVendas.setRows(5);
         jScrollPane9.setViewportView(jTextAreaCodigosAtualizarVendas);
 
+        jLabel42.setText("Servidores:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSeparator4)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton23, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(44, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(95, 95, 95))
-            .addComponent(jSeparator4)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton23, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(44, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addGap(95, 95, 95))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel40)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldIdCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel41)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSpinnerQTDAtualizarVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel42)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSpinnerQTDServer, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonAdicionar)
+                        .addContainerGap())))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(37, 37, 37)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addGap(4, 4, 4)
-                                .addComponent(jLabel40)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextFieldIdCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel41)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jSpinnerQTDAtualizarVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(44, 44, 44)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addGap(81, 81, 81)
                             .addComponent(jLabel38)
                             .addGap(2, 2, 2)
-                            .addComponent(jTextFieldIdVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jTextFieldIdVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addGap(37, 37, 37)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGap(18, 18, 18)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jButtonAdicionar)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButtonSubstituir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonAtualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jButtonSubstituir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonAtualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
@@ -238,16 +257,27 @@ public class InternalModificarCodigoVenda extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 225, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 174, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel40)
+                    .addComponent(jTextFieldIdCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel41)
+                    .addComponent(jSpinnerQTDAtualizarVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel42)
+                    .addComponent(jSpinnerQTDServer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton21)
                         .addGap(18, 18, 18)
                         .addComponent(jButton23)
-                        .addGap(18, 18, 18))
-                    .addComponent(jScrollPane9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(23, 23, 23))))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addContainerGap()
@@ -257,14 +287,7 @@ public class InternalModificarCodigoVenda extends javax.swing.JInternalFrame {
                                 .addComponent(jLabel38)
                                 .addComponent(jTextFieldIdVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGap(18, 18, 18)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(13, 13, 13)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel40)
-                                .addComponent(jTextFieldIdCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel41)
-                                .addComponent(jSpinnerQTDAtualizarVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jButtonAdicionar)))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addGap(50, 50, 50)
                             .addComponent(jButtonExcluir)
@@ -272,7 +295,7 @@ public class InternalModificarCodigoVenda extends javax.swing.JInternalFrame {
                             .addComponent(jButtonSubstituir)
                             .addGap(18, 18, 18)
                             .addComponent(jButtonAtualizar)))
-                    .addContainerGap(148, Short.MAX_VALUE)))
+                    .addContainerGap(182, Short.MAX_VALUE)))
         );
 
         jMenu1.setText("Opções");
@@ -319,7 +342,7 @@ public class InternalModificarCodigoVenda extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -343,10 +366,12 @@ public class InternalModificarCodigoVenda extends javax.swing.JInternalFrame {
                 jTextAreaCodigosAtualizarVendas.setText(jTextAreaCodigosAtualizarVendas.getText() + jTextFieldIdCodigo.getText() + " - " + jSpinnerQTDAtualizarVenda.getValue() + " - " + tipoAlteracao + " \n");
                 int id = Integer.parseInt(jTextFieldIdCodigo.getText());
                 int qtd = (int) jSpinnerQTDAtualizarVenda.getValue();
+                int qtdServer = (int) jSpinnerQTDServer.getValue();
                 codigos_has_vendas chv = new codigos_has_vendas();
                 chv.setIdVenda(jTextFieldIdVenda.getText());
                 chv.setId_codigo(id);
                 chv.setQtd(qtd);
+                chv.setQtd_servidor(qtdServer);
                 switch (tipoAlteracao) {
                     case "excluir":
                         codigosExcluidos.add(chv);
@@ -372,15 +397,12 @@ public class InternalModificarCodigoVenda extends javax.swing.JInternalFrame {
 
     private void jButtonExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirActionPerformed
         tipoAlteracao = "excluir";
-        jTextFieldIdCodigo.setText(listChv.get(jListCodigosAtuais.getSelectedIndex()).getId_codigo()+"");
+        jTextFieldIdCodigo.setText(listChv.get(jListCodigosAtuais.getSelectedIndex()).getId_codigo() + "");
     }//GEN-LAST:event_jButtonExcluirActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if (listChv == null) {
-            listChv = new Codigos_has_vendasDAO().getCodigoHasVendas(jTextFieldIdVenda.getText());
-            buscaInformacoesVenda();
-            jTextFieldIdVenda.setEditable(false);
-        }
+        listChv = new Codigos_has_vendasDAO().getCodigoHasVendas(jTextFieldIdVenda.getText());
+        buscaInformacoesVenda();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButtonAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAtualizarActionPerformed
@@ -396,43 +418,12 @@ public class InternalModificarCodigoVenda extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButtonAtualizarActionPerformed
 
     private void jListCodigosAtuaisMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListCodigosAtuaisMouseClicked
-        jSpinnerQTDAtualizarVenda.setValue(qtdDispositivosVenda - QtdSelecionadaDaVenda);
+        
     }//GEN-LAST:event_jListCodigosAtuaisMouseClicked
 
     private void jButton23ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton23ActionPerformed
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (!codigosInseridos.isEmpty()) {
-                    codigosInseridos.forEach((c) -> {
-                        new Codigos_has_vendasDAO().insertCodigoEmVenda(c);
-                        new CodigoDAO().updateQtdUsadaCodigo(c.getId_codigo());
-                    });
-                }
-            }
-        }).start();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (!codigosAtualizados.isEmpty()) {
-                    codigosAtualizados.forEach((c) -> {
-                        new Codigos_has_vendasDAO().updateCodigoHasVendas(c);
-                        new CodigoDAO().updateQtdUsadaCodigo(c.getId_codigo());
-                    });
-                }
-            }
-        }).start();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (!codigosExcluidos.isEmpty()) {
-                    codigosExcluidos.forEach((c) -> {
-                        new Codigos_has_vendasDAO().deteleCodigoHasVendas(c.getIdVenda(), c.getId_codigo());
-                        new CodigoDAO().updateQtdUsadaCodigo(c.getId_codigo());
-                    });
-                }
-            }
-        }).start();
+        salvarCodigos();
+        limparDados();
     }//GEN-LAST:event_jButton23ActionPerformed
 
     private void jButtonSubstituirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSubstituirActionPerformed
@@ -440,7 +431,7 @@ public class InternalModificarCodigoVenda extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButtonSubstituirActionPerformed
 
     private void jButton21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton21ActionPerformed
-        // TODO add your handling code here:
+limparDados();        // TODO add your handling code here:
     }//GEN-LAST:event_jButton21ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -460,7 +451,7 @@ public class InternalModificarCodigoVenda extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
-VariaveisDeControle.frameModificarVendaAberto = false;        // TODO add your handling code here:
+        VariaveisDeControle.frameModificarVendaAberto = false;        // TODO add your handling code here:
     }//GEN-LAST:event_formInternalFrameClosing
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -468,29 +459,37 @@ VariaveisDeControle.frameModificarVendaAberto = false;        // TODO add your h
             JOptionPane.showMessageDialog(null, "Pesquise uma venda!");
         } else {
             String s = JOptionPane.showInputDialog("Informe o id do produto");
-            if(s == null){
-                
-            } else{
-            new VendaDAO().updateIdProdutoVenda(venda.getId(),Integer.parseInt(s));
-            
+            if (s == null) {
+
+            } else {
+                new VendaDAO().updateIdProdutoVenda(venda.getId(), Integer.parseInt(s));
+
             }
         }        // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
- if (venda == null) {
+        if (venda == null) {
             JOptionPane.showMessageDialog(null, "Pesquise uma venda!");
         } else {
             String s = JOptionPane.showInputDialog("Informe a nova quantidade");
-            if(s == null){
-                
-            } else{
-            new VendaDAO().updateQtdVenda(venda.getId(),Integer.parseInt(s));
-            
+            if (s == null) {
+
+            } else {
+                new VendaDAO().updateQtdVenda(venda.getId(), Integer.parseInt(s));
+
             }
         }           // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
+    private void jListCodigosAtuaisValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListCodigosAtuaisValueChanged
+        int qtdDispositivos = listChv.get(jListCodigosAtuais.getSelectedIndex()).getQtd();
+        int qtdServidor = listChv.get(jListCodigosAtuais.getSelectedIndex()).getQtd_servidor();
+        jSpinnerQTDAtualizarVenda.setValue(qtdDispositivos);
+        jSpinnerQTDServer.setValue(qtdServidor);
+    }//GEN-LAST:event_jListCodigosAtuaisValueChanged
+
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -503,6 +502,7 @@ VariaveisDeControle.frameModificarVendaAberto = false;        // TODO add your h
     private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
+    private javax.swing.JLabel jLabel42;
     private javax.swing.JList<String> jListCodigosAtuais;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
@@ -514,6 +514,7 @@ VariaveisDeControle.frameModificarVendaAberto = false;        // TODO add your h
     private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSpinner jSpinnerQTDAtualizarVenda;
+    private javax.swing.JSpinner jSpinnerQTDServer;
     private javax.swing.JTextArea jTextAreaCodigosAtualizarVendas;
     private javax.swing.JTextField jTextFieldIdCodigo;
     private javax.swing.JTextField jTextFieldIdVenda;
@@ -541,5 +542,65 @@ VariaveisDeControle.frameModificarVendaAberto = false;        // TODO add your h
             jButtonExcluir.setEnabled(true);
             jButtonSubstituir.setEnabled(true);
         }
+    }
+
+    private void salvarCodigos() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<codigos_has_vendas> codigosInseridos2 = new ArrayList<>();
+                codigosInseridos2.addAll(codigosInseridos);
+                if (!codigosInseridos2.isEmpty()) {
+                    codigosInseridos2.forEach((c) -> {
+                        new Codigos_has_vendasDAO().insertCodigoEmVenda(c);
+                        new CodigoDAO().updateQtdUsadaCodigo(c.getId_codigo());
+                    });
+                }
+            }
+        }).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                 ArrayList<codigos_has_vendas> codigosAtualizados2 = new ArrayList<>();
+                 codigosAtualizados2.addAll(codigosAtualizados);
+                if (!codigosAtualizados2.isEmpty()) {
+                    codigosAtualizados2.forEach((c) -> {
+                        new Codigos_has_vendasDAO().updateCodigoHasVendas(c);
+                        new CodigoDAO().updateQtdUsadaCodigo(c.getId_codigo());
+                    });
+                }
+            }
+        }).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<codigos_has_vendas> codigosExcluidos2 = new ArrayList<>();
+                codigosExcluidos2.addAll(codigosExcluidos);
+                if (!codigosExcluidos2.isEmpty()) {
+                    codigosExcluidos2.forEach((c) -> {
+                        new Codigos_has_vendasDAO().deteleCodigoHasVendas(c.getIdVenda(), c.getId_codigo());
+                        new Codigos_has_vendasDAO().updateCodigoAntigos(c, new CodigoDAO().buscaUmCodigo(c.getId_codigo()).getCodigo());
+                        new CodigoDAO().updateQtdUsadaCodigo(c.getId_codigo());
+                    });
+                }
+            }
+        }).start();
+    }
+
+    private void limparDados() {
+        jTextAreaCodigosAtualizarVendas.setText("");
+        jTextFieldIdVenda.setText("");
+        jTextFieldIdCodigo.setText("");
+        jListCodigosAtuais.removeAll();
+        QtdSelecionadaDaVenda = 0;
+        venda = new Vendas();
+        listChv.clear();
+        listaCodigosHasVendasSelecionados.clear();
+        qtdDispositivosVenda = 0;
+        codigosExcluidos.clear();
+        codigosSubstituidos.clear();
+        codigosAtualizados.clear();
+        codigosInseridos.clear();
+        tipoAlteracao = "";
     }
 }

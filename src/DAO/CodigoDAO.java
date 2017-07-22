@@ -142,6 +142,28 @@ public class CodigoDAO {
             return null;
         }
     }
+    
+    public HashMap<Integer,Codigos> buscaTodosOsCodigosMap() {
+        PreparedStatement stmt;
+        ResultSet rs;
+        try {
+            HashMap<Integer,Codigos> mapCod = new HashMap<>();
+            stmt = con.prepareStatement("select * from codigos;");
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                Codigos cod = new Codigos();
+                cod.setId(rs.getInt("id"));
+                cod.setCodigo(rs.getString("codigo"));
+                cod.setPedido(rs.getString("pedido"));
+                mapCod.put(cod.getId(),cod);
+            }
+            return mapCod;
+        }catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public ArrayList<Codigos> buscaTodosOsCodigos(String tipo, String situacao, int anos) {
         PreparedStatement stmt;

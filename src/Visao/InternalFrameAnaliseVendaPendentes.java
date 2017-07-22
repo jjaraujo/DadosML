@@ -9,6 +9,7 @@ import Controle.EnviarCodigos;
 import Controle.InsereCodigoNasVendasParaEnvio;
 import Controle.VariaveisDeControle;
 import DAO.ClienteDAO;
+import DAO.VendaDAO;
 import DAO.VendasPendentesDAO;
 import Entidades.Vendas;
 import Entidades.VendasPendentes;
@@ -67,6 +68,7 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
         jLabel4 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jButtonCarregar = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -255,9 +257,15 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
                                         .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jTextFieldProduto)
                                         .addComponent(jTextFieldPagamento)))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabelMensagem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(89, 89, 89))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabelMensagem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(89, 89, 89))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(35, 35, 35)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -284,7 +292,8 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
-                            .addComponent(jTextFieldId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jTextFieldId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -513,6 +522,7 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextFieldApelido;
     private javax.swing.JTextField jTextFieldCodigo;
     private javax.swing.JTextField jTextFieldEmail;
@@ -524,7 +534,6 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
 
     public void carregarDadosVendasPendentes(boolean primeiroCarregamento) {
         if (!VariaveisDeControle.listaCarregando) {
-
             if (!VariaveisDeControle.listVen.isEmpty()) {
                 System.out.println("List isEmpty: " + VariaveisDeControle.listVen.isEmpty());
                 ven = VariaveisDeControle.listVen.get(0);
@@ -582,7 +591,7 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
     }
 
     private void preencheCamposAnaliseVendas() {
-        limparCampos();
+        jTextField1.setText(new VendaDAO().getUmaVenda(ven.getId_venda()).getValor()+"");
         jTextFieldObservacoes.setText(ven.getObservacoes());
         jTextFieldApelido.setText(ven.getApelido());
         jTextFieldEmail.setText(ven.getEmail());

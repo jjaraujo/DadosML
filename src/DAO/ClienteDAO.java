@@ -40,10 +40,11 @@ public class ClienteDAO {
     public Cliente buscaCliente(String apelido) {
 
         try {
-            stmt = con.prepareStatement("select email,telefone,inativo,confirmado,revendedor_assistencia from clientes_ml where apelido like '" + apelido + "';");
+            stmt = con.prepareStatement("select nome, email,telefone,inativo,confirmado,revendedor_assistencia from clientes_ml where apelido like '" + apelido + "';");
             rs = stmt.executeQuery();
             Cliente cliente = new Cliente();
             while (rs.next()) {
+                cliente.setNome(rs.getString("nome"));
                 cliente.setEmail(rs.getString("email"));
                 cliente.setInativo(rs.getString("inativo"));
                 cliente.setConfirmado(rs.getString("confirmado"));

@@ -11,12 +11,14 @@ import Controle.InsereCodigoNasVendasParaEnvio;
 import Controle.VariaveisDeControle;
 import DAO.CodigoDAO;
 import DAO.Codigos_has_vendasDAO;
+;import DAO.IncidentesDAO;
 import DAO.ProdutosDAO;
 import DAO.VendaDAO;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 /**
@@ -28,14 +30,21 @@ public class Principal extends javax.swing.JFrame {
     /**
      * Creates new form Principal
      */
+
     public Principal() {
+            initComponents();
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension scrnsize = toolkit.getScreenSize();
-        initComponents();
         dialogAutenticacao();
+           
         VariaveisDeControle.mapProd = new ProdutosDAO().getProdutosMap();
-
         this.setSize(scrnsize);
+ 
+        int i = new IncidentesDAO().getCountIncidentesAbertos();
+        if(i > 0){
+            jLabel3.setText("Há " + i + " incidente(s) abertos");
+            jDialog2.setVisible(true);
+        }
     }
 
     /**
@@ -53,10 +62,13 @@ public class Principal extends javax.swing.JFrame {
         jTextFieldUser = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jPasswordFieldSenha = new javax.swing.JPasswordField();
+        jDialog2 = new javax.swing.JDialog();
+        jLabel3 = new javax.swing.JLabel();
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem15 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -105,6 +117,29 @@ public class Principal extends javax.swing.JFrame {
         jDialog1.getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 110, -1, -1));
         jDialog1.getContentPane().add(jPasswordFieldSenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(74, 75, 146, -1));
 
+        jDialog2.setAlwaysOnTop(true);
+        jDialog2.setMinimumSize(new java.awt.Dimension(221, 108));
+        jDialog2.setModal(true);
+
+        jLabel3.setText("jLabel3");
+
+        javax.swing.GroupLayout jDialog2Layout = new javax.swing.GroupLayout(jDialog2.getContentPane());
+        jDialog2.getContentPane().setLayout(jDialog2Layout);
+        jDialog2Layout.setHorizontalGroup(
+            jDialog2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialog2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3)
+                .addContainerGap(177, Short.MAX_VALUE))
+        );
+        jDialog2Layout.setVerticalGroup(
+            jDialog2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialog2Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addComponent(jLabel3)
+                .addContainerGap(67, Short.MAX_VALUE))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jDesktopPane1.setBackground(new java.awt.Color(82, 144, 180));
@@ -129,6 +164,14 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         jMenu1.add(jMenuItem1);
+
+        jMenuItem15.setText("Incidentes");
+        jMenuItem15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem15ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem15);
 
         jMenuItem3.setText("Analise Vendas Pendentes");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
@@ -274,7 +317,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         verificaFrameAberto(new InternalFrameVendas(), VariaveisDeControle.frameVendasAberto);
-         VariaveisDeControle.frameVendasAberto = true;
+        VariaveisDeControle.frameVendasAberto = true;
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
@@ -370,7 +413,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
-        verificaFrameAberto(new InternalJSon(), VariaveisDeControle.frameJsonAberto);        
+        verificaFrameAberto(new InternalJSon(), VariaveisDeControle.frameJsonAberto);
         VariaveisDeControle.frameJsonAberto = true;
     }//GEN-LAST:event_jMenuItem13ActionPerformed
 
@@ -387,12 +430,12 @@ public class Principal extends javax.swing.JFrame {
             @Override
             public void run() {
                 String idVenda = JOptionPane.showInputDialog("Informe o ID da venda");
-                if(idVenda == null){
-                    
-                } else{
+                if (idVenda == null) {
+
+                } else {
                     System.out.println("reenviando email venda " + idVenda);
-                ArrayList listChv = new Codigos_has_vendasDAO().getCodigoHasVendas(idVenda);
-                new EnviarCodigos().reenviarEmail(new VendaDAO().getUmaVenda(idVenda), listChv);
+                    ArrayList listChv = new Codigos_has_vendasDAO().getCodigoHasVendas(idVenda);
+                    new EnviarCodigos().reenviarEmail(new VendaDAO().getUmaVenda(idVenda), listChv);
                 }
             }
         }).start();          // TODO add your handling code here:
@@ -406,8 +449,14 @@ public class Principal extends javax.swing.JFrame {
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
         InternalProdutos i = new InternalProdutos();
         jDesktopPane1.add(i);
-i.setVisible(true);        // TODO add your handling code here:
+        i.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem12ActionPerformed
+
+    private void jMenuItem15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem15ActionPerformed
+        InternalIncidentes inc = new InternalIncidentes();
+        jDesktopPane1.add(inc);
+        inc.setVisible(true);
+    }//GEN-LAST:event_jMenuItem15ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -444,8 +493,10 @@ i.setVisible(true);        // TODO add your handling code here:
     private javax.swing.JButton jButton2;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JDialog jDialog1;
+    private javax.swing.JDialog jDialog2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -459,6 +510,7 @@ i.setVisible(true);        // TODO add your handling code here:
     private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem13;
     private javax.swing.JMenuItem jMenuItem14;
+    private javax.swing.JMenuItem jMenuItem15;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
@@ -474,8 +526,9 @@ i.setVisible(true);        // TODO add your handling code here:
     public void dialogAutenticacao() {
         jDialog1.setVisible(true);
     }
-    private void verificaFrameAberto(JInternalFrame ifr, boolean aberto){
-        if (!aberto) {            
+
+    private void verificaFrameAberto(JInternalFrame ifr, boolean aberto) {
+        if (!aberto) {
             jDesktopPane1.add(ifr);
             ifr.setVisible(true);// TODO add your handling code here:            
         }

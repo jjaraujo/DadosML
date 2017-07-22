@@ -289,7 +289,7 @@
                 </Property>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="modelo2.addColumn(&quot;Atendente&quot;);&#xa;        modelo2.addColumn(&quot;Qtd_usada&quot;);&#xa;        modelo2.addColumn(&quot;Data&quot;);&#xa;        modelo2.addColumn(&quot;Hora&quot;);&#xa;        modelo2.addColumn(&quot;Local&quot;);&#xa;        modelo2.addColumn(&quot;Motivo&quot;);&#xa;        modelo2.addColumn(&quot;Pais&quot;);&#xa;        modelo2.addColumn(&quot;Resolvido&quot;);&#xa;    jTable3.getColumnModel().getColumn(0).setPreferredWidth(80);&#xa;    jTable3.getColumnModel().getColumn(1).setPreferredWidth(80);&#xa;    jTable3.getColumnModel().getColumn(2).setPreferredWidth(80);&#xa;    jTable3.getColumnModel().getColumn(3).setPreferredWidth(80);&#xa;    jTable3.getColumnModel().getColumn(4).setPreferredWidth(80);&#xa;    jTable3.getColumnModel().getColumn(5).setPreferredWidth(180);&#xa;    jTable3.getColumnModel().getColumn(6).setPreferredWidth(80);&#xa;    jTable3.getColumnModel().getColumn(7).setPreferredWidth(80);"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="jTable3.getColumnModel().getColumn(0).setPreferredWidth(80);&#xa;    jTable3.getColumnModel().getColumn(1).setPreferredWidth(80);&#xa;    jTable3.getColumnModel().getColumn(2).setPreferredWidth(80);&#xa;    jTable3.getColumnModel().getColumn(3).setPreferredWidth(80);&#xa;    jTable3.getColumnModel().getColumn(4).setPreferredWidth(80);&#xa;    jTable3.getColumnModel().getColumn(5).setPreferredWidth(180);&#xa;    jTable3.getColumnModel().getColumn(6).setPreferredWidth(80);&#xa;    jTable3.getColumnModel().getColumn(7).setPreferredWidth(80);"/>
               </AuxValues>
             </Component>
           </SubComponents>
@@ -339,7 +339,7 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <EmptySpace min="0" pref="278" max="32767" attributes="0"/>
+          <EmptySpace min="0" pref="282" max="32767" attributes="0"/>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
@@ -359,19 +359,15 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jScrollPane3" max="32767" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="jScrollPane3" alignment="0" pref="1219" max="32767" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jPanel10" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="jPanel12" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
                           <Component id="jPanel11" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -381,7 +377,6 @@
                   <Component id="jScrollPane3" min="-2" pref="139" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="jPanel12" alignment="1" min="-2" max="-2" attributes="0"/>
                       <Component id="jPanel10" alignment="1" min="-2" max="-2" attributes="0"/>
                       <Component id="jPanel11" alignment="1" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -398,15 +393,18 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JTable" name="jTable1">
+            <Component class="javax.swing.JTable" name="jTableCodigos">
               <Properties>
-                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor" postCode="jTableCodigos.setCellSelectionEnabled(true);">
                   <Connection code="modelo1" type="code"/>
                 </Property>
                 <Property name="columnSelectionAllowed" type="boolean" value="true"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTableCodigosMouseClicked"/>
+              </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="jTable1.setCellSelectionEnabled(true);&#xa;&#xa;jTable1.getColumnModel().getColumn(0).setPreferredWidth(10);&#xa;jTable1.getColumnModel().getColumn(1).setPreferredWidth(180);&#xa;jTable1.getColumnModel().getColumn(2).setPreferredWidth(70);&#xa;jTable1.getColumnModel().getColumn(3).setPreferredWidth(70);&#xa;jTable1.getColumnModel().getColumn(4).setPreferredWidth(70);&#xa;jTable1.getColumnModel().getColumn(5).setPreferredWidth(40);&#xa;jTable1.getColumnModel().getColumn(6).setPreferredWidth(60);&#xa;jTable1.getColumnModel().getColumn(7).setPreferredWidth(50);&#xa;jTable1.getColumnModel().getColumn(8).setPreferredWidth(30);&#xa;jTable1.getColumnModel().getColumn(9).setPreferredWidth(70);&#xa;jTable1.getColumnModel().getColumn(10).setPreferredWidth(130);&#xa;jTable1.getColumnModel().getColumn(11).setPreferredWidth(70);&#xa;jTable1.getColumnModel().getColumn(12).setPreferredWidth(70);"/>
+                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="jTableCodigos.getColumnModel().getColumn(0).setPreferredWidth(10);&#xa;jTableCodigos.getColumnModel().getColumn(1).setPreferredWidth(180);&#xa;jTableCodigos.getColumnModel().getColumn(2).setPreferredWidth(70);&#xa;jTableCodigos.getColumnModel().getColumn(3).setPreferredWidth(70);&#xa;jTableCodigos.getColumnModel().getColumn(4).setPreferredWidth(70);&#xa;jTableCodigos.getColumnModel().getColumn(5).setPreferredWidth(40);&#xa;jTableCodigos.getColumnModel().getColumn(6).setPreferredWidth(60);&#xa;jTableCodigos.getColumnModel().getColumn(7).setPreferredWidth(50);&#xa;jTableCodigos.getColumnModel().getColumn(8).setPreferredWidth(30);&#xa;jTableCodigos.getColumnModel().getColumn(9).setPreferredWidth(70);&#xa;jTableCodigos.getColumnModel().getColumn(10).setPreferredWidth(130);&#xa;jTableCodigos.getColumnModel().getColumn(11).setPreferredWidth(70);&#xa;jTableCodigos.getColumnModel().getColumn(12).setPreferredWidth(70);"/>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTable()"/>
               </AuxValues>
             </Component>
@@ -585,59 +583,6 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButton13ActionPerformed"/>
-              </Events>
-            </Component>
-          </SubComponents>
-        </Container>
-        <Container class="javax.swing.JPanel" name="jPanel12">
-          <Properties>
-            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-              <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                <TitledBorder title="Desbloqueio do c&#xf3;digo"/>
-              </Border>
-            </Property>
-          </Properties>
-
-          <Layout>
-            <DimensionLayout dim="0">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jButton7" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jButton8" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="46" max="32767" attributes="0"/>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-            <DimensionLayout dim="1">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jButton7" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButton8" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="32767" attributes="0"/>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-          </Layout>
-          <SubComponents>
-            <Component class="javax.swing.JButton" name="jButton7">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Registrar Desbloqueio"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton7ActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JButton" name="jButton8">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Ver desbloqueios"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton8ActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

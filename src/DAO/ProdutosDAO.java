@@ -30,10 +30,14 @@ public class ProdutosDAO {
         int produto = 0;
         if (p.contains("android")) {
             produto = 37;
-        } else if (p.contains("internet security")) {
+        } else if (p.contains("internet")) {
             if (p.contains("1 ano")) {
                 if (p.contains("1 dispositivo")) {
-                    produto = 19;
+                    if (p.contains("promocional")) {
+                        produto = 59;
+                    } else {
+                        produto = 19;
+                    }
                 } else if (p.contains("2 dispositivos")) {
                     produto = 20;
                 } else if (p.contains("3 dispositivos")) {
@@ -130,7 +134,7 @@ public class ProdutosDAO {
             if (p.contains("1 ano")) {
                 if (p.contains("1 server - kaspersky small office") || p.contains("1 dispositivo")) {
                     produto = 56;
-                } else if ((p.contains("5 pcs")&&!p.contains("15 pcs")) || (p.contains("5 dispositivos")&&!p.contains("15 dispositivos"))) {
+                } else if ((p.contains("5 pcs") && !p.contains("15 pcs")) || (p.contains("5 dispositivos") && !p.contains("15 dispositivos"))) {
                     produto = 48;
                 } else if (p.contains("10 pcs") || p.contains("10 dispositivos")) {
                     produto = 52;
@@ -142,7 +146,7 @@ public class ProdutosDAO {
             } else if (p.contains("2 anos")) {
                 if (p.contains("1 dispositivo") || p.contains("1 server - kaspersky small office") || p.contains("1 server 2 anos¹ - kaspersky small office security")) {
                     produto = 45;
-                } else if (p.contains("5 pcs")&&(p.contains("5 pcs")&&!p.contains("15 pcs")) || p.contains("5 dispositivos")) {
+                } else if (p.contains("5 pcs") && (p.contains("5 pcs") && !p.contains("15 pcs")) || p.contains("5 dispositivos")) {
                     produto = 40;
                 } else if (p.contains("10 pcs") || p.contains("10 dispositivos")) {
                     produto = 44;
@@ -198,23 +202,24 @@ public class ProdutosDAO {
             return null;
         }
     }
-     public ArrayList<Produtos> getProdutosList() {
+
+    public ArrayList<Produtos> getProdutosList() {
         Produtos p;
         ArrayList<Produtos> listProd = new ArrayList<>();
         try {
-                PreparedStatement stmt = VariaveisDeControle.CON.prepareStatement("select * from produtos order by tipo, qtd,duracao;");
-                ResultSet rs = stmt.executeQuery();
-                while (rs.next()) {
-                    p = new Produtos();
-                    p.setId(rs.getInt("id"));
-                    p.setTipo(rs.getString("tipo"));
-                    p.setAnos(rs.getInt("duracao"));
-                    p.setQtd(rs.getInt("qtd"));
-                    p.setValor(rs.getDouble("valor"));
-                    listProd.add(p);
-                }
-                return listProd;
-            
+            PreparedStatement stmt = VariaveisDeControle.CON.prepareStatement("select * from produtos order by tipo, qtd,duracao;");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                p = new Produtos();
+                p.setId(rs.getInt("id"));
+                p.setTipo(rs.getString("tipo"));
+                p.setAnos(rs.getInt("duracao"));
+                p.setQtd(rs.getInt("qtd"));
+                p.setValor(rs.getDouble("valor"));
+                listProd.add(p);
+            }
+            return listProd;
+
         } catch (SQLException ex) {
             System.out.println("Erro ao buscar tipo do produto em ProdutoDAO.retornaProduto: " + ex.getMessage());
             return null;

@@ -9,6 +9,7 @@ import DAO.ClienteDAO;
 import DAO.CodigoDAO;
 import DAO.Codigos_has_vendasDAO;
 import DAO.ProdutosDAO;
+import DAO.VendaDAO;
 import DAO.VendasPendentesDAO;
 import EmailConfig.MensagensEmail;
 import Entidades.Cliente;
@@ -32,13 +33,13 @@ import javax.swing.JOptionPane;
  * @author Joao
  */
 public class EnviarCodigos {
-    
+
     HashMap<Integer, Produtos> mapProd = VariaveisDeControle.mapProd;
-    
+
     public EnviarCodigos() {
-        
+
     }
-    
+
     public void enviarCodigoUmaVenda(VendasPendentes ven, boolean envioManual, ArrayList<Codigos> listCod, ArrayList<codigos_has_vendas> listaCodigosHasVendasSelecionados) {
         try {
             MensagensEmail msgEmail = new MensagensEmail();
@@ -53,7 +54,7 @@ public class EnviarCodigos {
             ex.printStackTrace();
         }
     }
-    
+
     public void setCodigoNaVenda(VendasPendentes ven) {
         String idVenda = ven.getId_venda(); // Colocando só o getIdVenda nao dava certo, a Thread mudava e a venda também
         int idCod = ven.getIdCodigo();
@@ -66,7 +67,7 @@ public class EnviarCodigos {
         new Codigos_has_vendasDAO().insertCodigoEmVenda(chv);
         new VendasPendentesDAO().remove(idVenda);
     }
-    
+
     public void enviarCodigosDaLista() {
         for (VendasPendentes v : VariaveisDeControle.listVen) {
             new Thread(new Runnable() {
@@ -77,6 +78,8 @@ public class EnviarCodigos {
                         if ((v.getPagamento().toLowerCase().contains("boleto")
                                 || v.getPagamento().toLowerCase().contains("saldo")) && c.getConfirmado() == null) {
                             new VendasPendentesDAO().marcaComoPendente(v.getId_venda(), "Análise Pendente");
+                        } else if (v.getProduto().contains("promocional")) {
+                            new VendasPendentesDAO().marcaComoPendente(v.getId_venda(), "Venda promocional");
                         } else if (v.getPendente() == null && v.getCodigo() != null) {
                             int qtdDispositivos = v.getQtd() * mapProd.get(v.getIdProduto()).getQtd();
                             String codigo = organizaCodigosParaEnvio(false, v, null, null, v.getCodigo());
@@ -107,19 +110,23 @@ public class EnviarCodigos {
             }).start();
         }
     }
-    
+
     public void reenviarEmail(Vendas v, ArrayList<codigos_has_vendas> list) {
         MensagensEmail msgEmail = new MensagensEmail();
         Produtos p = new ProdutosDAO().retornaProduto(v.getIdProduto());
         Cliente c = new ClienteDAO().buscaCliente(v.getApelido_comprador());
         int qtd = p.getQtd() * v.getQtd();
-        String codigo = "";
-        for (codigos_has_vendas chv : list) {
-            codigo = codigo + new CodigoDAO().buscaUmCodigo(chv.getId_codigo()).getCodigo() + "\n";
-        }
+        ArrayList<Codigos> listCod = new ArrayList<>();
+        list.forEach(cod -> {
+            listCod.add(new CodigoDAO().buscaUmCodigo(cod.getId_codigo()));
+        });
+        String codigo = organizaCodigosParaEnvio(true, null, list, listCod, null);
         String corpo = msgEmail.verificaQualOCorpoDOEmail(p.getTipo(), qtd, codigo, v.getQtd());
         String assunto = "Código de ativação - " + p.getTipo() + " " + qtd + " Dispositivo(s)" + p.getAnos() + " Ano(s) - " + v.getApelido_comprador() + " - " + v.getId();
         try {
+            System.out.println(codigo == null);
+            System.out.println(corpo == null);
+            System.out.println(assunto == null);
             EmailService email = new EmailService(c.getEmail(), assunto, corpo);
             email.sendEmail();
         } catch (IOException ex) {
@@ -127,9 +134,9 @@ public class EnviarCodigos {
         } catch (MessagingException ex) {
             Logger.getLogger(EnviarCodigos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
-    
+
     private String organizaCodigosParaEnvio(boolean envioManual, VendasPendentes ven, ArrayList<codigos_has_vendas> listaCodigosHasVendasSelecionados, ArrayList<Codigos> listCod, String codigo) {
         HashMap<Integer, codigos_has_vendas> map = new HashMap<>();
         if (envioManual) {
@@ -149,14 +156,16 @@ public class EnviarCodigos {
             }
         }
         if (envioManual) {
-            for (codigos_has_vendas chv : listaCodigosHasVendasSelecionados) {
-                new Codigos_has_vendasDAO().insertCodigoEmVenda(chv);
-                new VendasPendentesDAO().remove(ven.getId_venda());
+            if (ven != null) {
+                for (codigos_has_vendas chv : listaCodigosHasVendasSelecionados) {
+                    new Codigos_has_vendasDAO().insertCodigoEmVenda(chv);
+                    new VendasPendentesDAO().remove(ven.getId_venda());
+                }
             }
         } else {
             Produtos p = mapProd.get(ven.getIdProduto());
             if (p.getTipo().toLowerCase().equals("small")) {
-                codigo = "\n" + codigo + " - " + p.getQtd() * ven.getQtd() + " dispositivo(s) - " + ven.getQtd() + "server(s) \n";                
+                codigo = "\n" + codigo + " - " + p.getQtd() * ven.getQtd() + " dispositivo(s) - " + ven.getQtd() + "server(s) \n";
             } else {
                 codigo = "\n" + codigo + " - " + p.getQtd() * ven.getQtd() + " dispositivo(s)" + "\n";
             }

@@ -48,6 +48,7 @@ public class VendaDAO {
                 ven.setIdProduto(rs.getInt("id_produto"));
                 ven.setData(rs.getString("data"));
                 ven.setFormaPagamento(rs.getString("forma_pagamento"));
+                ven.setValor(rs.getDouble("valor"));
             }
             return ven;
         } catch (SQLException e) {

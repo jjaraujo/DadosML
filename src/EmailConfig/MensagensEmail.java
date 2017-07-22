@@ -1,5 +1,7 @@
 package EmailConfig;
 
+import DAO.ClienteDAO;
+
 /**
  *
  * @author HP
@@ -16,6 +18,7 @@ public class MensagensEmail {
             case "total":
                 return corpoTotal(qtdDispositivos, codigo);
             case "kis":
+            case "kis promocional":
                 return corpoKIS(qtdDispositivos, codigo);
             case "android":
                 return corpoKIS(qtdDispositivos, codigo);
@@ -68,7 +71,7 @@ public class MensagensEmail {
     }
 
     public String corpoSMALL(int qtd, String codigo, int servidor) {
-        
+
         return "Não ative seu(s) código(s) em mais dipositivos que o informado ao lado senão o seu código será bloqueado. Após ativação, efetue a qualificação da venda.\n"
                 + "\n"
                 + "Código de ativação: " + codigo + "\n"
@@ -99,4 +102,42 @@ public class MensagensEmail {
                 + "http://brazil.kaspersky.com/comprar/como-instalar-kaspersky-small-office-security\n";
     }
 
+    public String mensagemIncidenteAdicionado(String nome) {
+
+        
+        String s = "Caro(a) " + nome + ", recebemos seu incidente e iremos solucioná-lo o mais rápido possível. Aguarde nosso retorno, em breve responderemos!";
+        return s;
+    }
+
+    public String mensagemIncidenteEncerrado(String nome, int motivo, String codigo) {
+
+        String s = "Caro(a) " + nome + ", seu incidente foi encerrado em nosso sistema.";
+        if (motivo == 1 || motivo == 2) {
+            s = s + "\nVocê já pode utilizar o seu código '" + codigo + "' novamente. Em caso de outros problemas, entre em contato novamente, estamos dispostos a atendê-lo!";
+        }
+        else if (motivo == 3) {
+            s = s + "\n\nSeu código foi substituído. Siga os seguintes passos abaixo:Passo 1 - Eliminar as licenças:\n"
+                    + "Abra o Kaspersky \n"
+                    + "Clique na licença no canto inferior direito da janela.\n"
+                    + "Clique no X no lado direito do número de licença/chave.\n"
+                    + "Se você não vê um X na parte superior, clique na seta no centro da janela, depois, clique no \"X\" ou \"excluir codigo predefinido\".\n"
+                    + "Clique em Sim para excluir a licença.\n"
+                    + "Se você ver um outro X, clique nele e clique em Sim para excluir a licença.\n"
+                    + "Você será avisado o aplicativo não está ativado.\n"
+                    + "Reinicie o seu PC\n"
+                    + "Passo 2 - Reativar:\n"
+                    + "Abra o Kaspersky \n"
+                    + "Clique em \"licença\" no canto inferior direito da janela.\n"
+                    + "Clique em \"Ativar o aplicativo\" ou \"inserir o codigo de ativação\"\n"
+                    + "Digite o código de ativação apenas no numero de dispositivos conforme a sua compra: \n"
+                    + codigo + "\n"
+                    + "Clique em Avançar e aguarde o processo para ser executado.\n"
+                    + "Clique em Concluir.\n"
+                    + "Clique em Fechar";
+        }
+        else if(motivo == 4){
+             s = s + "\nCaso o problema ainda persista, entre em contato imediatamente conosco.";
+        }
+        return s;
+    }
 }

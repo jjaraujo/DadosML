@@ -6,13 +6,37 @@
 package Visao;
 
 import Connection.ConnectionFactory;
+import Controle.EnviarCodigos;
 import Controle.VariaveisDeControle;
+import DAO.ClienteDAO;
+import DAO.CodigoDAO;
+import DAO.Codigos_has_vendasDAO;
+import DAO.IncidentesDAO;
+import DAO.VendaDAO;
+import EmailConfig.AssuntosEmail;
+import EmailConfig.Email;
+import EmailConfig.MensagensEmail;
+import Entidades.Cliente;
+import Entidades.Incidentes;
+import Entidades.Vendas;
+import com.email.EmailService;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.table.DefaultTableModel;
+import org.joda.time.Days;
+import org.joda.time.LocalDate;
 
 /**
  *
@@ -23,6 +47,7 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
     private String tipoDePesquisa;
     private final DefaultTableModel modelo;
     private String apelidoClientePesquisado;
+    private int motivo;
 
     /**
      * Creates new form InternalFrameVendas
@@ -30,7 +55,7 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
     public InternalFrameVendas() {
         if (VariaveisDeControle.user.equals("JOAO")) {
             modelo = new DefaultTableModel(null, new String[]{"ID Venda", "Apelido", "Nome",
-                "Email", "Codigo", "Codigos Antigos", "Tipo", "Dispositivos",
+                "Email", "Codigo", "Codigos Antigos", "Tipo", "Dispositivos", "Servidores",
                 "Anos", "Valor", "Data", "Pagamento", "Cancelada", "Suspeito", "Inativo"}) {
                 @Override
                 public boolean isCellEditable(int i, int i1) {
@@ -39,7 +64,7 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
             };
         } else {
             modelo = new DefaultTableModel(null, new String[]{"ID Venda", "Apelido", "Nome",
-                "Email", "Codigo", "Codigos Antigos", "Tipo", "Dispositivos",
+                "Email", "Codigo", "Codigos Antigos", "Tipo", "Dispositivos", "Servidores",
                 "Anos", "Data", "Pagamento", "Cancelada", "Suspeito", "Inativo"}) {
                 @Override
                 public boolean isCellEditable(int i, int i1) {
@@ -60,6 +85,16 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         buttonGroupPesquisarVendaPor = new javax.swing.ButtonGroup();
+        jDialog1 = new javax.swing.JDialog();
+        jLabel1 = new javax.swing.JLabel();
+        jRadioButton5 = new javax.swing.JRadioButton();
+        jRadioButton6 = new javax.swing.JRadioButton();
+        jRadioButton7 = new javax.swing.JRadioButton();
+        jRadioButton8 = new javax.swing.JRadioButton();
+        jButton2 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jTextFieldInformacaoAdicional = new javax.swing.JTextField();
+        buttonGroupMotivo = new javax.swing.ButtonGroup();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableVendas = new javax.swing.JTable();
         jPanel8 = new javax.swing.JPanel();
@@ -69,6 +104,100 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
         jRadioButton4 = new javax.swing.JRadioButton();
         jTextFieldInformacaoVenda = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+
+        jDialog1.setMinimumSize(new java.awt.Dimension(605, 354));
+        jDialog1.setModal(true);
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+
+        buttonGroupMotivo.add(jRadioButton5);
+        jRadioButton5.setText("Tentou ativar pela primeira vez e o código excedeu");
+        jRadioButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton5ActionPerformed(evt);
+            }
+        });
+
+        buttonGroupMotivo.add(jRadioButton6);
+        jRadioButton6.setText("Formatou o computador e o código excedeu");
+        jRadioButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton6ActionPerformed(evt);
+            }
+        });
+
+        buttonGroupMotivo.add(jRadioButton7);
+        jRadioButton7.setText("Código bloqueado");
+        jRadioButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton7ActionPerformed(evt);
+            }
+        });
+
+        buttonGroupMotivo.add(jRadioButton8);
+        jRadioButton8.setText("Programa Incompatível");
+        jRadioButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton8ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Salvar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Informação adicional:");
+
+        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
+        jDialog1.getContentPane().setLayout(jDialog1Layout);
+        jDialog1Layout.setHorizontalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialog1Layout.createSequentialGroup()
+                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jDialog1Layout.createSequentialGroup()
+                        .addGap(54, 54, 54)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jDialog1Layout.createSequentialGroup()
+                        .addGap(153, 153, 153)
+                        .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jRadioButton6)
+                            .addComponent(jRadioButton5)
+                            .addComponent(jRadioButton7)
+                            .addComponent(jRadioButton8)))
+                    .addGroup(jDialog1Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextFieldInformacaoAdicional, javax.swing.GroupLayout.PREFERRED_SIZE, 438, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jDialog1Layout.createSequentialGroup()
+                        .addGap(270, 270, 270)
+                        .addComponent(jButton2)))
+                .addContainerGap(36, Short.MAX_VALUE))
+        );
+        jDialog1Layout.setVerticalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialog1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(jRadioButton5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jRadioButton6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jRadioButton7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jRadioButton8)
+                .addGap(33, 33, 33)
+                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jTextFieldInformacaoAdicional, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(32, 32, 32)
+                .addComponent(jButton2)
+                .addContainerGap(86, Short.MAX_VALUE))
+        );
 
         setClosable(true);
         setIconifiable(true);
@@ -95,6 +224,11 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
 
         jTableVendas.setModel(modelo);
         jTableVendas.setCellSelectionEnabled(true);
+        jTableVendas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableVendasMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTableVendas);
         jTableVendas.getColumnModel().getColumn(0).setPreferredWidth(100);
         jTableVendas.getColumnModel().getColumn(1).setPreferredWidth(140);
@@ -108,6 +242,7 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
         jTableVendas.getColumnModel().getColumn(9).setPreferredWidth(60);
         jTableVendas.getColumnModel().getColumn(10).setPreferredWidth(100);
         jTableVendas.getColumnModel().getColumn(11).setPreferredWidth(80);
+        jTableVendas.getColumnModel().getColumn(12).setPreferredWidth(80);
         jTableVendas.getColumnModel().getColumn(12).setPreferredWidth(80);
 
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Pesquisar por:"));
@@ -240,17 +375,79 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
         VariaveisDeControle.frameVendasAberto = false;        // TODO add your handling code here:
     }//GEN-LAST:event_formInternalFrameClosing
 
+    private void jTableVendasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableVendasMouseClicked
+        //Verificando se o botão direito foi pressionado
+        if ((evt.getModifiers() & MouseEvent.BUTTON3_MASK) != 0 && (jTableVendas.getSelectedRowCount() == 1)) {
+            int i = jTableVendas.getSelectedRow();
+            System.out.println(i);
+
+            JPopupMenu menu = new JPopupMenu();
+            JMenuItem adicionarIncidente = new JMenuItem("Adicionar Incidente");
+            adicionarIncidente.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent ae) {
+                    new Thread(() -> {
+                        gerarIncidente();
+                    }).start();
+                }
+            });
+            JMenuItem reenviar = new JMenuItem("Reenviar");
+            reenviar.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+                    reenviarCodigo();
+                }
+            });
+            menu.add(adicionarIncidente);
+            menu.add(reenviar);
+            menu.show(this, evt.getX(), evt.getY());
+        }
+    }//GEN-LAST:event_jTableVendasMouseClicked
+
+    private void jRadioButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton6ActionPerformed
+        motivo = 2;        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton6ActionPerformed
+
+    private void jRadioButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton7ActionPerformed
+        motivo = 3;        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton7ActionPerformed
+
+    private void jRadioButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton8ActionPerformed
+        motivo = 4;        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton8ActionPerformed
+
+    private void jRadioButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton5ActionPerformed
+        motivo = 1;        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton5ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        if (buttonGroupMotivo.getSelection() != null) {
+            jDialog1.setVisible(false);
+        } else {
+            JOptionPane.showMessageDialog(null, "Escolha um motivo");
+        }// TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroupMotivo;
     private javax.swing.ButtonGroup buttonGroupPesquisarVendaPor;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JDialog jDialog1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JRadioButton jRadioButton4;
+    private javax.swing.JRadioButton jRadioButton5;
+    private javax.swing.JRadioButton jRadioButton6;
+    private javax.swing.JRadioButton jRadioButton7;
+    private javax.swing.JRadioButton jRadioButton8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableVendas;
+    private javax.swing.JTextField jTextFieldInformacaoAdicional;
     private javax.swing.JTextField jTextFieldInformacaoVenda;
     // End of variables declaration//GEN-END:variables
 
@@ -264,7 +461,8 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
             ResultSet rs;
             String script = "select chv.id_venda id_venda, cl.apelido apelido,cl.nome nome,cl.email email,"
                     + " cd.codigo codigo,chv.codigos_antigos codigos_antigos,"
-                    + "cd.tipo tipo, chv.qtd_dispositivos qtd_dispositivos, v.valor, "
+                    + "cd.tipo tipo, chv.qtd_dispositivos qtd_dispositivos,"
+                    + "chv.qtd_servidor qtd_servidor, v.valor, "
                     + "cd.duracao duracao,v.data data, v.forma_pagamento pagamento"
                     + ",v.cancelada cancelada,cl.suspeito suspeito,cl.inativo inativo "
                     + "from codigos_has_vendas chv "
@@ -279,6 +477,7 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
             String tipo = null;
             String nome = null;
             int qtd_dispositivos = 0;
+            int qtd_server = 0;
             int duracao = 0;
             String data = null;
             String pagamento = null;
@@ -299,6 +498,7 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
                 codigosAntigos = rs.getString("codigos_antigos");
                 tipo = rs.getString("tipo");
                 qtd_dispositivos = rs.getInt("qtd_dispositivos");
+                qtd_server = rs.getInt("qtd_servidor");
                 duracao = rs.getInt("duracao");
                 valor = rs.getDouble("valor");
                 data = rs.getString("data");
@@ -307,16 +507,69 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
                 suspeito = rs.getString("suspeito");
                 inativo = rs.getString("inativo");
                 if (VariaveisDeControle.user.equals("JOAO")) {
-                    modelo.addRow(new Object[]{id_venda, apelidoClientePesquisado, nome, email, codigo, codigosAntigos, tipo, qtd_dispositivos, duracao, valor, data, pagamento, cancelada, suspeito, inativo});
+                    modelo.addRow(new Object[]{id_venda, apelidoClientePesquisado, nome, email, codigo, codigosAntigos, tipo, qtd_dispositivos, qtd_server, duracao, valor, data, pagamento, cancelada, suspeito, inativo});
                 } else {
-                    modelo.addRow(new Object[]{id_venda, apelidoClientePesquisado, nome, email, codigo, codigosAntigos, tipo, qtd_dispositivos, duracao, data, pagamento, cancelada, suspeito, inativo});
+                    modelo.addRow(new Object[]{id_venda, apelidoClientePesquisado, nome, email, codigo, codigosAntigos, tipo, qtd_dispositivos, qtd_server, duracao, data, pagamento, cancelada, suspeito, inativo});
                 }
             }
         } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage()+"\n Abra o programa novamente!","Erro",JOptionPane.WARNING_MESSAGE);
-                ex.printStackTrace();
-                System.exit(0);       
+            JOptionPane.showMessageDialog(null, ex.getMessage() + "\n Abra o programa novamente!", "Erro", JOptionPane.WARNING_MESSAGE);
+            ex.printStackTrace();
+            System.exit(0);
         }
     }
 
+    private void gerarIncidente() {
+        Incidentes inc = new Incidentes();
+        int i = jTableVendas.getSelectedRow();
+        String idvenda = (String) jTableVendas.getValueAt(i, 0);
+        inc.setId_venda(idvenda);
+        jLabel1.setText("MOTIVO DE CRIAR INCIDENTE NA VENDA " + idvenda + ":");
+        jDialog1.setVisible(true);
+        if (motivo > 0) {
+            Date date = new Date(System.currentTimeMillis());
+            SimpleDateFormat formatarDate = new SimpleDateFormat("yyyy-MM-dd");
+            String codigo = (String) jTableVendas.getValueAt(i, 4);
+            int countIncidentes = new IncidentesDAO().getCountIncidentes();
+            inc.setDataIncidente(formatarDate.format(date));
+            inc.setId("INC" + inc.getId_venda() + "00" + countIncidentes);
+            inc.setMotivo(motivo);
+            inc.setAnotacoes(jTextFieldInformacaoAdicional.getText());
+            inc.setId_codigo(new CodigoDAO().getCodigosPorCodigo(codigo).getId());
+            try {
+                new IncidentesDAO().addIncidente(inc);
+                JOptionPane.showMessageDialog(null, "Incidente adicionado!");
+                try {
+                    Vendas v = new VendaDAO().getUmaVenda(inc.getId_venda());
+                    Cliente c = new ClienteDAO().buscaCliente(v.getApelido_comprador());
+                    String assunto = new AssuntosEmail().assuntoAberturaIncidente(inc.getId());
+                    String corpo = new MensagensEmail().mensagemIncidenteAdicionado(c.getNome());
+                    new EmailService(c.getEmail(), assunto, corpo).sendEmail();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "O email não foi enviado para o cliente do incidente " + inc.getId());
+                }
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Não foi possível adicionar o incidente");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Motivo inválido");
+        }
+    }
+
+    private void reenviarCodigo() {
+        int i = jTableVendas.getSelectedRow();
+        String idVenda = (String) jTableVendas.getValueAt(i, 0);
+        int opcao = JOptionPane.showConfirmDialog(null, "Reenviar códigos da venda " + idVenda + "?", "Confirmar reenvio", JOptionPane.YES_NO_OPTION);
+        if (opcao == 0) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("reenviando email venda " + idVenda);
+                    ArrayList listChv = new Codigos_has_vendasDAO().getCodigoHasVendas(idVenda);
+                    new EnviarCodigos().reenviarEmail(new VendaDAO().getUmaVenda(idVenda), listChv);
+                }
+            }).start();
+        }
+    }
 }

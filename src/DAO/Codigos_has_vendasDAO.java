@@ -94,6 +94,7 @@ public class Codigos_has_vendasDAO {
                 cod.setIdVenda(rs.getString("id_venda"));
                 cod.setId_codigo(rs.getInt("id_codigo"));
                 cod.setQtd(rs.getInt("qtd_dispositivos"));
+                cod.setQtd_servidor(rs.getInt("qtd_servidor"));
                 cod.setCodigos_antigos(rs.getString("codigos_antigos"));
                 listCod.add(cod);
             }
@@ -167,10 +168,23 @@ public class Codigos_has_vendasDAO {
         public void updateCodigoHasVendas(codigos_has_vendas chv) {
         try {
             PreparedStatement stmt = con.prepareCall(""
-                    + "update codigos_has_vendas set qtd_dispositivos = ? where id_venda like ? and id_codigo = ?;");
-            stmt.setInt(1, chv.getQtd());
+                    + "update codigos_has_vendas set qtd_dispositivos = ?,qtd_servidor = ? where id_venda like ? and id_codigo = ?;");
+            stmt.setInt(1, chv.getQtd());            
+            stmt.setInt(2, chv.getQtd_servidor());
+            stmt.setString(3, chv.getIdVenda());
+            stmt.setInt(4, chv.getId_codigo());
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Codigos_has_vendasDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+        
+        public void updateCodigoAntigos(codigos_has_vendas chv,String codigo) {
+        try {
+            PreparedStatement stmt = con.prepareCall(""
+                    + "update codigos_has_vendas set codigos_antigos = concat(codigos_antigos,?) where id_venda like ?;");
+            stmt.setString(1, codigo + ";");
             stmt.setString(2, chv.getIdVenda());
-            stmt.setInt(3, chv.getId_codigo());
             stmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(Codigos_has_vendasDAO.class.getName()).log(Level.SEVERE, null, ex);

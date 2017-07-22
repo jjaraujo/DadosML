@@ -9,9 +9,14 @@ import Controle.VariaveisDeControle;
 import DAO.AtendentesDAO;
 import DAO.CodigoDAO;
 import DAO.DesbloqueioDAO;
+import DAO.IncidentesDAO;
 import Entidades.Atendentes;
 import Entidades.Codigos;
 import Entidades.Desbloqueios;
+import Entidades.Incidentes;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -19,7 +24,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -29,16 +36,15 @@ import javax.swing.table.DefaultTableModel;
 public class InternalFrameCodigos extends javax.swing.JInternalFrame {
 
     private String situacao;
-    private String tipo;    
+    private String tipo;
     DefaultTableModel modelo1;
-    DefaultTableModel modelo2 = new DefaultTableModel();
+    DefaultTableModel modelo2;
     private String local;
     private int idCodigo;
     private String dataDesbloqueio;
     private String hora;
     private int qtd_usada;
     private ArrayList<Atendentes> listAtendentes = new ArrayList<>();
-
 
     /**
      * Creates new form InternalFrameCodigos
@@ -51,6 +57,7 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
                 return false;
             }
         };
+        modelo2 = new DefaultTableModel(null, new String[]{"Atendente", "Qtd_usada", "Data", "Hora", "Local", "Motivo", "Pais", "Resolvido"});
         initComponents();
     }
 
@@ -87,7 +94,7 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
         jLabel26 = new javax.swing.JLabel();
         jPanelCodigos = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableCodigos = new javax.swing.JTable();
         jPanel10 = new javax.swing.JPanel();
         jButton5 = new javax.swing.JButton();
         jTextFieldEntradaCodigo = new javax.swing.JTextField();
@@ -99,9 +106,6 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
         jRadioButton12 = new javax.swing.JRadioButton();
         jButton6 = new javax.swing.JButton();
         jRadioButton13 = new javax.swing.JRadioButton();
-        jPanel12 = new javax.swing.JPanel();
-        jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
 
         jDialogsetDesbloqueio.setMinimumSize(new java.awt.Dimension(700, 500));
         jDialogsetDesbloqueio.setModal(true);
@@ -258,14 +262,6 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
 
         jTable3.setModel(modelo2);
         jTable3.setMinimumSize(new java.awt.Dimension(900, 500));
-        modelo2.addColumn("Atendente");
-        modelo2.addColumn("Qtd_usada");
-        modelo2.addColumn("Data");
-        modelo2.addColumn("Hora");
-        modelo2.addColumn("Local");
-        modelo2.addColumn("Motivo");
-        modelo2.addColumn("Pais");
-        modelo2.addColumn("Resolvido");
         jTable3.getColumnModel().getColumn(0).setPreferredWidth(80);
         jTable3.getColumnModel().getColumn(1).setPreferredWidth(80);
         jTable3.getColumnModel().getColumn(2).setPreferredWidth(80);
@@ -320,24 +316,28 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
             }
         });
 
-        jTable1.setModel(modelo1);
-        jTable1.setColumnSelectionAllowed(true);
-        jScrollPane3.setViewportView(jTable1);
-        jTable1.setCellSelectionEnabled(true);
-
-        jTable1.getColumnModel().getColumn(0).setPreferredWidth(10);
-        jTable1.getColumnModel().getColumn(1).setPreferredWidth(180);
-        jTable1.getColumnModel().getColumn(2).setPreferredWidth(70);
-        jTable1.getColumnModel().getColumn(3).setPreferredWidth(70);
-        jTable1.getColumnModel().getColumn(4).setPreferredWidth(70);
-        jTable1.getColumnModel().getColumn(5).setPreferredWidth(40);
-        jTable1.getColumnModel().getColumn(6).setPreferredWidth(60);
-        jTable1.getColumnModel().getColumn(7).setPreferredWidth(50);
-        jTable1.getColumnModel().getColumn(8).setPreferredWidth(30);
-        jTable1.getColumnModel().getColumn(9).setPreferredWidth(70);
-        jTable1.getColumnModel().getColumn(10).setPreferredWidth(130);
-        jTable1.getColumnModel().getColumn(11).setPreferredWidth(70);
-        jTable1.getColumnModel().getColumn(12).setPreferredWidth(70);
+        jTableCodigos.setModel(modelo1);
+        jTableCodigos.setCellSelectionEnabled(true);
+        jTableCodigos.setColumnSelectionAllowed(true);
+        jTableCodigos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableCodigosMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(jTableCodigos);
+        jTableCodigos.getColumnModel().getColumn(0).setPreferredWidth(10);
+        jTableCodigos.getColumnModel().getColumn(1).setPreferredWidth(180);
+        jTableCodigos.getColumnModel().getColumn(2).setPreferredWidth(70);
+        jTableCodigos.getColumnModel().getColumn(3).setPreferredWidth(70);
+        jTableCodigos.getColumnModel().getColumn(4).setPreferredWidth(70);
+        jTableCodigos.getColumnModel().getColumn(5).setPreferredWidth(40);
+        jTableCodigos.getColumnModel().getColumn(6).setPreferredWidth(60);
+        jTableCodigos.getColumnModel().getColumn(7).setPreferredWidth(50);
+        jTableCodigos.getColumnModel().getColumn(8).setPreferredWidth(30);
+        jTableCodigos.getColumnModel().getColumn(9).setPreferredWidth(70);
+        jTableCodigos.getColumnModel().getColumn(10).setPreferredWidth(130);
+        jTableCodigos.getColumnModel().getColumn(11).setPreferredWidth(70);
+        jTableCodigos.getColumnModel().getColumn(12).setPreferredWidth(70);
 
         jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder("Pesquisa por código"));
 
@@ -448,43 +448,6 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder("Desbloqueio do código"));
-
-        jButton7.setText("Registrar Desbloqueio");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
-            }
-        });
-
-        jButton8.setText("Ver desbloqueios");
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
-        jPanel12.setLayout(jPanel12Layout);
-        jPanel12Layout.setHorizontalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel12Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton8)
-                .addContainerGap(46, Short.MAX_VALUE))
-        );
-        jPanel12Layout.setVerticalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel12Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton7)
-                    .addComponent(jButton8))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
         javax.swing.GroupLayout jPanelCodigosLayout = new javax.swing.GroupLayout(jPanelCodigos);
         jPanelCodigos.setLayout(jPanelCodigosLayout);
         jPanelCodigosLayout.setHorizontalGroup(
@@ -492,16 +455,13 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
             .addGroup(jPanelCodigosLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanelCodigosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelCodigosLayout.createSequentialGroup()
-                        .addComponent(jScrollPane3)
-                        .addContainerGap())
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 1219, Short.MAX_VALUE)
                     .addGroup(jPanelCodigosLayout.createSequentialGroup()
                         .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanelCodigosLayout.setVerticalGroup(
             jPanelCodigosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -509,7 +469,6 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
                 .addGroup(jPanelCodigosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 22, Short.MAX_VALUE))
@@ -528,7 +487,7 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 278, Short.MAX_VALUE)
+            .addGap(0, 282, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
@@ -570,30 +529,6 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
         situacao = "";        // TODO add your handling code here:
     }//GEN-LAST:event_jRadioButton13ActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        if (idCodigo == 0) {
-            JOptionPane.showMessageDialog(null, "Nenhum código foi pesquisado ainda");
-        } else {
-            jDialogsetDesbloqueio.setVisible(true);
-        }
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton7ActionPerformed
-
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        try {
-            if (tipo == null) {
-                JOptionPane.showMessageDialog(null, "Faça uma pesquisa de código");
-            } else {
-                pesquisarDesbloqueios(modelo2);
-                jDialogGetDesbloqueios.setVisible(true);
-            }// TODO add your handling code here:
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(TelaCodigos.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(TelaCodigos.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jButton8ActionPerformed
-
     private void jRadioButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton14ActionPerformed
         Date data = new Date(System.currentTimeMillis());
         SimpleDateFormat formatarDate = new SimpleDateFormat("yyyy-MM-dd");
@@ -623,6 +558,12 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
         try {
             new DesbloqueioDAO().setDesbloqueio(des);
             JOptionPane.showMessageDialog(null, "Dados salvos com sucesso!");
+            ArrayList<Incidentes> array = new IncidentesDAO().getIncidentesPorIdCodigo(idCodigo);
+            array.forEach(inc ->{
+              new Thread(()->{
+                   new InternalIncidentes().encerrarIncidente(inc.getId());
+              }).start(); 
+            });
             jDialogsetDesbloqueio.dispose();
         } catch (SQLException ex) {
             Logger.getLogger(TelaCodigos.class.getName()).log(Level.SEVERE, null, ex);
@@ -642,8 +583,35 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jRadioButton18ActionPerformed
 
     private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
-VariaveisDeControle.frameCodigosAberto = false;        // TODO add your handling code here:
+        VariaveisDeControle.frameCodigosAberto = false;        // TODO add your handling code here:
     }//GEN-LAST:event_formInternalFrameClosing
+
+    private void jTableCodigosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableCodigosMouseClicked
+        if ((evt.getModifiers() & MouseEvent.BUTTON3_MASK) != 0 && jTableCodigos.getSelectedRowCount() == 1) {
+            int i = jTableCodigos.getSelectedRow();
+            idCodigo =  (int) jTableCodigos.getValueAt(i, 0) ;
+            JPopupMenu jpop = new JPopupMenu();
+            JMenuItem registrarDesbloqueio = new JMenuItem("Registrar Desbloqueio");
+            JMenuItem pesquisarDesbloqueios = new JMenuItem("Pesquisar Desbloqueio");
+            registrarDesbloqueio.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+                    jDialogsetDesbloqueio.setVisible(true);
+                }
+            });
+
+            pesquisarDesbloqueios.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+                    pesquisarDesbloqueios(modelo2);
+                    jDialogGetDesbloqueios.setVisible(true);
+                }
+            });
+            jpop.add(registrarDesbloqueio);
+            jpop.add(pesquisarDesbloqueios);
+            jpop.show(this, evt.getX(), evt.getY());
+        }
+    }//GEN-LAST:event_jTableCodigosMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -652,8 +620,6 @@ VariaveisDeControle.frameCodigosAberto = false;        // TODO add your handling
     private javax.swing.ButtonGroup buttonGroupSituacaoCodigo;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JComboBox<String> jComboBoxAnos;
     private javax.swing.JComboBox<String> jComboBoxTipo;
@@ -667,7 +633,6 @@ VariaveisDeControle.frameCodigosAberto = false;        // TODO add your handling
     private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanelCodigos;
     private javax.swing.JRadioButton jRadioButton11;
     private javax.swing.JRadioButton jRadioButton12;
@@ -681,13 +646,14 @@ VariaveisDeControle.frameCodigosAberto = false;        // TODO add your handling
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable3;
+    private javax.swing.JTable jTableCodigos;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextFieldEntradaCodigo;
     // End of variables declaration//GEN-END:variables
-public void pesquisarTodosCodigos(DefaultTableModel modelo) {
+
+    public void pesquisarTodosCodigos(DefaultTableModel modelo) {
         modelo.setNumRows(0);
         CodigoDAO dao = new CodigoDAO();
         String entrada = jTextFieldEntradaCodigo.getText().replaceAll("^\\s+", "");
@@ -701,7 +667,7 @@ public void pesquisarTodosCodigos(DefaultTableModel modelo) {
         tipo = c.getTipo();
     }
 
-public void pesquisarTodosCodigosPorTipo(DefaultTableModel modelo) throws ClassNotFoundException {
+    public void pesquisarTodosCodigosPorTipo(DefaultTableModel modelo) throws ClassNotFoundException {
         modelo.setNumRows(0);
         CodigoDAO dao = new CodigoDAO();
         ArrayList list = dao.buscaTodosOsCodigos(jComboBoxTipo.getSelectedItem().toString(), situacao, jComboBoxAnos.getSelectedIndex() + 1);
@@ -716,7 +682,7 @@ public void pesquisarTodosCodigosPorTipo(DefaultTableModel modelo) throws ClassN
         }
     }
 
-    public void pesquisarDesbloqueios(DefaultTableModel modelo) throws ClassNotFoundException, SQLException {
+    public void pesquisarDesbloqueios(DefaultTableModel modelo) {
         modelo.setNumRows(0);
         DesbloqueioDAO dao = new DesbloqueioDAO();
         ArrayList<Desbloqueios> list = (ArrayList) dao.getDesbloqueiosPorId(idCodigo);
@@ -727,6 +693,7 @@ public void pesquisarTodosCodigosPorTipo(DefaultTableModel modelo) throws ClassN
         });
         setMensagemPorTipo();
     }
+
     public void setMensagemPorTipo() {
         String qtdMaxima = null;
         if (tipo.equals("TOTAL")) {

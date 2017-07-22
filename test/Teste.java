@@ -1,13 +1,16 @@
 
 import DAO.ClienteDAO;
 import Visao.Principal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JOptionPane;
 
 public class Teste {
 static boolean i;
     public static void main(String[] args) throws ClassNotFoundException {
-        new Principal().dialogAutenticacao();
-            String s = JOptionPane.showInputDialog(null, "Numero :" + new ClienteDAO().buscaCliente("SFVFLA").getTelefone()+ "\nDeseja adicionar outro?(Deixe em branco caso não)","Confirmar numero de telefone");
-            System.out.println(s);
-    }
+        Date date = new Date(System.currentTimeMillis());
+            SimpleDateFormat formatarDate = new SimpleDateFormat("dd/MM/yyyy");
+            String data = formatarDate.format(date);
+            System.out.println(data);
+}
 }
