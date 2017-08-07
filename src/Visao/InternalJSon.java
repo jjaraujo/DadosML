@@ -101,7 +101,7 @@ public class InternalJSon extends javax.swing.JInternalFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         LeituraJson json = new LeituraJson();
-        if (jTextAreaJson.getText().contains("anuncio")) {
+        if (jTextAreaJson.getText().contains("idProduto")) {
             VendaDAO vendaDAO = new VendaDAO();
             vendaDAO.insertVenda(json.lerJsonVendas("[" + jTextAreaJson.getText() + "]"));
         } else {

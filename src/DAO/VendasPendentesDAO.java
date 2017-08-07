@@ -6,7 +6,9 @@
 package DAO;
 
 import Controle.VariaveisDeControle;
+import Entidades.Vendas;
 import Entidades.VendasPendentes;
+import Entidades.codigos_has_vendas;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,13 +24,13 @@ import javax.swing.JOptionPane;
  * @author HP
  */
 public class VendasPendentesDAO {
-
+    
     private Connection con;
-
+    
     public VendasPendentesDAO() {
         con = VariaveisDeControle.CON;
     }
-
+    
     public void insereVendas(VendasPendentes ven) {
         
         try {
@@ -37,17 +39,17 @@ public class VendasPendentesDAO {
             stmt.setString(1, ven.getId_venda());
             stmt.setString(2, ven.getApelido());
             stmt.setInt(3, ven.getQtd());
-            stmt.setInt(4, ven.getIdProduto());
+            stmt.setString(4, ven.getIdProduto());
             stmt.setString(5, ven.getEmail());
             stmt.setString(6, ven.getPagamento());
             stmt.executeUpdate();
             System.out.println("Venda: " + ven.getId_venda() + " adicionada como pendente");
         } catch (SQLException e1) {
-
+            
             System.err.println(ven.getId_venda() + ": Erro na transação de DAO.VendasPendentesDAO().insereVendas: " + e1);
         }
     }
-
+    
     public boolean marcaComoPendente(String id, String observacoes) {
         try {
             PreparedStatement stmt = con.prepareStatement("update vendas_pendentes set pendente = 'sim',observacao = ? where id_venda like ?;");
@@ -60,7 +62,7 @@ public class VendasPendentesDAO {
             return false;
         }
     }
-
+    
     public void marcaComoVerificada(String id) {
         try {
             PreparedStatement stmt = con.prepareStatement("update vendas_pendentes set pendente = null,verificada = 'sim' where id_venda like ?;");
@@ -70,7 +72,7 @@ public class VendasPendentesDAO {
             System.err.println("Erro na transação de DAO.VendasPendentesDAO().marcaComoVerificada: " + e1);
         }
     }
-
+    
     public ArrayList<VendasPendentes> retornaVendasPendentes() {
         VendasPendentes vendasPen;
         ArrayList<VendasPendentes> list = new ArrayList<>();
@@ -82,13 +84,13 @@ public class VendasPendentesDAO {
                 vendasPen.setId_venda(rs.getString("id_venda"));
                 vendasPen.setApelido(rs.getString("apelido_comprador"));
                 vendasPen.setQtd(rs.getInt("qtd"));
-                vendasPen.setIdProduto(rs.getInt("id_produto"));
+                vendasPen.setIdProduto(rs.getString("id_produto"));
                 vendasPen.setEmail(rs.getString("email"));
                 vendasPen.setPagamento(rs.getString("forma_pagamento"));
                 vendasPen.setPendente(rs.getString("pendente"));
                 vendasPen.setVerificada(rs.getString("verificada"));
                 vendasPen.setObservacoes(rs.getString("observacao"));
-                vendasPen.getProduto();//colocando aqui, o nome do produto é oletado após o incremento d0 idProduto
+                vendasPen.getProduto();//colocando aqui, o nome do produto é coletado após o incremento d0 idProduto
                 list.add(vendasPen);
             }
             return list;
@@ -97,7 +99,7 @@ public class VendasPendentesDAO {
             return null;
         }
     }
-
+    
     public void remove(String id) {
         try {
             PreparedStatement stmt = con.prepareStatement("delete from vendas_pendentes where id_venda = ?;");
@@ -108,14 +110,13 @@ public class VendasPendentesDAO {
             System.err.println("Erro na transação de DAO.VendasPendentesDAO().remove: " + e1);
         }
     }
-
+    
     public boolean verificaSeAVendaPodeSerAdicionada(String id) {
         boolean contem = false;
         try {
-            PreparedStatement stmt = con.prepareStatement("select id_venda from codigos_has_vendas where id_venda like ?;");
-            stmt.setString(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (!rs.next()) {
+            ArrayList<codigos_has_vendas> chv = new Codigos_has_vendasDAO().getCodigoHasVendas(id);
+            Vendas v = new VendaDAO().getUmaVenda(id);
+            if (chv.isEmpty() && (v.getCancelada() == null || v.getCancelada().equals(""))) {
                 PreparedStatement stmt2 = con.prepareStatement("select id_venda from vendas_pendentes where id_venda like ?");
                 stmt2.setString(1, id);
                 ResultSet rs2 = stmt2.executeQuery();

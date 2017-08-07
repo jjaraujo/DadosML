@@ -1,16 +1,22 @@
 
 import DAO.ClienteDAO;
 import Visao.Principal;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.joda.time.LocalDate;
 
 public class Teste {
-static boolean i;
-    public static void main(String[] args) throws ClassNotFoundException {
-        Date date = new Date(System.currentTimeMillis());
-            SimpleDateFormat formatarDate = new SimpleDateFormat("dd/MM/yyyy");
-            String data = formatarDate.format(date);
-            System.out.println(data);
+    public static void main(String[] args)  {
+      
+
+       
+ 
+    
 }
 }

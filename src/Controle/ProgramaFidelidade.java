@@ -26,13 +26,13 @@ public class ProgramaFidelidade {
         ArrayList<Vendas> array = new VendaDAO().getVendasClienteNoPrograma(apelido, "2017-06-10");
         int ciclo = (int) Math.ceil((double) array.size() / 5);
 
-        HashMap<Integer, Integer> map = new HashMap<>();
+        HashMap<String, Integer> map = new HashMap<>();
         array.forEach((v) -> {
-            int idProd = v.getIdProduto();
+            String idProd = v.getIdProduto();
             Produtos p = new ProdutosDAO().retornaProduto(idProd);
             int t = p.getQtd() * v.getQtd();
             if (p.getTipo().toLowerCase().equals("kis") && p.getAnos() == 1) {
-                map.put(19, t);
+               // map.put(19, t);
             } else {
                 map.put(idProd, t);
             }

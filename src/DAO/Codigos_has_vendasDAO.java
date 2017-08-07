@@ -48,10 +48,10 @@ public class Codigos_has_vendasDAO {
                 stmt.close();
             }
             return cod;
-        } catch(MySQLNonTransientConnectionException e){
+        } catch (MySQLNonTransientConnectionException e) {
             new Principal().dialogAutenticacao();
             return null;
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
@@ -82,8 +82,8 @@ public class Codigos_has_vendasDAO {
     }
 
     public ArrayList<codigos_has_vendas> getCodigoHasVendas(String idVenda) {
+        ArrayList<codigos_has_vendas> listCod = new ArrayList<>();
         try {
-            ArrayList<codigos_has_vendas> listCod = new ArrayList<>();
             PreparedStatement stmt;
             ResultSet rs;
             stmt = con.prepareStatement("select * from codigos_has_vendas where id_venda like ?;");
@@ -100,11 +100,12 @@ public class Codigos_has_vendasDAO {
             }
             rs.close();
             stmt.close();
-            return listCod;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Codigos_has_vendasDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        return listCod;
     }
 
     public ArrayList<Codigos> getCodigosJaEnviadosParaOCliente(String apelido) {
@@ -146,11 +147,11 @@ public class Codigos_has_vendasDAO {
             new CodigoDAO().setQtdUsadaCodigo(chv.getId_codigo(), chv.getQtd());
             return true;
         } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "Por algum erro na conexão, a venda " + chv.getIdVenda() + " não foi gravada");
-                    System.err.println( "Por algum erro na conexão, a venda " + chv.getIdVenda() + " não foi gravada \n" );
-                    ex.printStackTrace();
-            }
-        
+            JOptionPane.showMessageDialog(null, "Por algum erro na conexão, a venda " + chv.getIdVenda() + " não foi gravada");
+            System.err.println("Por algum erro na conexão, a venda " + chv.getIdVenda() + " não foi gravada \n");
+            ex.printStackTrace();
+        }
+
         return false;
     }
 
@@ -164,12 +165,12 @@ public class Codigos_has_vendasDAO {
             Logger.getLogger(Codigos_has_vendasDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-        public void updateCodigoHasVendas(codigos_has_vendas chv) {
+
+    public void updateCodigoHasVendas(codigos_has_vendas chv) {
         try {
             PreparedStatement stmt = con.prepareCall(""
                     + "update codigos_has_vendas set qtd_dispositivos = ?,qtd_servidor = ? where id_venda like ? and id_codigo = ?;");
-            stmt.setInt(1, chv.getQtd());            
+            stmt.setInt(1, chv.getQtd());
             stmt.setInt(2, chv.getQtd_servidor());
             stmt.setString(3, chv.getIdVenda());
             stmt.setInt(4, chv.getId_codigo());
@@ -178,8 +179,8 @@ public class Codigos_has_vendasDAO {
             Logger.getLogger(Codigos_has_vendasDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-        
-        public void updateCodigoAntigos(codigos_has_vendas chv,String codigo) {
+
+    public void updateCodigoAntigos(codigos_has_vendas chv, String codigo) {
         try {
             PreparedStatement stmt = con.prepareCall(""
                     + "update codigos_has_vendas set codigos_antigos = concat(codigos_antigos,?) where id_venda like ?;");

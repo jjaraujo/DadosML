@@ -21,8 +21,6 @@ import javax.swing.JOptionPane;
 public class InternalCadastroVendaOutrosMeios extends javax.swing.JInternalFrame {
 
     private Vendas venCadOutAquisicoes = new Vendas();
-    private int anoProduto;
-    private String tipoDeProduto;
 
     /**
      * Creates new form internalCadastroVendaOutrosMeios
@@ -43,8 +41,8 @@ public class InternalCadastroVendaOutrosMeios extends javax.swing.JInternalFrame
         buttonGroupPagamento = new javax.swing.ButtonGroup();
         buttonGroupAquisicao = new javax.swing.ButtonGroup();
         buttonGroupDataVenda = new javax.swing.ButtonGroup();
-        buttonGroupAnos = new javax.swing.ButtonGroup();
         buttonGroupTipo = new javax.swing.ButtonGroup();
+        buttonGroupServer = new javax.swing.ButtonGroup();
         jPanelCadastroVenda_quatidade = new javax.swing.JPanel();
         jTextFieldQtd = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
@@ -53,28 +51,22 @@ public class InternalCadastroVendaOutrosMeios extends javax.swing.JInternalFrame
         jTextFieldDispositivos = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         jPanelCadastroVenda_pagamento = new javax.swing.JPanel();
-        jRadioButtonMP = new javax.swing.JRadioButton();
-        jRadioButtonDeposito = new javax.swing.JRadioButton();
+        jComboBoxPagamento = new javax.swing.JComboBox<>();
         jPanelCadastroVenda_aquisicao = new javax.swing.JPanel();
-        jRadioButton9 = new javax.swing.JRadioButton();
-        jRadioButton10 = new javax.swing.JRadioButton();
-        jRadioButtonBrinde = new javax.swing.JRadioButton();
+        jComboBoxAquisicao = new javax.swing.JComboBox<>();
         jPanelCadastroVenda_anos = new javax.swing.JPanel();
-        jRadioButton3anos = new javax.swing.JRadioButton();
-        jRadioButton2anos = new javax.swing.JRadioButton();
-        jRadioButton1ano = new javax.swing.JRadioButton();
+        jComboBoxAnos = new javax.swing.JComboBox<>();
         jPanelCadastroVenda_cliente = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         jTextFieldApelidoCadastraVendaWhatsapp = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
         jPanelCadastroVenda_tipo = new javax.swing.JPanel();
-        jRadioButtonKIS = new javax.swing.JRadioButton();
-        jRadioButtonAndroid = new javax.swing.JRadioButton();
-        jRadioButtonSmall = new javax.swing.JRadioButton();
-        jRadioButtonTotal = new javax.swing.JRadioButton();
+        jComboBoxTipo = new javax.swing.JComboBox<>();
         jPanelCadastroVenda_data = new javax.swing.JPanel();
         jRadioButton5 = new javax.swing.JRadioButton();
         jRadioButton6 = new javax.swing.JRadioButton();
+        jPanelServidores = new javax.swing.JPanel();
+        jComboBoxServidores = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -124,7 +116,7 @@ public class InternalCadastroVendaOutrosMeios extends javax.swing.JInternalFrame
             jPanelCadastroVenda_quatidadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelCadastroVenda_quatidadeLayout.createSequentialGroup()
                 .addComponent(jLabel9)
-                .addGap(2, 2, 2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextFieldValor, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel10)
@@ -134,7 +126,7 @@ public class InternalCadastroVendaOutrosMeios extends javax.swing.JInternalFrame
                 .addComponent(jLabel12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextFieldQtd, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 32, Short.MAX_VALUE))
+                .addGap(0, 39, Short.MAX_VALUE))
         );
         jPanelCadastroVenda_quatidadeLayout.setVerticalGroup(
             jPanelCadastroVenda_quatidadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -147,24 +139,15 @@ public class InternalCadastroVendaOutrosMeios extends javax.swing.JInternalFrame
                     .addComponent(jTextFieldDispositivos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12)
                     .addComponent(jTextFieldQtd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         jPanelCadastroVenda_pagamento.setBorder(javax.swing.BorderFactory.createTitledBorder("Pagamento"));
 
-        buttonGroupPagamento.add(jRadioButtonMP);
-        jRadioButtonMP.setText("Mercado Pago");
-        jRadioButtonMP.addActionListener(new java.awt.event.ActionListener() {
+        jComboBoxPagamento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Deposito", "Mercado Pago" }));
+        jComboBoxPagamento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonMPActionPerformed(evt);
-            }
-        });
-
-        buttonGroupPagamento.add(jRadioButtonDeposito);
-        jRadioButtonDeposito.setText("Deposito");
-        jRadioButtonDeposito.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonDepositoActionPerformed(evt);
+                jComboBoxPagamentoActionPerformed(evt);
             }
         });
 
@@ -173,116 +156,57 @@ public class InternalCadastroVendaOutrosMeios extends javax.swing.JInternalFrame
         jPanelCadastroVenda_pagamentoLayout.setHorizontalGroup(
             jPanelCadastroVenda_pagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelCadastroVenda_pagamentoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jRadioButtonDeposito)
-                .addGap(18, 18, 18)
-                .addComponent(jRadioButtonMP)
-                .addGap(10, 10, 10))
+                .addContainerGap()
+                .addComponent(jComboBoxPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanelCadastroVenda_pagamentoLayout.setVerticalGroup(
             jPanelCadastroVenda_pagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelCadastroVenda_pagamentoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanelCadastroVenda_pagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButtonDeposito)
-                    .addComponent(jRadioButtonMP))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelCadastroVenda_pagamentoLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jComboBoxPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jPanelCadastroVenda_aquisicao.setBorder(javax.swing.BorderFactory.createTitledBorder("Aquisição"));
 
-        buttonGroupAquisicao.add(jRadioButton9);
-        jRadioButton9.setText("Whatsapp");
-        jRadioButton9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton9ActionPerformed(evt);
-            }
-        });
-
-        buttonGroupAquisicao.add(jRadioButton10);
-        jRadioButton10.setText("Email");
-        jRadioButton10.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton10ActionPerformed(evt);
-            }
-        });
-
-        buttonGroupAquisicao.add(jRadioButtonBrinde);
-        jRadioButtonBrinde.setText("Brinde");
-        jRadioButtonBrinde.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonBrindeActionPerformed(evt);
-            }
-        });
+        jComboBoxAquisicao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Whatsapp", "Email", "Brinde" }));
 
         javax.swing.GroupLayout jPanelCadastroVenda_aquisicaoLayout = new javax.swing.GroupLayout(jPanelCadastroVenda_aquisicao);
         jPanelCadastroVenda_aquisicao.setLayout(jPanelCadastroVenda_aquisicaoLayout);
         jPanelCadastroVenda_aquisicaoLayout.setHorizontalGroup(
             jPanelCadastroVenda_aquisicaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelCadastroVenda_aquisicaoLayout.createSequentialGroup()
-                .addComponent(jRadioButton9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
-                .addComponent(jRadioButtonBrinde))
+                .addContainerGap()
+                .addComponent(jComboBoxAquisicao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanelCadastroVenda_aquisicaoLayout.setVerticalGroup(
             jPanelCadastroVenda_aquisicaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelCadastroVenda_aquisicaoLayout.createSequentialGroup()
-                .addContainerGap(9, Short.MAX_VALUE)
-                .addGroup(jPanelCadastroVenda_aquisicaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton9)
-                    .addComponent(jRadioButton10)
-                    .addComponent(jRadioButtonBrinde))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jComboBoxAquisicao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
         jPanelCadastroVenda_anos.setBorder(javax.swing.BorderFactory.createTitledBorder("Anos"));
 
-        buttonGroupAnos.add(jRadioButton3anos);
-        jRadioButton3anos.setText("3 anos");
-        jRadioButton3anos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton3anosActionPerformed(evt);
-            }
-        });
-
-        buttonGroupAnos.add(jRadioButton2anos);
-        jRadioButton2anos.setText("2 anos");
-        jRadioButton2anos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton2anosActionPerformed(evt);
-            }
-        });
-
-        buttonGroupAnos.add(jRadioButton1ano);
-        jRadioButton1ano.setText("1 ano");
-        jRadioButton1ano.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1anoActionPerformed(evt);
-            }
-        });
+        jComboBoxAnos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione" }));
 
         javax.swing.GroupLayout jPanelCadastroVenda_anosLayout = new javax.swing.GroupLayout(jPanelCadastroVenda_anos);
         jPanelCadastroVenda_anos.setLayout(jPanelCadastroVenda_anosLayout);
         jPanelCadastroVenda_anosLayout.setHorizontalGroup(
             jPanelCadastroVenda_anosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelCadastroVenda_anosLayout.createSequentialGroup()
-                .addComponent(jRadioButton1ano)
-                .addGap(8, 8, 8)
-                .addComponent(jRadioButton2anos)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton3anos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(18, 18, 18)
+                .addComponent(jComboBoxAnos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(12, Short.MAX_VALUE))
         );
         jPanelCadastroVenda_anosLayout.setVerticalGroup(
             jPanelCadastroVenda_anosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelCadastroVenda_anosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelCadastroVenda_anosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton1ano)
-                    .addComponent(jRadioButton2anos)
-                    .addComponent(jRadioButton3anos))
+                .addComponent(jComboBoxAnos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -301,11 +225,10 @@ public class InternalCadastroVendaOutrosMeios extends javax.swing.JInternalFrame
         jPanelCadastroVenda_clienteLayout.setHorizontalGroup(
             jPanelCadastroVenda_clienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelCadastroVenda_clienteLayout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel13)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldApelidoCadastraVendaWhatsapp, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addComponent(jTextFieldApelidoCadastraVendaWhatsapp, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanelCadastroVenda_clienteLayout.setVerticalGroup(
             jPanelCadastroVenda_clienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -326,35 +249,10 @@ public class InternalCadastroVendaOutrosMeios extends javax.swing.JInternalFrame
 
         jPanelCadastroVenda_tipo.setBorder(javax.swing.BorderFactory.createTitledBorder("Tipo"));
 
-        buttonGroupTipo.add(jRadioButtonKIS);
-        jRadioButtonKIS.setText("KIS");
-        jRadioButtonKIS.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonKISActionPerformed(evt);
-            }
-        });
-
-        buttonGroupTipo.add(jRadioButtonAndroid);
-        jRadioButtonAndroid.setText("Android");
-        jRadioButtonAndroid.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonAndroidActionPerformed(evt);
-            }
-        });
-
-        buttonGroupTipo.add(jRadioButtonSmall);
-        jRadioButtonSmall.setText("Small");
-        jRadioButtonSmall.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonSmallActionPerformed(evt);
-            }
-        });
-
-        buttonGroupTipo.add(jRadioButtonTotal);
-        jRadioButtonTotal.setText("Total");
-        jRadioButtonTotal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonTotalActionPerformed(evt);
+        jComboBoxTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione", "KIS", "ANDROID", "TOTAL", "SMALL" }));
+        jComboBoxTipo.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBoxTipoItemStateChanged(evt);
             }
         });
 
@@ -363,25 +261,16 @@ public class InternalCadastroVendaOutrosMeios extends javax.swing.JInternalFrame
         jPanelCadastroVenda_tipoLayout.setHorizontalGroup(
             jPanelCadastroVenda_tipoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelCadastroVenda_tipoLayout.createSequentialGroup()
-                .addComponent(jRadioButtonKIS)
-                .addGap(18, 18, 18)
-                .addComponent(jRadioButtonAndroid)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jRadioButtonSmall)
-                .addGap(10, 10, 10)
-                .addComponent(jRadioButtonTotal)
-                .addContainerGap())
+                .addContainerGap()
+                .addComponent(jComboBoxTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanelCadastroVenda_tipoLayout.setVerticalGroup(
             jPanelCadastroVenda_tipoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelCadastroVenda_tipoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanelCadastroVenda_tipoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButtonKIS)
-                    .addComponent(jRadioButtonAndroid)
-                    .addComponent(jRadioButtonSmall)
-                    .addComponent(jRadioButtonTotal))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelCadastroVenda_tipoLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jComboBoxTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jPanelCadastroVenda_data.setBorder(javax.swing.BorderFactory.createTitledBorder("Data"));
@@ -407,11 +296,11 @@ public class InternalCadastroVendaOutrosMeios extends javax.swing.JInternalFrame
         jPanelCadastroVenda_dataLayout.setHorizontalGroup(
             jPanelCadastroVenda_dataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelCadastroVenda_dataLayout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(25, Short.MAX_VALUE)
                 .addComponent(jRadioButton5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jRadioButton6)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(24, 24, 24))
         );
         jPanelCadastroVenda_dataLayout.setVerticalGroup(
             jPanelCadastroVenda_dataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -423,58 +312,79 @@ public class InternalCadastroVendaOutrosMeios extends javax.swing.JInternalFrame
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jPanelServidores.setBorder(javax.swing.BorderFactory.createTitledBorder("Servidores"));
+
+        jComboBoxServidores.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3" }));
+
+        javax.swing.GroupLayout jPanelServidoresLayout = new javax.swing.GroupLayout(jPanelServidores);
+        jPanelServidores.setLayout(jPanelServidoresLayout);
+        jPanelServidoresLayout.setHorizontalGroup(
+            jPanelServidoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelServidoresLayout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jComboBoxServidores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanelServidoresLayout.setVerticalGroup(
+            jPanelServidoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelServidoresLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jComboBoxServidores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanelCadastroVenda_cliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(73, 73, 73)
+                        .addComponent(jPanelCadastroVenda_cliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton3))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(94, 94, 94)
-                                .addComponent(jButton3)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanelCadastroVenda_data, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jPanelCadastroVenda_aquisicao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPanelCadastroVenda_anos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jPanelCadastroVenda_quatidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanelCadastroVenda_aquisicao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanelCadastroVenda_pagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanelCadastroVenda_tipo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(40, 40, 40))
+                                .addComponent(jPanelCadastroVenda_pagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanelCadastroVenda_tipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jPanelCadastroVenda_anos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jPanelServidores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jPanelCadastroVenda_quatidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanelCadastroVenda_data, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(2, 2, 2)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanelCadastroVenda_pagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanelCadastroVenda_tipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanelCadastroVenda_aquisicao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanelCadastroVenda_aquisicao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanelCadastroVenda_pagamento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanelCadastroVenda_tipo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanelCadastroVenda_anos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanelServidores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(16, 16, 16)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanelCadastroVenda_quatidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanelCadastroVenda_data, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanelCadastroVenda_data, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanelCadastroVenda_anos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addComponent(jPanelCadastroVenda_cliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(6, 6, 6)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanelCadastroVenda_quatidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanelCadastroVenda_cliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
+                        .addGap(44, 44, 44)
                         .addComponent(jButton3)))
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         pack();
@@ -489,80 +399,34 @@ public class InternalCadastroVendaOutrosMeios extends javax.swing.JInternalFrame
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldDispositivosActionPerformed
 
-    private void jRadioButtonMPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMPActionPerformed
-        venCadOutAquisicoes.setFormaPagamento("MP");        // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButtonMPActionPerformed
-
-    private void jRadioButtonDepositoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonDepositoActionPerformed
-        venCadOutAquisicoes.setFormaPagamento("DEPOSITO");        // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButtonDepositoActionPerformed
-
-    private void jRadioButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton9ActionPerformed
-        venCadOutAquisicoes.setFormaAquisicao("WHATSAPP");        // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton9ActionPerformed
-
-    private void jRadioButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton10ActionPerformed
-        venCadOutAquisicoes.setFormaAquisicao("EMAIL");        // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton10ActionPerformed
-
-    private void jRadioButton3anosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3anosActionPerformed
-        anoProduto = 3;         // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton3anosActionPerformed
-
-    private void jRadioButton2anosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2anosActionPerformed
-        anoProduto = 2;           // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton2anosActionPerformed
-
-    private void jRadioButton1anoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1anoActionPerformed
-        anoProduto = 1;        // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton1anoActionPerformed
-
     private void jTextFieldApelidoCadastraVendaWhatsappActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldApelidoCadastraVendaWhatsappActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldApelidoCadastraVendaWhatsappActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         boolean ok = true;
-        if (buttonGroupPagamento.getSelection() == null && !jRadioButtonBrinde.isSelected()) {
-            jPanelCadastroVenda_pagamento.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Pagamento", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 0, 0)));
-            ok = false;
-        } else {
-            jPanelCadastroVenda_pagamento.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Pagamento", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
-            ok = true;
-        }
-        if (buttonGroupAquisicao.getSelection() == null) {
-            jPanelCadastroVenda_aquisicao.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Aquisição", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 0, 0)));
-            ok = false;
-        } else {
-            jPanelCadastroVenda_aquisicao.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Aquisição", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
-            ok = true;
-        }
-        if (jTextFieldApelidoCadastraVendaWhatsapp.getText().equals("")) {
-            jPanelCadastroVenda_cliente.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cliente", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 0, 0)));
-            ok = false;
-        } else {
-            jPanelCadastroVenda_cliente.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cliente", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
-            ok = true;
-        }
-        if (buttonGroupDataVenda.getSelection() == null) {
-            jPanelCadastroVenda_data.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 0, 0)));
-            ok = false;
-        } else {
-            jPanelCadastroVenda_data.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
-            ok = true;
-        }
-        if (buttonGroupTipo.getSelection() == null) {
+        
+        if (jComboBoxTipo.getSelectedIndex()==0) {
             jPanelCadastroVenda_tipo.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Tipo", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 0, 0)));
             ok = false;
         } else {
             jPanelCadastroVenda_tipo.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Tipo", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
             ok = true;
         }
-        if (buttonGroupAnos.getSelection() == null) {
+        if (jComboBoxAnos.getSelectedIndex()==0) {
             jPanelCadastroVenda_anos.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Anos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 0, 0)));
             ok = false;
         } else {
             jPanelCadastroVenda_anos.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Anos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
+            ok = true;
+        }
+        
+        
+        if (buttonGroupDataVenda.getSelection() == null) {
+            jPanelCadastroVenda_data.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 0, 0)));
+            ok = false;
+        } else {
+            jPanelCadastroVenda_data.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
             ok = true;
         }
         if (jTextFieldQtd.getText().equals("") || jTextFieldValor.getText().equals("") || jTextFieldDispositivos.getText().equals("")) {
@@ -578,22 +442,19 @@ public class InternalCadastroVendaOutrosMeios extends javax.swing.JInternalFrame
         if (ok) {
             new Thread(() -> {
                 VendaDAO vDao = new VendaDAO();
-                String pluralDispositivo = "dispositivos";
-                String pluralAno = "anos";
-                if (Integer.parseInt(jTextFieldDispositivos.getText()) == 1) {
-                    pluralDispositivo = "dispositivo";
+                String idProduto = "";
+                if (jComboBoxTipo.getSelectedItem().equals("SMALL")) {
+                    idProduto = jComboBoxTipo.getSelectedItem() + jTextFieldDispositivos.getText() + "D" + jComboBoxServidores.getSelectedItem() +"S" + jComboBoxAnos.getSelectedItem() + "A";
+                } else{
+                idProduto = jComboBoxTipo.getSelectedItem() + jTextFieldDispositivos.getText() + "D" + jComboBoxAnos.getSelectedItem() + "A";
                 }
-                if (anoProduto == 1) {
-                    pluralAno = "ano";
-                }
-                String nomeProduto = tipoDeProduto + " " + jTextFieldDispositivos.getText() + " " + pluralDispositivo + " " + anoProduto + " " + pluralAno;
-                System.out.println(nomeProduto);
-                venCadOutAquisicoes.setIdProduto(new ProdutosDAO().pegaIDProduto(nomeProduto));
+                System.out.println(idProduto);
+                venCadOutAquisicoes.setIdProduto(idProduto);
                 venCadOutAquisicoes.setApelido_comprador(jTextFieldApelidoCadastraVendaWhatsapp.getText());
                 venCadOutAquisicoes.setValor(Double.parseDouble(jTextFieldValor.getText()));
                 venCadOutAquisicoes.setCadastroVendedor(1);
-                venCadOutAquisicoes.setFormaAquisicao("WHATSAPP");
-                venCadOutAquisicoes.setFormaPagamento("DEPOSITO");
+                venCadOutAquisicoes.setFormaAquisicao((String) jComboBoxAquisicao.getSelectedItem());
+                venCadOutAquisicoes.setFormaPagamento((String) jComboBoxPagamento.getSelectedItem());
                 venCadOutAquisicoes.setId(vDao.getCountVendasWhatsappDoDia());
                 venCadOutAquisicoes.setQtd(Integer.parseInt(jTextFieldQtd.getText()));
                 venCadOutAquisicoes.setValor(Double.parseDouble(jTextFieldValor.getText()));
@@ -604,31 +465,6 @@ public class InternalCadastroVendaOutrosMeios extends javax.swing.JInternalFrame
             JOptionPane.showMessageDialog(null, "Verifique os campos em vermelho e preencha");
         }
     }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jRadioButtonKISActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonKISActionPerformed
-        jRadioButton2anos.setVisible(false);
-        jRadioButton3anos.setVisible(false);
-        tipoDeProduto = "internet security";
-
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButtonKISActionPerformed
-
-    private void jRadioButtonAndroidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonAndroidActionPerformed
-        jRadioButton2anos.setVisible(true);
-        jRadioButton3anos.setVisible(true);
-        tipoDeProduto = "android";// TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButtonAndroidActionPerformed
-
-    private void jRadioButtonSmallActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonSmallActionPerformed
-        jRadioButton3anos.setVisible(false);
-        tipoDeProduto = "small";// TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButtonSmallActionPerformed
-
-    private void jRadioButtonTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonTotalActionPerformed
-        jRadioButton2anos.setVisible(true);
-        jRadioButton3anos.setVisible(true);
-        tipoDeProduto = "total security";// TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButtonTotalActionPerformed
 
     private void jRadioButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton5ActionPerformed
         Date data = new Date(System.currentTimeMillis());
@@ -644,20 +480,58 @@ public class InternalCadastroVendaOutrosMeios extends javax.swing.JInternalFrame
         VariaveisDeControle.frameCadVenOutroMeioAberto = false;        // TODO add your handling code here:
     }//GEN-LAST:event_formInternalFrameClosing
 
-    private void jRadioButtonBrindeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonBrindeActionPerformed
-        venCadOutAquisicoes.setFormaAquisicao("BRINDE");
-        jRadioButtonMP.setEnabled(false);
-        jRadioButtonDeposito.setEnabled(false);
-    }//GEN-LAST:event_jRadioButtonBrindeActionPerformed
+    private void jComboBoxTipoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxTipoItemStateChanged
+        int contador = 0;
+        if (contador == 0) {
+            contador = 1;
+            String tipo = (String) jComboBoxTipo.getSelectedItem();
+            switch (tipo) {
+                case "SMALL":
+                     jComboBoxServidores.setEnabled(true);
+                     jComboBoxAnos.removeAllItems();
+                     jComboBoxAnos.addItem("1");
+                     jComboBoxAnos.addItem("2");
+                    break;
+                case "KIS":
+                    jComboBoxServidores.setEnabled(false);
+                    jComboBoxAnos.removeAllItems();
+                    jComboBoxAnos.addItem("1");
+                    break;
+                case "TOTAL":
+                     jComboBoxServidores.setEnabled(false);
+                     jComboBoxAnos.removeAllItems();
+                     jComboBoxAnos.addItem("1");
+                     jComboBoxAnos.addItem("2");
+                     jComboBoxAnos.addItem("3");
+                     jComboBoxAnos.addItem("4");
+                     jComboBoxAnos.addItem("5");
+                    break;
+                case "ANDROID":
+                     jComboBoxServidores.setEnabled(false);
+                     jComboBoxAnos.removeAllItems();
+                     jComboBoxAnos.addItem("1");
+                    break;
+            }
+        }
+    }//GEN-LAST:event_jComboBoxTipoItemStateChanged
+
+    private void jComboBoxPagamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxPagamentoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxPagamentoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup buttonGroupAnos;
     private javax.swing.ButtonGroup buttonGroupAquisicao;
     private javax.swing.ButtonGroup buttonGroupDataVenda;
     private javax.swing.ButtonGroup buttonGroupPagamento;
+    private javax.swing.ButtonGroup buttonGroupServer;
     private javax.swing.ButtonGroup buttonGroupTipo;
     private javax.swing.JButton jButton3;
+    private javax.swing.JComboBox<String> jComboBoxAnos;
+    private javax.swing.JComboBox<String> jComboBoxAquisicao;
+    private javax.swing.JComboBox<String> jComboBoxPagamento;
+    private javax.swing.JComboBox<String> jComboBoxServidores;
+    private javax.swing.JComboBox<String> jComboBoxTipo;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
@@ -669,20 +543,9 @@ public class InternalCadastroVendaOutrosMeios extends javax.swing.JInternalFrame
     private javax.swing.JPanel jPanelCadastroVenda_pagamento;
     private javax.swing.JPanel jPanelCadastroVenda_quatidade;
     private javax.swing.JPanel jPanelCadastroVenda_tipo;
-    private javax.swing.JRadioButton jRadioButton10;
-    private javax.swing.JRadioButton jRadioButton1ano;
-    private javax.swing.JRadioButton jRadioButton2anos;
-    private javax.swing.JRadioButton jRadioButton3anos;
+    private javax.swing.JPanel jPanelServidores;
     private javax.swing.JRadioButton jRadioButton5;
     private javax.swing.JRadioButton jRadioButton6;
-    private javax.swing.JRadioButton jRadioButton9;
-    private javax.swing.JRadioButton jRadioButtonAndroid;
-    private javax.swing.JRadioButton jRadioButtonBrinde;
-    private javax.swing.JRadioButton jRadioButtonDeposito;
-    private javax.swing.JRadioButton jRadioButtonKIS;
-    private javax.swing.JRadioButton jRadioButtonMP;
-    private javax.swing.JRadioButton jRadioButtonSmall;
-    private javax.swing.JRadioButton jRadioButtonTotal;
     private javax.swing.JTextField jTextFieldApelidoCadastraVendaWhatsapp;
     private javax.swing.JTextField jTextFieldDispositivos;
     private javax.swing.JTextField jTextFieldQtd;

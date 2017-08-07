@@ -11,11 +11,11 @@ package Entidades;
  */
 public class Produtos {
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -50,16 +50,15 @@ public class Produtos {
     public void setValor(double valor) {
         this.valor = valor;
     }
-    private int id;
+    private String id;
     private String tipo;
     private int qtd;
     private int anos;
     private double valor;
 
-    @Override
-    public int hashCode() {
-        return id; //To change body of generated methods, choose Tools | Templates.
-    }
+   
+
+   
 
     @Override
     public boolean equals(Object obj) {

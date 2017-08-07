@@ -28,6 +28,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.table.DefaultTableModel;
+import org.joda.time.Days;
+import org.joda.time.LocalDate;
 
 /**
  *
@@ -50,7 +52,7 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
      * Creates new form InternalFrameCodigos
      */
     public InternalFrameCodigos() {
-        modelo1 = new DefaultTableModel(null, new String[]{"Id", "Codigo", "Pedido", "Data Compra", "Data Expiração", "Qtd Usada",
+        modelo1 = new DefaultTableModel(null, new String[]{"Id", "Codigo", "Pedido", "Data Compra", "Dias Restantes", "Qtd Usada",
             "Tipo", "Dispositivos", "Anos", "Nome", "Email", "Suspeito de revenda", "Senha MyKaspersky"}) {
             @Override
             public boolean isCellEditable(int i, int i1) {
@@ -384,7 +386,7 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
 
         jComboBoxTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "KIS", "TOTAL", "SMALL" }));
 
-        jComboBoxAnos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1 ano", "2 anos", "3 anos" }));
+        jComboBoxAnos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1 ano", "2 anos", "3 anos", "4 anos", "5 anos" }));
         jComboBoxAnos.setSelectedItem("Ano");
         jComboBoxAnos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -518,11 +520,7 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jRadioButton12ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        try {
-            pesquisarTodosCodigosPorTipo(modelo1);        // TODO add your handling code here:
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(TelaCodigos.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        pesquisarTodosCodigosPorTipo(modelo1);        // TODO add your handling code here:
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jRadioButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton13ActionPerformed
@@ -541,6 +539,8 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
 
     private void jRadioButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton15ActionPerformed
         dataDesbloqueio = JOptionPane.showInputDialog("Qual dia? 'AAAA-MM-DD'");
+        Time time = new Time(System.currentTimeMillis());
+        hora = time + "";
         // TODO add your handling code here:
     }//GEN-LAST:event_jRadioButton15ActionPerformed
 
@@ -559,10 +559,10 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
             new DesbloqueioDAO().setDesbloqueio(des);
             JOptionPane.showMessageDialog(null, "Dados salvos com sucesso!");
             ArrayList<Incidentes> array = new IncidentesDAO().getIncidentesPorIdCodigo(idCodigo);
-            array.forEach(inc ->{
-              new Thread(()->{
-                   new InternalIncidentes().encerrarIncidente(inc.getId());
-              }).start(); 
+            array.forEach(inc -> {
+                new Thread(() -> {
+                    new InternalIncidentes().encerrarIncidente(inc.getId(),false);
+                }).start();
             });
             jDialogsetDesbloqueio.dispose();
         } catch (SQLException ex) {
@@ -589,7 +589,7 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
     private void jTableCodigosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableCodigosMouseClicked
         if ((evt.getModifiers() & MouseEvent.BUTTON3_MASK) != 0 && jTableCodigos.getSelectedRowCount() == 1) {
             int i = jTableCodigos.getSelectedRow();
-            idCodigo =  (int) jTableCodigos.getValueAt(i, 0) ;
+            idCodigo = (int) jTableCodigos.getValueAt(i, 0);
             JPopupMenu jpop = new JPopupMenu();
             JMenuItem registrarDesbloqueio = new JMenuItem("Registrar Desbloqueio");
             JMenuItem pesquisarDesbloqueios = new JMenuItem("Pesquisar Desbloqueio");
@@ -659,7 +659,8 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
         String entrada = jTextFieldEntradaCodigo.getText().replaceAll("^\\s+", "");
         entrada = entrada.replaceAll("\\s+$", "");
         Codigos c = dao.getCodigosPorCodigo(entrada);
-        modelo.addRow(new Object[]{c.getId(), c.getCodigo(), c.getPedido(), c.getData_compra(), c.getData_expiracao(),
+        int dias = getDiasRestantes(c.getData_expiracao());
+        modelo.addRow(new Object[]{c.getId(), c.getCodigo(), c.getPedido(), c.getData_compra(),dias,
             c.getQtd_usada(), c.getTipo(), c.getDispositivos(), c.getDuracao(), c.getNome(),
             c.getEmail(), c.getSuspeito(), c.getSenha_mykaspersky()});
         idCodigo = c.getId();
@@ -667,18 +668,20 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
         tipo = c.getTipo();
     }
 
-    public void pesquisarTodosCodigosPorTipo(DefaultTableModel modelo) throws ClassNotFoundException {
+    public void pesquisarTodosCodigosPorTipo(DefaultTableModel modelo) {
         modelo.setNumRows(0);
         CodigoDAO dao = new CodigoDAO();
-        ArrayList list = dao.buscaTodosOsCodigos(jComboBoxTipo.getSelectedItem().toString(), situacao, jComboBoxAnos.getSelectedIndex() + 1);
-        ArrayList<Codigos> list2 = list;
-        for (Codigos c : list2) {
-            modelo.addRow(new Object[]{c.getId(), c.getCodigo(), c.getPedido(), c.getData_compra(), c.getData_expiracao(),
-                c.getQtd_usada(), c.getTipo(), c.getDispositivos(), c.getDuracao(), c.getNome(),
-                c.getEmail(), c.getSuspeito(), c.getSenha_mykaspersky()});
-            idCodigo = c.getId();
-            qtd_usada = c.getQtd_usada();
-            tipo = c.getTipo();
+        ArrayList<Codigos> list = dao.buscaTodosOsCodigos(jComboBoxTipo.getSelectedItem().toString(), situacao, jComboBoxAnos.getSelectedIndex() + 1);
+        if (list != null) {
+            for (Codigos c : list) {
+                int dias = getDiasRestantes(c.getData_expiracao());
+                modelo.addRow(new Object[]{c.getId(), c.getCodigo(), c.getPedido(), c.getData_compra(), dias,
+                    c.getQtd_usada(), c.getTipo(), c.getDispositivos(), c.getDuracao(), c.getNome(),
+                    c.getEmail(), c.getSuspeito(), c.getSenha_mykaspersky()});
+                idCodigo = c.getId();
+                qtd_usada = c.getQtd_usada();
+                tipo = c.getTipo();
+            }
         }
     }
 
@@ -703,5 +706,13 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
             qtdMaxima = "2 desbloqueios";
         }
         jLabel26.setText("O código deve ter no máximo " + qtdMaxima + " em até um mês da compra, com o resolvido 'SIM'. Caso não tenha passado um mês e ele está excedido, me avisa");
+    }
+
+    private int getDiasRestantes(String expiracao) {
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat formatarDate = new SimpleDateFormat("yyyy-MM-dd");
+        LocalDate hoje = LocalDate.parse(formatarDate.format(date));
+        LocalDate dataFim = LocalDate.parse(expiracao);
+        return Days.daysBetween( hoje, dataFim).getDays();
     }
 }

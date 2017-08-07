@@ -16,7 +16,10 @@ import DAO.ProdutosDAO;
 import DAO.VendaDAO;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -32,14 +35,12 @@ public class Principal extends javax.swing.JFrame {
      */
 
     public Principal() {
-            initComponents();
+        initComponents();
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension scrnsize = toolkit.getScreenSize();
         dialogAutenticacao();
-           
         VariaveisDeControle.mapProd = new ProdutosDAO().getProdutosMap();
         this.setSize(scrnsize);
- 
         int i = new IncidentesDAO().getCountIncidentesAbertos();
         if(i > 0){
             jLabel3.setText("Há " + i + " incidente(s) abertos");

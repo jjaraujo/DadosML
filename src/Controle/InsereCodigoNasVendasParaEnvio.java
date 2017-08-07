@@ -92,18 +92,17 @@ public class InsereCodigoNasVendasParaEnvio {
     }
 
     private void setCodigoNaVendaParaEnvio() {
-        HashMap<Integer, Produtos> mapProd = VariaveisDeControle.mapProd;
+        HashMap<String, Produtos> mapProd = VariaveisDeControle.mapProd;
         for (VendasPendentes v : VariaveisDeControle.listVen) {
             Produtos prod = mapProd.get(v.getIdProduto());
-            System.out.println("for VendasPendentes: " + v.getId_venda() + ". Tipo: " + prod.getTipo() + " Anos " + prod.getAnos());
+            System.out.println("Carregando código na venda VendasPendentes: " + v.getId_venda() + ". Tipo: " + prod.getTipo() + " Anos " + prod.getAnos());
             int ano = prod.getAnos();
             ArrayList<Codigos> setCodEnviados = new Codigos_has_vendasDAO().getCodigosJaEnviadosParaOCliente(v.getApelido());
             //condicionais que adicionam o codigo na venda de acordo com o tipo de ID
             switch (ano) {
                 case 1:
                     switch (prod.getTipo().toLowerCase()) {
-                        case "total":
-                            System.out.println("1 ano total");
+                        case "total":                            
                             verificaSeOCodigoPodeSerAdicionadoNaVenda(v, total1Ano, setCodEnviados);
                             break;
                         case "kis":
@@ -118,7 +117,6 @@ public class InsereCodigoNasVendasParaEnvio {
                 case 2:
                     switch (prod.getTipo().toLowerCase()) {
                         case "total":
-                            System.out.println("2 ano total");
                             verificaSeOCodigoPodeSerAdicionadoNaVenda(v, total2Anos, setCodEnviados);
                             break;
                         case "small":
@@ -127,11 +125,9 @@ public class InsereCodigoNasVendasParaEnvio {
                     }
                     break;
                 case 3:
-                    System.out.println("3 ano");
                     verificaSeOCodigoPodeSerAdicionadoNaVenda(v, total3Anos, setCodEnviados);
                     break;
                 default:
-                    System.err.println("Nenhum ano");
             }
         }
         VariaveisDeControle.listaCarregando = false;

@@ -59,7 +59,7 @@ public class TelaVendas extends javax.swing.JFrame {
     private static boolean listaCarregando = false;
     private String apelidoClientePesquisado;
     private Vendas venCadOutAquisicoes = new Vendas();
-    private HashMap<Integer, Produtos> mapProd;
+    private HashMap<String, Produtos> mapProd;
     private javax.swing.DefaultComboBoxModel jComboBoxModelDialogVendasPendentes;
     private int QtdSelecionadaDaVenda;
     private ArrayList<codigos_has_vendas> listaCodigosHasVendasSelecionados = new ArrayList<>();
@@ -2625,7 +2625,7 @@ public class TelaVendas extends javax.swing.JFrame {
                 }
                 String nomeProduto = tipoDeProduto + " " + jTextFieldDispositivos.getText() + " " + pluralDispositivo + " " + anoProduto + " " + pluralAno;
                 System.out.println(nomeProduto);
-                venCadOutAquisicoes.setIdProduto(new ProdutosDAO().pegaIDProduto(nomeProduto));
+                venCadOutAquisicoes.setIdProduto(nomeProduto);
                 venCadOutAquisicoes.setApelido_comprador(jTextFieldApelidoCadastraVendaWhatsapp.getText());
                 venCadOutAquisicoes.setValor(Double.parseDouble(jTextFieldValor.getText()));
                 venCadOutAquisicoes.setCadastroVendedor(1);

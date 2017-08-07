@@ -102,10 +102,15 @@ public class MensagensEmail {
                 + "http://brazil.kaspersky.com/comprar/como-instalar-kaspersky-small-office-security\n";
     }
 
-    public String mensagemIncidenteAdicionado(String nome) {
+    public String mensagemIncidenteAdicionado(String nome, String id) {
 
-        
-        String s = "Caro(a) " + nome + ", recebemos seu incidente e iremos solucioná-lo o mais rápido possível. Aguarde nosso retorno, em breve responderemos!";
+        String s = "Caro(a) " + nome + ", obrigado por contatar a Furtado Antivirus.\n"
+                + "\n"
+                + "Seu pedido de suporte foi recebido pela equipe técnica de suporte.\n"
+                + "O número de seu protocolo é: " + id
+                + "\nIremos solucioná-lo o mais rápido possível. Aguarde nosso retorno, em breve responderemos!\n"
+                + "Atenciosamente, \n"
+                + "Suporte Técnico Furtado Antivirus";
         return s;
     }
 
@@ -113,9 +118,9 @@ public class MensagensEmail {
 
         String s = "Caro(a) " + nome + ", seu incidente foi encerrado em nosso sistema.";
         if (motivo == 1 || motivo == 2) {
-            s = s + "\nVocê já pode utilizar o seu código '" + codigo + "' novamente. Em caso de outros problemas, entre em contato novamente, estamos dispostos a atendê-lo!";
-        }
-        else if (motivo == 3) {
+            s = s + "\nVocê já pode utilizar o seu código '" + codigo + "' novamente.\n"
+                    + "Em caso de outros problemas, entre em contato novamente, estamos dispostos a atendê-lo!";
+        } else if (motivo == 3) {
             s = s + "\n\nSeu código foi substituído. Siga os seguintes passos abaixo:Passo 1 - Eliminar as licenças:\n"
                     + "Abra o Kaspersky \n"
                     + "Clique na licença no canto inferior direito da janela.\n"
@@ -129,15 +134,15 @@ public class MensagensEmail {
                     + "Abra o Kaspersky \n"
                     + "Clique em \"licença\" no canto inferior direito da janela.\n"
                     + "Clique em \"Ativar o aplicativo\" ou \"inserir o codigo de ativação\"\n"
-                    + "Digite o código de ativação apenas no numero de dispositivos conforme a sua compra: \n"
-                    + codigo + "\n"
+                    + "Digite o código de ativação apenas no numero de dispositivos conforme a sua compra. Você receberá um novo email com seu(s) código(s) \n"
                     + "Clique em Avançar e aguarde o processo para ser executado.\n"
                     + "Clique em Concluir.\n"
                     + "Clique em Fechar";
+        } else if (motivo == 4) {
+            s = s + "\nCaso o problema ainda persista, entre em contato imediatamente conosco.";
         }
-        else if(motivo == 4){
-             s = s + "\nCaso o problema ainda persista, entre em contato imediatamente conosco.";
-        }
+        s = s +  "\nAtenciosamente, \n"
+                + "Suporte Técnico Furtado Antivirus";
         return s;
     }
 }

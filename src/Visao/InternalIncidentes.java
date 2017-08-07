@@ -103,14 +103,27 @@ public class InternalIncidentes extends javax.swing.JInternalFrame {
     private void jTableIncidentesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableIncidentesMouseClicked
         if ((evt.getModifiers() & MouseEvent.BUTTON3_MASK) != 0 && jTableIncidentes.getSelectedRow() >= 0) {
             JPopupMenu menu = new JPopupMenu();
-            JMenuItem encerrarIncidente = new JMenuItem("Fechar Incidente");
-            encerrarIncidente.addActionListener((ActionEvent ae) -> {
+            JMenuItem encerrarIncidenteCodSubstituido = new JMenuItem("Fechar Incidente  - código substituído");
+            encerrarIncidenteCodSubstituido.addActionListener((ActionEvent ae) -> {
                 new Thread(() -> {
                     int i = jTableIncidentes.getSelectedRow();
                     String id = (String) jTableIncidentes.getValueAt(i, 0);
                     int opcao = JOptionPane.showConfirmDialog(null, "Deseja encerrar o incidente " + id + "?", "Confirmar", JOptionPane.YES_NO_OPTION);
                     if (opcao == 0) {
-                        encerrarIncidente(id);
+                        encerrarIncidente(id, true);
+                    }
+                    JOptionPane.showMessageDialog(null, "Incidente encerrado com sucesso!");
+                    modelo.removeRow(i);
+                }).start();
+            });
+            JMenuItem encerrarIncidenteCodDesbloqueado = new JMenuItem("Fechar Incidente  - código desbloqueado");
+            encerrarIncidenteCodDesbloqueado.addActionListener((ActionEvent ae) -> {
+                new Thread(() -> {
+                    int i = jTableIncidentes.getSelectedRow();
+                    String id = (String) jTableIncidentes.getValueAt(i, 0);
+                    int opcao = JOptionPane.showConfirmDialog(null, "Deseja encerrar o incidente " + id + "?", "Confirmar", JOptionPane.YES_NO_OPTION);
+                    if (opcao == 0) {
+                        encerrarIncidente(id, false);
                     }
                     JOptionPane.showMessageDialog(null, "Incidente encerrado com sucesso!");
                     modelo.removeRow(i);
@@ -122,7 +135,8 @@ public class InternalIncidentes extends javax.swing.JInternalFrame {
                     adicionarAnotacao();
                 }).start();
             });
-            menu.add(encerrarIncidente);
+            menu.add(encerrarIncidenteCodDesbloqueado);
+            menu.add(encerrarIncidenteCodSubstituido);
             menu.add(adicionarAnotacao);
             menu.show(this, evt.getX(), evt.getY());
         }// TODO add your handling code here:
@@ -133,6 +147,7 @@ public class InternalIncidentes extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableIncidentes;
     // End of variables declaration//GEN-END:variables
+
     private void incidentesAbertos() {
         ArrayList<Incidentes> list = new IncidentesDAO().getIncidentes();
         modelo.setNumRows(0);
@@ -150,7 +165,7 @@ public class InternalIncidentes extends javax.swing.JInternalFrame {
         return Days.daysBetween(criacao, hoje).getDays();
     }
 
-    public void encerrarIncidente(String id) {
+    public void encerrarIncidente(String id, boolean substituido) {
         try {
             new IncidentesDAO().encerrarIncidente(id);
             Incidentes inc = new IncidentesDAO().getIncidente(id);
@@ -159,7 +174,13 @@ public class InternalIncidentes extends javax.swing.JInternalFrame {
                 Cliente c = new ClienteDAO().buscaCliente(v.getApelido_comprador());
                 String assunto = new AssuntosEmail().assuntoEncerramentoIncidente(id);
                 String codigo = new CodigoDAO().buscaUmCodigo(inc.getId_codigo()).getCodigo();
-                String corpo = new MensagensEmail().mensagemIncidenteEncerrado(c.getNome(), inc.getMotivo(), codigo);
+                String corpo = null;
+                if(substituido){
+                 corpo = new MensagensEmail().mensagemIncidenteEncerrado(c.getNome(), 3, codigo);
+                } else{
+                 corpo = new MensagensEmail().mensagemIncidenteEncerrado(c.getNome(), inc.getMotivo(), codigo);                    
+                }
+            
                 new EmailService(c.getEmail(), assunto, corpo).sendEmail();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "O email não foi enviado para o cliente do incidente " + inc.getId());

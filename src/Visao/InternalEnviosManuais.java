@@ -32,7 +32,7 @@ public class InternalEnviosManuais extends javax.swing.JInternalFrame {
     private VendasPendentes ven = new VendasPendentes();
     ArrayList<codigos_has_vendas> listaCodigosHasVendasSelecionados = new ArrayList<>();
     private ArrayList<Codigos> codAdicionadoManualmente = new ArrayList<>();
-    private HashMap<Integer,Produtos> map = VariaveisDeControle.mapProd;
+    private HashMap<String,Produtos> map = VariaveisDeControle.mapProd;
 
     public InternalEnviosManuais() {
         initComponents();
@@ -102,8 +102,6 @@ public class InternalEnviosManuais extends javax.swing.JInternalFrame {
                 jButtonCarregarActionPerformed(evt);
             }
         });
-
-        jSpinnerQTD.setValue(ven.getQtd() * map.get(ven.getIdProduto()).getQtd());
 
         jLabel31.setText("Escolher venda:");
 
@@ -313,7 +311,6 @@ public class InternalEnviosManuais extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jComboBoxDialogCodigoManualmenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxDialogCodigoManualmenteActionPerformed
-        
         VariaveisDeControle.carregamentoCodigoManual = true;
         ven = (VendasPendentes) jComboBoxDialogCodigoManualmente.getSelectedItem();
         if (ven == null) {
@@ -323,7 +320,6 @@ public class InternalEnviosManuais extends javax.swing.JInternalFrame {
             jTextFieldObservacaoEnvioManual.setText(ven.getObservacoes());
             jTextFieldProdutoEnvioManual.setText(ven.getProduto());
         }
-
     }//GEN-LAST:event_jComboBoxDialogCodigoManualmenteActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -393,7 +389,7 @@ VariaveisDeControle.frameEnvioManualAberto = false;        // TODO add your hand
     private javax.swing.JTextField jTextFieldProdutoEnvioManual;
     // End of variables declaration//GEN-END:variables
   private void inserirEAlterarCodigoVendaManualmente(int id, int qtd, int qtdServer) {
-        codigos_has_vendas chv = new codigos_has_vendas();
+  try{      codigos_has_vendas chv = new codigos_has_vendas();
         chv.setIdVenda(ven.getId_venda());
         chv.setId_codigo(id);
         chv.setQtd(qtd);
@@ -401,5 +397,8 @@ VariaveisDeControle.frameEnvioManualAberto = false;        // TODO add your hand
         listaCodigosHasVendasSelecionados.add(chv);
         Codigos c = new CodigoDAO().buscaUmCodigo(id);
         codAdicionadoManualmente.add(c);
+  }catch(Exception e){
+      
+  }
     }
 }

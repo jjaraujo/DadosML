@@ -34,7 +34,7 @@ import javax.swing.JOptionPane;
  */
 public class EnviarCodigos {
 
-    HashMap<Integer, Produtos> mapProd = VariaveisDeControle.mapProd;
+    HashMap<String, Produtos> mapProd = VariaveisDeControle.mapProd;
 
     public EnviarCodigos() {
 
@@ -49,8 +49,10 @@ public class EnviarCodigos {
             EmailService email = new EmailService(ven.getEmail(),
                     "Código de ativação - " + ven.getProduto() + " - " + ven.getApelido() + " - " + ven.getId_venda(), corpo);
             email.sendEmail();
+            
         } catch (MessagingException | IOException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao enviar o código da venda " + ven.getId_venda() + "\n" + ex.getMessage());
+            System.err.println( "Erro ao enviar o código da venda " + ven.getId_venda() + "\n" + ex.getMessage());
             ex.printStackTrace();
         }
     }

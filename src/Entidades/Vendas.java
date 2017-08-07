@@ -11,6 +11,26 @@ package Entidades;
  */
 public class Vendas {
 
+    
+    private String id;
+    private String apelido_comprador;
+    private int qtd;
+    private String data;
+    private String dataEnvio;
+    private String valorString;
+    private double valor;
+    private double valorPorDispositivo;
+    private double valorPorDispositivoDesconto;
+    private double valorDesconto;
+    private int cadastroVendedor;
+    private String formaPagamento;
+    private String formaAquisicao;
+    private String cancelada;
+    private String observacoes;
+    private String hora;
+    private String anuncio;
+    private String idProduto;
+
     public String getId() {
         return id;
     }
@@ -41,6 +61,14 @@ public class Vendas {
 
     public void setData(String data) {
         this.data = data;
+    }
+    
+        public String getDataEnvio() {
+        return dataEnvio;
+    }
+
+    public void setDataEnvio(String dataEnvio) {
+        this.dataEnvio = dataEnvio;
     }
 
     public double getValor() {
@@ -129,24 +157,6 @@ public class Vendas {
         return this.anuncio;
     }
 
-    private String id;
-    private String apelido_comprador;
-    private int qtd;
-    private String data;
-    private String valorString;
-    private double valor;
-    private double valorPorDispositivo;
-    private double valorPorDispositivoDesconto;
-    private double valorDesconto;
-    private int cadastroVendedor;
-    private String formaPagamento;
-    private String formaAquisicao;
-    private String cancelada;
-    private String observacoes;
-    private String hora;
-    private String anuncio;
-    private int idProduto;
-
     public String getValorString() {
         return valorString;
     }
@@ -155,11 +165,11 @@ public class Vendas {
         this.valorString = valorString;
     }
 
-    public int getIdProduto() {
+    public String getIdProduto() {
         return idProduto;
     }
 
-    public void setIdProduto(int idProduto) {
+    public void setIdProduto(String idProduto) {
         this.idProduto = idProduto;
     }
 

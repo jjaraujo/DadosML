@@ -7,6 +7,7 @@ package Visao;
 
 import Connection.ConnectionFactory;
 import Controle.EnviarCodigos;
+import Controle.EnviosManuaisControle;
 import Controle.VariaveisDeControle;
 import DAO.ClienteDAO;
 import DAO.CodigoDAO;
@@ -27,10 +28,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -47,7 +51,7 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
     private String tipoDePesquisa;
     private final DefaultTableModel modelo;
     private String apelidoClientePesquisado;
-    private int motivo;
+    public static int motivo;
 
     /**
      * Creates new form InternalFrameVendas
@@ -56,7 +60,7 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
         if (VariaveisDeControle.user.equals("JOAO")) {
             modelo = new DefaultTableModel(null, new String[]{"ID Venda", "Apelido", "Nome",
                 "Email", "Codigo", "Codigos Antigos", "Tipo", "Dispositivos", "Servidores",
-                "Anos", "Valor", "Data", "Pagamento", "Cancelada", "Suspeito", "Inativo"}) {
+                "Anos", "Valor", "Data", "Data envio", "Dias restantes", "Pagamento", "Cancelada", "Suspeito", "Inativo"}) {
                 @Override
                 public boolean isCellEditable(int i, int i1) {
                     return false;//To change body of generated methods, choose Tools | Templates.
@@ -65,7 +69,7 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
         } else {
             modelo = new DefaultTableModel(null, new String[]{"ID Venda", "Apelido", "Nome",
                 "Email", "Codigo", "Codigos Antigos", "Tipo", "Dispositivos", "Servidores",
-                "Anos", "Data", "Pagamento", "Cancelada", "Suspeito", "Inativo"}) {
+                "Anos", "Data", "Data envio", "Dias restantes", "Pagamento", "Cancelada", "Suspeito", "Inativo"}) {
                 @Override
                 public boolean isCellEditable(int i, int i1) {
                     return false;//To change body of generated methods, choose Tools | Templates.
@@ -243,7 +247,9 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
         jTableVendas.getColumnModel().getColumn(10).setPreferredWidth(100);
         jTableVendas.getColumnModel().getColumn(11).setPreferredWidth(80);
         jTableVendas.getColumnModel().getColumn(12).setPreferredWidth(80);
-        jTableVendas.getColumnModel().getColumn(12).setPreferredWidth(80);
+        jTableVendas.getColumnModel().getColumn(13).setPreferredWidth(80);
+        jTableVendas.getColumnModel().getColumn(14).setPreferredWidth(80);
+        jTableVendas.getColumnModel().getColumn(15).setPreferredWidth(80);
 
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Pesquisar por:"));
 
@@ -379,22 +385,20 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
         //Verificando se o botão direito foi pressionado
         if ((evt.getModifiers() & MouseEvent.BUTTON3_MASK) != 0 && (jTableVendas.getSelectedRowCount() == 1)) {
             int i = jTableVendas.getSelectedRow();
-            System.out.println(i);
-
             JPopupMenu menu = new JPopupMenu();
             JMenuItem adicionarIncidente = new JMenuItem("Adicionar Incidente");
             adicionarIncidente.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent ae) {
-                    new Thread(() -> {
-                        gerarIncidente();
-                    }).start();
+                    String idvenda = (String) jTableVendas.getValueAt(i, 0);
+                    jLabel1.setText("MOTIVO DE CRIAR INCIDENTE NA VENDA " + idvenda + ":");
+                    jDialog1.setVisible(true);
                 }
             });
             JMenuItem reenviar = new JMenuItem("Reenviar");
             reenviar.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    reenviarCodigo();
+                    new EnviosManuaisControle().reenviarCodigo(jTableVendas);
                 }
             });
             menu.add(adicionarIncidente);
@@ -420,6 +424,11 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jRadioButton5ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        new Thread(() -> {
+            int i = jTableVendas.getSelectedRow();
+            String idvenda = (String) jTableVendas.getValueAt(i, 0);
+            new EnviosManuaisControle().gerarIncidente(jTableVendas, idvenda, jTextFieldInformacaoAdicional);
+        }).start();
         if (buttonGroupMotivo.getSelection() != null) {
             jDialog1.setVisible(false);
         } else {
@@ -463,53 +472,42 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
                     + " cd.codigo codigo,chv.codigos_antigos codigos_antigos,"
                     + "cd.tipo tipo, chv.qtd_dispositivos qtd_dispositivos,"
                     + "chv.qtd_servidor qtd_servidor, v.valor, "
-                    + "cd.duracao duracao,v.data data, v.forma_pagamento pagamento"
-                    + ",v.cancelada cancelada,cl.suspeito suspeito,cl.inativo inativo "
+                    + "cd.duracao duracao,v.data data,v.data_envio data_envio, v.forma_pagamento pagamento,"
+                    + "p.duracao duracao_produto,v.cancelada cancelada,cl.suspeito suspeito,cl.inativo inativo "
                     + "from codigos_has_vendas chv "
                     + "join vendas v on v.id like chv.id_venda "
-                    + " join clientes_ml cl on v.apelido_comprador like cl.apelido "
+                    + "join clientes_ml cl on v.apelido_comprador like cl.apelido "
                     + "join codigos cd on cd.id = chv.id_codigo "
+                    + "join produtos p on p.id = v.id_produto"
                     + " where "
                     + tipoDePesquisa + " like ? order by v.data;";
-            String id_venda = null;
-            String email = null;
-            String codigo = null;
-            String tipo = null;
-            String nome = null;
-            int qtd_dispositivos = 0;
-            int qtd_server = 0;
-            int duracao = 0;
-            String data = null;
-            String pagamento = null;
-            String cancelada = "";
-            String suspeito = "";
-            String inativo = "";
-            String codigosAntigos = "";
-            Double valor = 0.0;
             stmt = VariaveisDeControle.CON.prepareStatement(script);
             stmt.setString(1, "%" + entrada + "%");
             rs = stmt.executeQuery();
             while (rs.next()) {
-                id_venda = rs.getString("id_venda");
+                String id_venda = rs.getString("id_venda");
                 apelidoClientePesquisado = rs.getString("apelido");
-                nome = rs.getString("nome");
-                email = rs.getString("email");
-                codigo = rs.getString("codigo");
-                codigosAntigos = rs.getString("codigos_antigos");
-                tipo = rs.getString("tipo");
-                qtd_dispositivos = rs.getInt("qtd_dispositivos");
-                qtd_server = rs.getInt("qtd_servidor");
-                duracao = rs.getInt("duracao");
-                valor = rs.getDouble("valor");
-                data = rs.getString("data");
-                pagamento = rs.getString("pagamento");
-                cancelada = rs.getString("cancelada");
-                suspeito = rs.getString("suspeito");
-                inativo = rs.getString("inativo");
+                String nome = rs.getString("nome");
+                String email = rs.getString("email");
+                String codigo = rs.getString("codigo");
+                String codigosAntigos = rs.getString("codigos_antigos");
+                String tipo = rs.getString("tipo");
+                int qtd_dispositivos = rs.getInt("qtd_dispositivos");
+                int qtd_server = rs.getInt("qtd_servidor");
+                int duracao = rs.getInt("duracao");
+                Double valor = rs.getDouble("valor");
+                String data = rs.getString("data");
+                String dataEnvio = rs.getString("data_envio");
+                int duracao_produto = rs.getInt("duracao_produto");
+                String pagamento = rs.getString("pagamento");
+                String cancelada = rs.getString("cancelada");
+                String suspeito = rs.getString("suspeito");
+                String inativo = rs.getString("inativo");
+                int diasRestantes = getDiasRestantes(data, duracao_produto);
                 if (VariaveisDeControle.user.equals("JOAO")) {
-                    modelo.addRow(new Object[]{id_venda, apelidoClientePesquisado, nome, email, codigo, codigosAntigos, tipo, qtd_dispositivos, qtd_server, duracao, valor, data, pagamento, cancelada, suspeito, inativo});
+                    modelo.addRow(new Object[]{id_venda, apelidoClientePesquisado, nome, email, codigo, codigosAntigos, tipo, qtd_dispositivos, qtd_server, duracao, valor, data, dataEnvio, diasRestantes, pagamento, cancelada, suspeito, inativo});
                 } else {
-                    modelo.addRow(new Object[]{id_venda, apelidoClientePesquisado, nome, email, codigo, codigosAntigos, tipo, qtd_dispositivos, qtd_server, duracao, data, pagamento, cancelada, suspeito, inativo});
+                    modelo.addRow(new Object[]{id_venda, apelidoClientePesquisado, nome, email, codigo, codigosAntigos, tipo, qtd_dispositivos, qtd_server, duracao, data, dataEnvio, diasRestantes, pagamento, cancelada, suspeito, inativo});
                 }
             }
         } catch (SQLException ex) {
@@ -519,57 +517,21 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
         }
     }
 
-    private void gerarIncidente() {
-        Incidentes inc = new Incidentes();
-        int i = jTableVendas.getSelectedRow();
-        String idvenda = (String) jTableVendas.getValueAt(i, 0);
-        inc.setId_venda(idvenda);
-        jLabel1.setText("MOTIVO DE CRIAR INCIDENTE NA VENDA " + idvenda + ":");
-        jDialog1.setVisible(true);
-        if (motivo > 0) {
-            Date date = new Date(System.currentTimeMillis());
-            SimpleDateFormat formatarDate = new SimpleDateFormat("yyyy-MM-dd");
-            String codigo = (String) jTableVendas.getValueAt(i, 4);
-            int countIncidentes = new IncidentesDAO().getCountIncidentes();
-            inc.setDataIncidente(formatarDate.format(date));
-            inc.setId("INC" + inc.getId_venda() + "00" + countIncidentes);
-            inc.setMotivo(motivo);
-            inc.setAnotacoes(jTextFieldInformacaoAdicional.getText());
-            inc.setId_codigo(new CodigoDAO().getCodigosPorCodigo(codigo).getId());
-            try {
-                new IncidentesDAO().addIncidente(inc);
-                JOptionPane.showMessageDialog(null, "Incidente adicionado!");
-                try {
-                    Vendas v = new VendaDAO().getUmaVenda(inc.getId_venda());
-                    Cliente c = new ClienteDAO().buscaCliente(v.getApelido_comprador());
-                    String assunto = new AssuntosEmail().assuntoAberturaIncidente(inc.getId());
-                    String corpo = new MensagensEmail().mensagemIncidenteAdicionado(c.getNome());
-                    new EmailService(c.getEmail(), assunto, corpo).sendEmail();
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "O email não foi enviado para o cliente do incidente " + inc.getId());
-                }
-
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Não foi possível adicionar o incidente");
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Motivo inválido");
+    private int getDiasRestantes(String data_compra, int ano) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date dataCompra = format.parse(data_compra);
+            Date dateHoje = new Date(System.currentTimeMillis());
+            Calendar c = Calendar.getInstance();
+            c.setTime(dataCompra);
+            c.set(Calendar.YEAR, c.get(Calendar.YEAR) + ano);
+            LocalDate hoje = LocalDate.parse(format.format(dateHoje));
+            LocalDate dataFim = LocalDate.parse(format.format(c.getTime()));
+            return Days.daysBetween(hoje, dataFim).getDays();
+        } catch (ParseException ex) {
+            Logger.getLogger(InternalFrameVendas.class.getName()).log(Level.SEVERE, null, ex);
+            return 0;
         }
     }
 
-    private void reenviarCodigo() {
-        int i = jTableVendas.getSelectedRow();
-        String idVenda = (String) jTableVendas.getValueAt(i, 0);
-        int opcao = JOptionPane.showConfirmDialog(null, "Reenviar códigos da venda " + idVenda + "?", "Confirmar reenvio", JOptionPane.YES_NO_OPTION);
-        if (opcao == 0) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    System.out.println("reenviando email venda " + idVenda);
-                    ArrayList listChv = new Codigos_has_vendasDAO().getCodigoHasVendas(idVenda);
-                    new EnviarCodigos().reenviarEmail(new VendaDAO().getUmaVenda(idVenda), listChv);
-                }
-            }).start();
-        }
-    }
 }

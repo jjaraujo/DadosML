@@ -15,6 +15,7 @@ import Entidades.Codigos;
 import Entidades.Vendas;
 import Entidades.VendasPendentes;
 import Entidades.codigos_has_vendas;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.logging.Level;
@@ -401,8 +402,12 @@ public class InternalModificarCodigoVenda extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButtonExcluirActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        listChv = new Codigos_has_vendasDAO().getCodigoHasVendas(jTextFieldIdVenda.getText());
-        buscaInformacoesVenda();
+        try {
+            listChv = new Codigos_has_vendasDAO().getCodigoHasVendas(jTextFieldIdVenda.getText());
+            buscaInformacoesVenda();
+        } catch (Exception e) {
+
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButtonAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAtualizarActionPerformed
@@ -418,7 +423,7 @@ public class InternalModificarCodigoVenda extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButtonAtualizarActionPerformed
 
     private void jListCodigosAtuaisMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListCodigosAtuaisMouseClicked
-        
+
     }//GEN-LAST:event_jListCodigosAtuaisMouseClicked
 
     private void jButton23ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton23ActionPerformed
@@ -431,7 +436,7 @@ public class InternalModificarCodigoVenda extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButtonSubstituirActionPerformed
 
     private void jButton21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton21ActionPerformed
-limparDados();        // TODO add your handling code here:
+        limparDados();        // TODO add your handling code here:
     }//GEN-LAST:event_jButton21ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -483,13 +488,14 @@ limparDados();        // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jListCodigosAtuaisValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListCodigosAtuaisValueChanged
-        int qtdDispositivos = listChv.get(jListCodigosAtuais.getSelectedIndex()).getQtd();
-        int qtdServidor = listChv.get(jListCodigosAtuais.getSelectedIndex()).getQtd_servidor();
-        jSpinnerQTDAtualizarVenda.setValue(qtdDispositivos);
-        jSpinnerQTDServer.setValue(qtdServidor);
+        if (listChv != null) {
+            int qtdDispositivos = listChv.get(jListCodigosAtuais.getSelectedIndex()).getQtd();
+            int qtdServidor = listChv.get(jListCodigosAtuais.getSelectedIndex()).getQtd_servidor();
+            jSpinnerQTDAtualizarVenda.setValue(qtdDispositivos);
+            jSpinnerQTDServer.setValue(qtdServidor);
+        }
     }//GEN-LAST:event_jListCodigosAtuaisValueChanged
 
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -561,8 +567,8 @@ limparDados();        // TODO add your handling code here:
         new Thread(new Runnable() {
             @Override
             public void run() {
-                 ArrayList<codigos_has_vendas> codigosAtualizados2 = new ArrayList<>();
-                 codigosAtualizados2.addAll(codigosAtualizados);
+                ArrayList<codigos_has_vendas> codigosAtualizados2 = new ArrayList<>();
+                codigosAtualizados2.addAll(codigosAtualizados);
                 if (!codigosAtualizados2.isEmpty()) {
                     codigosAtualizados2.forEach((c) -> {
                         new Codigos_has_vendasDAO().updateCodigoHasVendas(c);

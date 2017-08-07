@@ -45,10 +45,11 @@ public class VendaDAO {
                 ven.setId(rs.getString("id"));
                 ven.setApelido_comprador(rs.getString("apelido_comprador"));
                 ven.setQtd(rs.getInt("qtd"));
-                ven.setIdProduto(rs.getInt("id_produto"));
+                ven.setIdProduto(rs.getString("id_produto"));
                 ven.setData(rs.getString("data"));
                 ven.setFormaPagamento(rs.getString("forma_pagamento"));
                 ven.setValor(rs.getDouble("valor"));
+                ven.setCancelada(rs.getString("cancelada"));
             }
             return ven;
         } catch (SQLException e) {
@@ -58,84 +59,86 @@ public class VendaDAO {
     }
 
     public void insertVenda(ArrayList<Vendas> set) {
-        ProdutosDAO prodDAO = new ProdutosDAO();
-
         for (Vendas v : set) {
             Runnable r = new Runnable() {
                 @Override
                 public void run() {
-                    // verifica se nao tem a venda em vendasPendentes
-                    VendasPendentes vp = new VendasPendentes();
-                    Cliente cliente = new ClienteDAO().buscaCliente(v.getApelido_comprador());
-                    String anuncio = v.getAnuncio();
-                    double valor = v.getValor() * v.getQtd();
-                    double valorpordispositivo;
-                    double valordesconto;
-                    if (valor < 40) {
-                        valordesconto = (valor - (valor * 11) / 100);
-                    } else {
-                        valordesconto = (valor - (valor * 16) / 100);
-                    }
-                    int idProduto = prodDAO.pegaIDProduto(anuncio);
-                    Produtos produto = prodDAO.retornaProduto(idProduto);
-                    int qtddispproduto = produto.getQtd();
-                    int qtdProdutosVenda = v.getQtd();
-                    int qtdTotalDispositivos = qtdProdutosVenda * qtddispproduto;
-                    double valorpordispositivodescont = valordesconto / qtdTotalDispositivos;
-                    valorpordispositivo = valor / qtdTotalDispositivos;
-                    String hora = v.getHora().substring(11, v.getHora().length() - 1);
-                    if (getUmaVenda(v.getId()).getApelido_comprador() == null) {
-
-                        try {
-                            PreparedStatement stmt = con.prepareStatement("insert into vendas(id, apelido_comprador,"
-                                    + "id_produto, qtd, valor,"
-                                    + "valorpordispositivo, valorpordispositivo_descont,"
-                                    + "valor_desconto, cadastro_vendedor,"
-                                    + "forma_aquisicao, forma_pagamento, data, hora) values (?,?,?,?,?,?,?,?,?,?,?,?,?);");
-                            stmt.setString(1, v.getId()); //seta o id da venda
-                            stmt.setString(2, v.getApelido_comprador());
-                            stmt.setInt(3, idProduto);
-                            stmt.setInt(4, qtdProdutosVenda);
-                            stmt.setDouble(5, valor);
-                            stmt.setDouble(6, valorpordispositivo);
-                            stmt.setDouble(7, valorpordispositivodescont);
-                            stmt.setDouble(8, valordesconto);
-                            stmt.setInt(9, v.getCadastroVendedor());
-                            stmt.setString(10, v.getFormaAquisicao());
-                            stmt.setString(11, v.getFormaPagamento());
-                            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                            java.sql.Date data = new java.sql.Date(format.parse(v.getData()).getTime());
-                            stmt.setDate(12, data);
-                            stmt.setString(13, hora);
-                            System.out.println("Venda cadastrada: " + v.getId());
-                            stmt.executeUpdate();
-                            stmt.close();
-
-                        } catch (SQLException ex) {
-                            System.err.println("Erro ao adicionar a venda " + v.getId() + ": " + ex.getMessage());
-                            ex.printStackTrace();
-                        } catch (NullPointerException ex) {
-                            System.err.println(v.getId() + " tem erro de nulo: " + ex.getMessage());
-                            ex.printStackTrace();
-                        } catch (ParseException ex) {
-                            Logger.getLogger(VendaDAO.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    if (new VendasPendentesDAO().verificaSeAVendaPodeSerAdicionada(v.getId())) {
-                        vp.setApelido(v.getApelido_comprador());
-                        vp.setEmail(cliente.getEmail());
-                        vp.setIdProduto(idProduto);
-                        vp.setPagamento(v.getFormaPagamento());
-                        vp.setQtd(qtdProdutosVenda);
-                        vp.setId_venda(v.getId());
-                        //verifica se o cliente é inativo, se for não vai enviar para vendas pendentes
-                        if (cliente.getInativo().equals("null")) {//
-                            new VendasPendentesDAO().insereVendas(vp);//
+                    try { // verifica se nao tem a venda em vendasPendentes
+                        VendasPendentes vp = new VendasPendentes();
+                        Cliente cliente = new ClienteDAO().buscaCliente(v.getApelido_comprador());
+                        double valor = v.getValor() * v.getQtd();
+                        double valorpordispositivo;
+                        double valordesconto;
+                        if (valor < 20) {
+                            valordesconto = (valor - (valor * 11) / 100);
                         } else {
-                            JOptionPane.showMessageDialog(null, "Cliente inativo: " + v.getApelido_comprador());//
+                            valordesconto = (valor - (valor * 16) / 100);
                         }
-                        // ----------------------------
 
+                        Produtos produto = VariaveisDeControle.mapProd.get(v.getIdProduto());
+                        int qtddispproduto = produto.getQtd();
+                        int qtdProdutosVenda = v.getQtd();
+                        int qtdTotalDispositivos = qtdProdutosVenda * qtddispproduto;
+                        double valorpordispositivodescont = valordesconto / qtdTotalDispositivos;
+                        valorpordispositivo = valor / qtdTotalDispositivos;
+                        String hora = v.getHora().substring(11, v.getHora().length() - 1);
+
+                        if (getUmaVenda(v.getId()).getApelido_comprador() == null) {
+
+                            try {
+                                PreparedStatement stmt = con.prepareStatement("insert into vendas(id, apelido_comprador,"
+                                        + "id_produto, qtd, valor,"
+                                        + "valorpordispositivo, valorpordispositivo_descont,"
+                                        + "valor_desconto, cadastro_vendedor,"
+                                        + "forma_aquisicao, forma_pagamento, data, hora) values (?,?,?,?,?,?,?,?,?,?,?,?,?);");
+                                stmt.setString(1, v.getId()); //seta o id da venda
+                                stmt.setString(2, v.getApelido_comprador());
+                                stmt.setString(3, v.getIdProduto());
+                                stmt.setInt(4, qtdProdutosVenda);
+                                stmt.setDouble(5, valor);
+                                stmt.setDouble(6, valorpordispositivo);
+                                stmt.setDouble(7, valorpordispositivodescont);
+                                stmt.setDouble(8, valordesconto);
+                                stmt.setInt(9, v.getCadastroVendedor());
+                                stmt.setString(10, v.getFormaAquisicao());
+                                stmt.setString(11, v.getFormaPagamento());
+                                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                                java.sql.Date data = new java.sql.Date(format.parse(v.getData()).getTime());
+                                stmt.setDate(12, data);
+                                stmt.setString(13, hora);
+                                System.out.println("Venda cadastrada: " + v.getId());
+                                stmt.executeUpdate();
+                                stmt.close();
+
+                            } catch (SQLException ex) {
+                                System.err.println("Erro ao adicionar a venda " + v.getId() + ": " + ex.getMessage());
+                                ex.printStackTrace();
+                            } catch (NullPointerException ex) {
+                                System.err.println(v.getId() + " tem erro de nulo: " + ex.getMessage());
+                                ex.printStackTrace();
+                            } catch (ParseException ex) {
+                                Logger.getLogger(VendaDAO.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        if (new VendasPendentesDAO().verificaSeAVendaPodeSerAdicionada(v.getId())) {
+                            vp.setApelido(v.getApelido_comprador());
+                            vp.setEmail(cliente.getEmail());
+                            vp.setIdProduto(v.getIdProduto());
+                            vp.setPagamento(v.getFormaPagamento());
+                            vp.setQtd(qtdProdutosVenda);
+                            vp.setId_venda(v.getId());
+                            //verifica se o cliente é inativo, se for não vai enviar para vendas pendentes
+                            if (cliente.getInativo().equals("null")) {//
+                                new VendasPendentesDAO().insereVendas(vp);//
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Cliente inativo: " + v.getApelido_comprador());//
+                            }
+                            // ----------------------------
+
+                        }
+                    } catch (Exception e) {
+                        System.err.println("Erro ao adicionar a venda " +v.getId() +": "+ e.getMessage());
+                        e.printStackTrace(); 
                     }
                 }
             };
@@ -184,7 +187,7 @@ public class VendaDAO {
                     + "forma_aquisicao,forma_pagamento,data,hora) values (?,?,?,?,?,?,?,?,?,?,?,?,?);");
             stmt.setString(1, v.getId()); //seta o id da venda
             stmt.setString(2, v.getApelido_comprador());
-            stmt.setInt(3, v.getIdProduto());
+            stmt.setString(3, v.getIdProduto());
             stmt.setInt(4, qtdProdutosVenda);
             stmt.setDouble(5, valor);
             stmt.setDouble(6, valorpordispositivo);
@@ -247,7 +250,7 @@ public class VendaDAO {
                 v = new Vendas();
                 v.setApelido_comprador(rs.getString("apelido_cliente"));
                 v.setQtd(rs.getInt("qtd"));
-                v.setIdProduto(rs.getInt("id_produto"));
+                v.setIdProduto(rs.getString("id_produto"));
                 array.add(v);
             }
             return array;
@@ -286,6 +289,19 @@ public class VendaDAO {
             stmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(VendaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void setDataEnvio(String data, String id) {
+        try {
+            PreparedStatement stmt = con.prepareCall("update vendas set data_envio = ? where id like ?; ");
+            stmt.setString(1, data);
+            stmt.setString(2, id);
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Não foi possivel adicionar a data de envio do código para a venda " + id + "\n" + ex.getMessage());
+            System.err.println("Não foi possivel adicionar a data de envio do código para a venda " + id + "\n" + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 }

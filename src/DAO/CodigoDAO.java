@@ -40,7 +40,7 @@ import org.joda.time.LocalDate;
  */
 public class CodigoDAO {
 
-    private Connection con;
+    private final Connection con;
     private static boolean situacaoCodigosVerificado = false;
     private PreparedStatement stmtInicial;
 
@@ -247,7 +247,6 @@ public class CodigoDAO {
         ArrayList<Codigos> listTodosCod1 = new ArrayList<>();
         ArrayList<Codigos> listTodosCod2;
         QtdUsoCodigos qtdUso = new QtdUsoCodigosDAO().getQtdUsada();
-
         try {
             PreparedStatement stmt = con.prepareStatement("select id,codigo,tipo,qtd_usada,data_expiracao,duracao from codigos where situacao like 'UTILIZANDO';");
             ResultSet rs = stmt.executeQuery();
@@ -264,12 +263,13 @@ public class CodigoDAO {
 
             listTodosCod2 = verificaDesbloqueioEQuantidadeUsada(listTodosCod1);
             System.out.println("listTodosCod2 isEmpty:" + listTodosCod2.isEmpty());
-            for (Codigos c : listTodosCod2) {
+            for (Codigos c : listTodosCod1) {
                 System.out.println("Código: " + c.getCodigo() + ". Tipo codigo: " + c.getTipo());
                 if (controlaSituacaoCodigos(c, qtdUso)) {
                     setSituacaoCodigo("REPOSICAO", c.getId());
                     System.out.println("Entrou no if para mudar a situacao: " + c.getCodigo());
                 } else {
+                    System.out.println("Código "+ c.getCodigo() +" livre para uso ");
                     listCodUtilizaveis.add(c);
                 }
             }
@@ -351,7 +351,7 @@ public class CodigoDAO {
             }
         }
         if ((tipo.toLowerCase().equals("kis") || tipo.toLowerCase().equals("android")) && ((qtd_usada >= qtdUso.getQtdMaxKis()) || (diasRestantes < qtdUso.getDiasMaxKis1A()))) {
-            System.out.println("true kis, ano 1, dias menores que o permitido ou qtd usada maior");
+            System.out.println("true kis, ano 1, dias menores que o permitido ou qtd usada maior - ID COD1: " + c.getId());
             return true;
         }
         if (tipo.toLowerCase().equals("small")) {

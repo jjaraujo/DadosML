@@ -68,7 +68,7 @@ public class IncidentesDAO {
             }
             return list;
         } catch (SQLException ex) {
-            Logger.getLogger(IncidentesDAO.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Erro ao buscar incidentes");
             return null;
         }
     }

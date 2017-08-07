@@ -4,12 +4,8 @@ import Controle.VariaveisDeControle;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import javafx.scene.control.PasswordField;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+
 
 public class ConnectionFactory {
 

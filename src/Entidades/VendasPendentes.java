@@ -24,7 +24,7 @@ public class VendasPendentes {
     private String codigo;
     private String produto;
     private String pagamento;    
-    private int idProduto;
+    private String idProduto;
     private int idCodigo;
     private int qtd;
     private String tipoProduto;
@@ -111,6 +111,7 @@ public class VendasPendentes {
         Produtos p = new ProdutosDAO().retornaProduto(idProduto);
         String server = "";
         String tipo = p.getTipo();
+        
         if(p.getTipo().toLowerCase().equals("small") && p.getQtd() > 1){
             server = qtd + " server ";
         }
@@ -125,11 +126,11 @@ public class VendasPendentes {
         this.email = email;
     }        
 
-    public int getIdProduto() {
+    public String getIdProduto() {
         return idProduto;
     }
 
-    public void setIdProduto(int idProduto) {
+    public void setIdProduto(String idProduto) {
         this.idProduto = idProduto;
     }
 
