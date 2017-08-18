@@ -108,9 +108,11 @@ public class InternalIncidentes extends javax.swing.JInternalFrame {
                 new Thread(() -> {
                     int i = jTableIncidentes.getSelectedRow();
                     String id = (String) jTableIncidentes.getValueAt(i, 0);
+                    String idVenda = new IncidentesDAO().getIncidente(id).getId_venda();
                     int opcao = JOptionPane.showConfirmDialog(null, "Deseja encerrar o incidente " + id + "?", "Confirmar", JOptionPane.YES_NO_OPTION);
                     if (opcao == 0) {
-                        encerrarIncidente(id, true);
+                        new Controle.ControleIncidentes().encerrarIncidente(id,idVenda, true);
+                        
                     }
                     JOptionPane.showMessageDialog(null, "Incidente encerrado com sucesso!");
                     modelo.removeRow(i);
@@ -123,7 +125,7 @@ public class InternalIncidentes extends javax.swing.JInternalFrame {
                     String id = (String) jTableIncidentes.getValueAt(i, 0);
                     int opcao = JOptionPane.showConfirmDialog(null, "Deseja encerrar o incidente " + id + "?", "Confirmar", JOptionPane.YES_NO_OPTION);
                     if (opcao == 0) {
-                        encerrarIncidente(id, false);
+                        new Controle.ControleIncidentes().encerrarIncidente(id,null, false);
                     }
                     JOptionPane.showMessageDialog(null, "Incidente encerrado com sucesso!");
                     modelo.removeRow(i);
@@ -165,33 +167,7 @@ public class InternalIncidentes extends javax.swing.JInternalFrame {
         return Days.daysBetween(criacao, hoje).getDays();
     }
 
-    public void encerrarIncidente(String id, boolean substituido) {
-        try {
-            new IncidentesDAO().encerrarIncidente(id);
-            Incidentes inc = new IncidentesDAO().getIncidente(id);
-            try {
-                Vendas v = new VendaDAO().getUmaVenda(inc.getId_venda());
-                Cliente c = new ClienteDAO().buscaCliente(v.getApelido_comprador());
-                String assunto = new AssuntosEmail().assuntoEncerramentoIncidente(id);
-                String codigo = new CodigoDAO().buscaUmCodigo(inc.getId_codigo()).getCodigo();
-                String corpo = null;
-                if(substituido){
-                 corpo = new MensagensEmail().mensagemIncidenteEncerrado(c.getNome(), 3, codigo);
-                } else{
-                 corpo = new MensagensEmail().mensagemIncidenteEncerrado(c.getNome(), inc.getMotivo(), codigo);                    
-                }
-            
-                new EmailService(c.getEmail(), assunto, corpo).sendEmail();
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "O email não foi enviado para o cliente do incidente " + inc.getId());
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Não foi possível encerrar o incidente " + id);
-            e.printStackTrace();
-        }
-
-    }
-
+   
     private void adicionarAnotacao() {
         int i = jTableIncidentes.getSelectedRow();
         String id = (String) jTableIncidentes.getValueAt(i, 0);

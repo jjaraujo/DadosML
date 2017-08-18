@@ -55,6 +55,15 @@ public class Produtos {
     private int qtd;
     private int anos;
     private double valor;
+    private int server;
+
+    public int getServer() {
+        return server;
+    }
+
+    public void setServer(int server) {
+        this.server = server;
+    }
 
    
 

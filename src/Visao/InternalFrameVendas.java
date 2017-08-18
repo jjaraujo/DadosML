@@ -398,7 +398,8 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
             reenviar.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    new EnviosManuaisControle().reenviarCodigo(jTableVendas);
+                   int i =  jTableVendas.getSelectedRow();
+                    new EnviosManuaisControle().reenviarCodigo((String) jTableVendas.getValueAt(i, 0));
                 }
             });
             menu.add(adicionarIncidente);

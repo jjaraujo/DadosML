@@ -18,7 +18,6 @@ import Entidades.Produtos;
 import Entidades.Vendas;
 import Entidades.VendasPendentes;
 import Entidades.codigos_has_vendas;
-import Visao.TelaVendas;
 import com.email.EmailService;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -65,7 +64,7 @@ public class EnviarCodigos {
         chv.setIdVenda(idVenda);
         chv.setId_codigo(idCod);
         chv.setQtd(qtd);
-        chv.setQtd_servidor(ven.getQtd());
+        chv.setQtd_servidor(mapProd.get(ven.getIdProduto()).getServer());
         new Codigos_has_vendasDAO().insertCodigoEmVenda(chv);
         new VendasPendentesDAO().remove(idVenda);
     }
@@ -144,7 +143,6 @@ public class EnviarCodigos {
         if (envioManual) {
             for (codigos_has_vendas chv : listaCodigosHasVendasSelecionados) {
                 map.put(chv.getId_codigo(), chv);
-                System.out.println(chv.getId_codigo() + " for. " + map.get(chv.getId_codigo()).getQtd());
             }
             codigo = "";
             for (int i = 0; i < listCod.size(); i++) {
@@ -154,7 +152,6 @@ public class EnviarCodigos {
                 } else {
                     codigo = "\n" + codigo + c.getCodigo() + " - " + map.get(c.getId()).getQtd() + " dispositivo(s)" + "\n";
                 }
-                System.out.println("for enviarCodigoUmaVenda:" + codigo);
             }
         }
         if (envioManual) {
@@ -167,7 +164,7 @@ public class EnviarCodigos {
         } else {
             Produtos p = mapProd.get(ven.getIdProduto());
             if (p.getTipo().toLowerCase().equals("small")) {
-                codigo = "\n" + codigo + " - " + p.getQtd() * ven.getQtd() + " dispositivo(s) - " + ven.getQtd() + "server(s) \n";
+                codigo = "\n" + codigo + " - " + p.getQtd() * ven.getQtd() + " dispositivo(s) - " + mapProd.get(ven.getIdProduto()).getServer()+ "server(s) \n";
             } else {
                 codigo = "\n" + codigo + " - " + p.getQtd() * ven.getQtd() + " dispositivo(s)" + "\n";
             }

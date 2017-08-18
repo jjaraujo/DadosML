@@ -361,10 +361,9 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
                 try {
                     new EmailService(ven.getEmail(), "Contato Pendente", "Para que seu código seja enviado, por favor entre em contato pelo whastapp 91980452185. Essa verificação está informada no anúncio e é bem rápida. Aguardo :)").sendEmail();
                 } catch (IOException ex) {
-                    Logger.getLogger(TelaVendas.class.getName()).log(Level.SEVERE, null, ex);
+                    ex.printStackTrace();
                 } catch (MessagingException ex) {
-                    Logger.getLogger(TelaVendas.class.getName()).log(Level.SEVERE, null, ex);
-                }
+ex.printStackTrace();                }
             }
         }).start();
     }//GEN-LAST:event_jButtonSolicitarContatoActionPerformed

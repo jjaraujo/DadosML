@@ -36,12 +36,12 @@ import javax.swing.JTextField;
  * @author Joao
  */
 public class EnviosManuaisControle {
-    
-    public void gerarIncidente(JTable jTableVendas, String idvenda, JTextField jTextFieldInformacaoAdicional ) {
+
+    public void gerarIncidente(JTable jTableVendas, String idvenda, JTextField jTextFieldInformacaoAdicional) {
         Incidentes inc = new Incidentes();
         int i = jTableVendas.getSelectedRow();
         inc.setId_venda(idvenda);
-        
+
         int motivo = InternalFrameVendas.motivo;
         if (motivo > 0) {
             Date date = new Date(System.currentTimeMillis());
@@ -53,30 +53,27 @@ public class EnviosManuaisControle {
             inc.setMotivo(motivo);
             inc.setAnotacoes(jTextFieldInformacaoAdicional.getText());
             inc.setId_codigo(new CodigoDAO().getCodigosPorCodigo(codigo).getId());
-            try {
                 new IncidentesDAO().addIncidente(inc);
-                JOptionPane.showMessageDialog(null, "Incidente adicionado!");
                 try {
                     Vendas v = new VendaDAO().getUmaVenda(inc.getId_venda());
                     Cliente c = new ClienteDAO().buscaCliente(v.getApelido_comprador());
                     String assunto = new AssuntosEmail().assuntoAberturaIncidente(inc.getId());
-                    String corpo = new MensagensEmail().mensagemIncidenteAdicionado(c.getNome(),inc.getId());
+                    String corpo = new MensagensEmail().mensagemIncidenteAdicionado(c.getNome(), inc.getId());
                     new EmailService(c.getEmail(), assunto, corpo).sendEmail();
+                    JOptionPane.showMessageDialog(null, "Incidente adicionado!");
                 } catch (Exception e) {
+                    new IncidentesDAO().deleteIncidente(inc.getId());
                     JOptionPane.showMessageDialog(null, "O email não foi enviado para o cliente do incidente " + inc.getId());
+                    e.printStackTrace();
                 }
-                
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Não foi possível adicionar o incidente");
-            }
         } else {
             JOptionPane.showMessageDialog(null, "Motivo inválido");
         }
     }
 
-    public void reenviarCodigo(JTable jTableVendas) {
-        int i = jTableVendas.getSelectedRow();
-        String idVenda = (String) jTableVendas.getValueAt(i, 0);
+
+    
+    public void reenviarCodigo(String idVenda) {
         int opcao = JOptionPane.showConfirmDialog(null, "Reenviar códigos da venda " + idVenda + "?", "Confirmar reenvio", JOptionPane.YES_NO_OPTION);
         if (opcao == 0) {
             new Thread(new Runnable() {

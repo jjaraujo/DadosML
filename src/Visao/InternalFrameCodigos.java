@@ -561,12 +561,12 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
             ArrayList<Incidentes> array = new IncidentesDAO().getIncidentesPorIdCodigo(idCodigo);
             array.forEach(inc -> {
                 new Thread(() -> {
-                    new InternalIncidentes().encerrarIncidente(inc.getId(),false);
+                   new Controle.ControleIncidentes().encerrarIncidente(inc.getId(),null,false);
                 }).start();
             });
             jDialogsetDesbloqueio.dispose();
         } catch (SQLException ex) {
-            Logger.getLogger(TelaCodigos.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }//GEN-LAST:event_jButton9ActionPerformed
 

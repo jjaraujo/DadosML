@@ -131,11 +131,9 @@ public class Codigos_has_vendasDAO {
     }
 
     public boolean insertCodigoEmVenda(codigos_has_vendas chv) {
-        System.out.println("Entrou aqui");
         PreparedStatement stmt;
         ResultSet rs;
         try {
-            System.out.println("Entrou no try");
             stmt = con.prepareStatement("insert into codigos_has_vendas (id_venda,id_codigo,qtd_dispositivos,qtd_servidor) values (?,?,?,?) ;");
             stmt.setString(1, chv.getIdVenda());
             System.out.println(chv.getIdVenda());

@@ -59,6 +59,7 @@ public class ProdutosDAO {
                     p.setTipo(rs.getString("tipo"));
                     p.setAnos(rs.getInt("duracao"));
                     p.setQtd(rs.getInt("qtd"));
+                    p.setServer(rs.getInt("servidor"));
                     mapProd.put(p.getId(), p);
                 }
                 return mapProd;

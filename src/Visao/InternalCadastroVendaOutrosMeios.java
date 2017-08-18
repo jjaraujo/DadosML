@@ -314,7 +314,12 @@ public class InternalCadastroVendaOutrosMeios extends javax.swing.JInternalFrame
 
         jPanelServidores.setBorder(javax.swing.BorderFactory.createTitledBorder("Servidores"));
 
-        jComboBoxServidores.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3" }));
+        jComboBoxServidores.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "0" }));
+        jComboBoxServidores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxServidoresActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelServidoresLayout = new javax.swing.GroupLayout(jPanelServidores);
         jPanelServidores.setLayout(jPanelServidoresLayout);
@@ -448,7 +453,6 @@ public class InternalCadastroVendaOutrosMeios extends javax.swing.JInternalFrame
                 } else{
                 idProduto = jComboBoxTipo.getSelectedItem() + jTextFieldDispositivos.getText() + "D" + jComboBoxAnos.getSelectedItem() + "A";
                 }
-                System.out.println(idProduto);
                 venCadOutAquisicoes.setIdProduto(idProduto);
                 venCadOutAquisicoes.setApelido_comprador(jTextFieldApelidoCadastraVendaWhatsapp.getText());
                 venCadOutAquisicoes.setValor(Double.parseDouble(jTextFieldValor.getText()));
@@ -518,6 +522,10 @@ public class InternalCadastroVendaOutrosMeios extends javax.swing.JInternalFrame
     private void jComboBoxPagamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxPagamentoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBoxPagamentoActionPerformed
+
+    private void jComboBoxServidoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxServidoresActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxServidoresActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

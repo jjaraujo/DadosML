@@ -86,7 +86,6 @@ public class InsereCodigoNasVendasParaEnvio {
                     System.err.println("Nenhum ano");
             }
         }
-        System.out.println("aqui");
         setCodigoNaVendaParaEnvio();
 
     }
@@ -142,10 +141,11 @@ public class InsereCodigoNasVendasParaEnvio {
         Collections.sort(cod);
         for (Integer i : cod) {
             Codigos c = (Codigos) mapTipoEAnoCodigo.get(i);
-            if (!array.contains(c)) {
+            int qtd_dispositivos = VariaveisDeControle.mapProd.get(v.getIdProduto()).getQtd()*v.getQtd();
+            if (!array.contains(c)||c.getDispositivos()<qtd_dispositivos) {
                 v.setIdCodigo(c.getId());
                 v.setCodigo(c.getCodigo());
-                c.setQtd_usada(c.getQtd_usada() + v.getQtd());
+                c.setQtd_usada(c.getQtd_usada() + qtd_dispositivos);
                 return v;
             }
         }

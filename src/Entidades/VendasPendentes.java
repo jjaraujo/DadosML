@@ -5,6 +5,7 @@
  */
 package Entidades;
 
+import Controle.VariaveisDeControle;
 import DAO.ProdutosDAO;
 import java.util.Objects;
 
@@ -108,17 +109,15 @@ public class VendasPendentes {
     }
 
     public String getProduto() {
-        Produtos p = new ProdutosDAO().retornaProduto(idProduto);
+        Produtos p = VariaveisDeControle.mapProd.get(idProduto);
         String server = "";
-        String tipo = p.getTipo();
         
-        if(p.getTipo().toLowerCase().equals("small") && p.getQtd() > 1){
-            server = qtd + " server ";
+        if(p.getTipo().toLowerCase().equals("small") && p.getServer() > 1){
+            server = p.getServer() + " servers ";
+        } else{
+            server = p.getServer() + " server ";
         }
-        if(p.getAnos() > 1 && !p.getTipo().toLowerCase().equals("small")){
-            tipo = "Total";
-        }
-        produto = tipo + " " + qtd * p.getQtd() + " Dispositivo(s) " + server + " " +  p.getAnos() + " ano(s)";
+        produto = p.getTipo() + " " + qtd * p.getQtd() + " Dispositivo(s) " + server + " " +  p.getAnos() + " ano(s)";
         return produto;
     }
 

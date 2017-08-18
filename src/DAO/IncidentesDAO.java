@@ -162,6 +162,31 @@ public class IncidentesDAO {
             System.err.println("Não foi possível encerrar o incidente");
             ex.printStackTrace();
         }
+    }    
+    
+    public void reabrirIncidente(String id) {
+        try {
+
+            PreparedStatement stmt = VariaveisDeControle.CON.prepareStatement("update incidentes set situacao = 'ABERTO', data_encerramento = ? where id = ?; ");
+            stmt.setString(1,null);
+            stmt.setString(2,id);
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            System.err.println("Não foi possível encerrar o incidente");
+            ex.printStackTrace();
+        }
+    }    
+    public void deleteIncidente(String id) {
+        try {
+
+            PreparedStatement stmt = VariaveisDeControle.CON.prepareStatement("delete from incidentes where id = ?; ");
+
+            stmt.setString(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            System.err.println("Não foi possível excluir o incidente " + id);
+            ex.printStackTrace();
+        }
     }
 
     public void encerrarIncidentePorIdCodigo(int idCodigo) {

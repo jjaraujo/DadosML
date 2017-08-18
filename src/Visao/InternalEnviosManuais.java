@@ -32,7 +32,7 @@ public class InternalEnviosManuais extends javax.swing.JInternalFrame {
     private VendasPendentes ven = new VendasPendentes();
     ArrayList<codigos_has_vendas> listaCodigosHasVendasSelecionados = new ArrayList<>();
     private ArrayList<Codigos> codAdicionadoManualmente = new ArrayList<>();
-    private HashMap<String,Produtos> map = VariaveisDeControle.mapProd;
+    private HashMap<String, Produtos> map = VariaveisDeControle.mapProd;
 
     public InternalEnviosManuais() {
         initComponents();
@@ -270,7 +270,7 @@ public class InternalEnviosManuais extends javax.swing.JInternalFrame {
             for (int i = 0; i < VariaveisDeControle.listVen.size(); i++) {
                 VariaveisDeControle.jComboBoxModelDialogVendasPendentes.insertElementAt(VariaveisDeControle.listVen.get(i), i);
             }
-        } else{
+        } else {
             jComboBoxDialogCodigoManualmente.setModel(VariaveisDeControle.jComboBoxModelDialogVendasPendentes);
         }
     }//GEN-LAST:event_jButtonCarregarActionPerformed
@@ -301,9 +301,9 @@ public class InternalEnviosManuais extends javax.swing.JInternalFrame {
                     VendasPendentes v = ven;
                     VariaveisDeControle.listVen.remove(v);
                     VariaveisDeControle.jComboBoxModelDialogVendasPendentes.removeElement(v);
-                         
+
                     new EnviarCodigos().enviarCodigoUmaVenda(v, true, codAdicionadoManualmente2, listaCodigosHasVendasSelecionados2);
-                    
+
                     new VendasPendentesDAO().remove(v.getId_venda());
                 }
             }
@@ -325,7 +325,7 @@ public class InternalEnviosManuais extends javax.swing.JInternalFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         QtdSelecionadaDaVenda = QtdSelecionadaDaVenda + (int) jSpinnerQTD.getValue();
         if (QtdSelecionadaDaVenda <= ven.getQtd() * map.get(ven.getIdProduto()).getQtd()) {
-            jTextAreaCodigosSelecionados.setText(jTextAreaCodigosSelecionados.getText() + jTextFieldIdCodigo.getText() + " - " + jSpinnerQTD.getValue() + " - " + jSpinnerQTDServer.getValue()  + " server\n");
+            jTextAreaCodigosSelecionados.setText(jTextAreaCodigosSelecionados.getText() + jTextFieldIdCodigo.getText() + " - " + jSpinnerQTD.getValue() + " - " + jSpinnerQTDServer.getValue() + " server\n");
             inserirEAlterarCodigoVendaManualmente(Integer.parseInt(jTextFieldIdCodigo.getText()), (int) jSpinnerQTD.getValue(), (int) jSpinnerQTDServer.getValue());
         } else {
             JOptionPane.showMessageDialog(null, "Quantidade de dispositivos maior que a da venda");
@@ -361,7 +361,7 @@ public class InternalEnviosManuais extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
-VariaveisDeControle.frameEnvioManualAberto = false;        // TODO add your handling code here:
+        VariaveisDeControle.frameEnvioManualAberto = false;        // TODO add your handling code here:
     }//GEN-LAST:event_formInternalFrameClosing
 
 
@@ -389,16 +389,17 @@ VariaveisDeControle.frameEnvioManualAberto = false;        // TODO add your hand
     private javax.swing.JTextField jTextFieldProdutoEnvioManual;
     // End of variables declaration//GEN-END:variables
   private void inserirEAlterarCodigoVendaManualmente(int id, int qtd, int qtdServer) {
-  try{      codigos_has_vendas chv = new codigos_has_vendas();
-        chv.setIdVenda(ven.getId_venda());
-        chv.setId_codigo(id);
-        chv.setQtd(qtd);
-        chv.setQtd_servidor(qtdServer);
-        listaCodigosHasVendasSelecionados.add(chv);
-        Codigos c = new CodigoDAO().buscaUmCodigo(id);
-        codAdicionadoManualmente.add(c);
-  }catch(Exception e){
-      
-  }
+        try {
+            codigos_has_vendas chv = new codigos_has_vendas();
+            chv.setIdVenda(ven.getId_venda());
+            chv.setId_codigo(id);
+            chv.setQtd(qtd);
+            chv.setQtd_servidor(qtdServer);
+            listaCodigosHasVendasSelecionados.add(chv);
+            Codigos c = new CodigoDAO().buscaUmCodigo(id);
+            codAdicionadoManualmente.add(c);
+        } catch (Exception e) {
+
+        }
     }
 }
