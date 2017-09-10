@@ -18,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -26,6 +27,7 @@ import javax.swing.JOptionPane;
 public class VendasPendentesDAO {
     
     private Connection con;
+    private JTextArea textArea = VariaveisDeControle.textArea;
     
     public VendasPendentesDAO() {
         con = VariaveisDeControle.CON;
@@ -44,6 +46,7 @@ public class VendasPendentesDAO {
             stmt.setString(6, ven.getPagamento());
             stmt.executeUpdate();
             System.out.println("Venda: " + ven.getId_venda() + " adicionada como pendente");
+            textArea.setText(textArea.getText() + "Venda: " + ven.getId_venda() + " adicionada como pendente\n" );
         } catch (SQLException e1) {
             
             System.err.println(ven.getId_venda() + ": Erro na transação de DAO.VendasPendentesDAO().insereVendas: " + e1);
@@ -90,12 +93,13 @@ public class VendasPendentesDAO {
                 vendasPen.setPendente(rs.getString("pendente"));
                 vendasPen.setVerificada(rs.getString("verificada"));
                 vendasPen.setObservacoes(rs.getString("observacao"));
-                vendasPen.getProduto();//colocando aqui, o nome do produto é coletado após o incremento d0 idProduto
+                VariaveisDeControle.mapProd.get(vendasPen.getIdProduto()).getNomeProdutoQtdTotal(vendasPen.getQtd());//colocando aqui, o nome do produto é coletado após o incremento d0 idProduto
                 list.add(vendasPen);
             }
             return list;
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro em DAO.VendasPendesntesDAO().retornaVendasPendentes: " + ex.getMessage());
+            
             return null;
         }
     }

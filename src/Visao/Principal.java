@@ -14,12 +14,18 @@ import DAO.Codigos_has_vendasDAO;
 ;import DAO.IncidentesDAO;
 import DAO.ProdutosDAO;
 import DAO.VendaDAO;
+import EmailConfig.MensagensEmail;
+import Entidades.EmailNomeTipoproduto;
+import  EmailConfig.EmailService;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.mail.MessagingException;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -28,24 +34,31 @@ import javax.swing.JOptionPane;
  *
  * @author Joao
  */
+
+
 public class Principal extends javax.swing.JFrame {
 
     /**
      * Creates new form Principal
      */
-
     public Principal() {
         initComponents();
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension scrnsize = toolkit.getScreenSize();
         dialogAutenticacao();
-        VariaveisDeControle.mapProd = new ProdutosDAO().getProdutosMap();
+        VariaveisDeControle.atualizaMapProdutos();
+        VariaveisDeControle.textArea = jTextAreaSaida;
         this.setSize(scrnsize);
         int i = new IncidentesDAO().getCountIncidentesAbertos();
-        if(i > 0){
+        if (i > 0) {
+            
             jLabel3.setText("Há " + i + " incidente(s) abertos");
             jDialog2.setVisible(true);
         }
+           if(!new CodigoDAO().getCodigosProximosExpirar().isEmpty()){
+              jLabel3.setText("Há códigos próximos de expirar. Verifique a lista de códigos para enviar emails");
+           jDialog2.setVisible(true);
+           }
     }
 
     /**
@@ -66,6 +79,8 @@ public class Principal extends javax.swing.JFrame {
         jDialog2 = new javax.swing.JDialog();
         jLabel3 = new javax.swing.JLabel();
         jDesktopPane1 = new javax.swing.JDesktopPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextAreaSaida = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -75,9 +90,9 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
-        jMenuItem14 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem8 = new javax.swing.JMenuItem();
+        jMenuItem17 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenu8 = new javax.swing.JMenu();
@@ -88,6 +103,7 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem13 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         jMenuItem12 = new javax.swing.JMenuItem();
+        jMenuItem16 = new javax.swing.JMenuItem();
 
         jDialog1.setAlwaysOnTop(true);
         jDialog1.setMinimumSize(new java.awt.Dimension(256, 183));
@@ -145,15 +161,27 @@ public class Principal extends javax.swing.JFrame {
 
         jDesktopPane1.setBackground(new java.awt.Color(82, 144, 180));
 
+        jTextAreaSaida.setColumns(20);
+        jTextAreaSaida.setRows(5);
+        jScrollPane1.setViewportView(jTextAreaSaida);
+
+        jDesktopPane1.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
         jDesktopPane1Layout.setHorizontalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 706, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
+                .addContainerGap(40, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 642, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24))
         );
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 279, Short.MAX_VALUE)
+            .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         jMenu1.setText("Vendas");
@@ -214,14 +242,6 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem5);
 
-        jMenuItem14.setText("Reenviar");
-        jMenuItem14.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem14ActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItem14);
-
         jMenuBar1.add(jMenu1);
 
         jMenu3.setText("Clientes");
@@ -233,6 +253,14 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         jMenu3.add(jMenuItem8);
+
+        jMenuItem17.setText("Enviar Email Sobre Atualização");
+        jMenuItem17.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem17ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem17);
 
         jMenuBar1.add(jMenu3);
 
@@ -297,6 +325,14 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         jMenu5.add(jMenuItem12);
+
+        jMenuItem16.setText("Atualizar Lista Produtos");
+        jMenuItem16.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem16ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem16);
 
         jMenuBar1.add(jMenu5);
 
@@ -402,7 +438,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-        verificaFrameAberto(new InternalModificarCodigoVenda(), VariaveisDeControle.frameModificarVendaAberto);
+        verificaFrameAberto(new InternalModificarVenda(), VariaveisDeControle.frameModificarVendaAberto);
         VariaveisDeControle.frameModificarVendaAberto = true;
 // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem5ActionPerformed
@@ -426,22 +462,6 @@ public class Principal extends javax.swing.JFrame {
         System.exit(0);        // TODO add your handling code here:
     }//GEN-LAST:event_jDialog1WindowClosing
 
-    private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String idVenda = JOptionPane.showInputDialog("Informe o ID da venda");
-                if (idVenda == null) {
-
-                } else {
-                    System.out.println("reenviando email venda " + idVenda);
-                    ArrayList listChv = new Codigos_has_vendasDAO().getCodigoHasVendas(idVenda);
-                    new EnviarCodigos().reenviarEmail(new VendaDAO().getUmaVenda(idVenda), listChv);
-                }
-            }
-        }).start();          // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem14ActionPerformed
-
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
         verificaFrameAberto(new InternalCadastrarCliente(), VariaveisDeControle.frameCadastroClienteAberto);
         VariaveisDeControle.frameCadastroClienteAberto = true;
@@ -458,6 +478,29 @@ public class Principal extends javax.swing.JFrame {
         jDesktopPane1.add(inc);
         inc.setVisible(true);
     }//GEN-LAST:event_jMenuItem15ActionPerformed
+
+    private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
+        VariaveisDeControle.atualizaMapProdutos();
+        JOptionPane.showMessageDialog(null, "Produtos atualizados");// TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem16ActionPerformed
+
+    private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
+//        ArrayList<EmailNomeTipoproduto> set = new VendaDAO().getEmailVendasKisTotal();
+//        System.out.println("Vai começar a enviar");
+//        int count = 0;
+//        for (EmailNomeTipoproduto t : set) {
+//            try {
+//                count ++;
+//                String corpo = new MensagensEmail().atualizacaoPrograma(t.nome, t.tipo);
+//                new EmailService(t.email, "Atualização do Kaspersky 2018", corpo).sendEmail(t.apelido);
+//                System.err.println("================ ============= ========== " + count + "============================================");
+//            } catch (IOException ex) {
+//                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+//            } catch (MessagingException ex) {
+//                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+    }//GEN-LAST:event_jMenuItem17ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -510,8 +553,9 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem11;
     private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem13;
-    private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem15;
+    private javax.swing.JMenuItem jMenuItem16;
+    private javax.swing.JMenuItem jMenuItem17;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
@@ -521,6 +565,8 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPasswordField jPasswordFieldSenha;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextAreaSaida;
     private javax.swing.JTextField jTextFieldUser;
     // End of variables declaration//GEN-END:variables
 

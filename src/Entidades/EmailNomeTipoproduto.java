@@ -3,9 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package EmailConfig;
+package Entidades;
 
-import com.email.domain.MailConfig;
-public class Email {
-    
+/**
+ *
+ * @author Joao
+ */
+public class EmailNomeTipoproduto {
+    public String nome;
+    public String email;
+    public String tipo;
+    public String apelido;
 }

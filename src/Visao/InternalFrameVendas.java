@@ -15,12 +15,11 @@ import DAO.Codigos_has_vendasDAO;
 import DAO.IncidentesDAO;
 import DAO.VendaDAO;
 import EmailConfig.AssuntosEmail;
-import EmailConfig.Email;
 import EmailConfig.MensagensEmail;
 import Entidades.Cliente;
 import Entidades.Incidentes;
 import Entidades.Vendas;
-import com.email.EmailService;
+import EmailConfig.EmailService;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -387,6 +386,8 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
             int i = jTableVendas.getSelectedRow();
             JPopupMenu menu = new JPopupMenu();
             JMenuItem adicionarIncidente = new JMenuItem("Adicionar Incidente");
+            JMenuItem reenviar = new JMenuItem("Reenviar");
+            JMenuItem atualizarEmail = new JMenuItem("Atualizar email");
             adicionarIncidente.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent ae) {
                     String idvenda = (String) jTableVendas.getValueAt(i, 0);
@@ -394,16 +395,33 @@ public class InternalFrameVendas extends javax.swing.JInternalFrame {
                     jDialog1.setVisible(true);
                 }
             });
-            JMenuItem reenviar = new JMenuItem("Reenviar");
+
             reenviar.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                   int i =  jTableVendas.getSelectedRow();
-                    new EnviosManuaisControle().reenviarCodigo((String) jTableVendas.getValueAt(i, 0));
+                    String idVenda = (String) jTableVendas.getValueAt(i, 0);
+                        new EnviarCodigos().reenviarEmail(idVenda);
+                    }
+            });
+            atualizarEmail.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent ae) {
+                    String apelido = (String) jTableVendas.getValueAt(i, 1);
+                    String email = JOptionPane.showInputDialog("Informe o novo email");
+                    int i = JOptionPane.showConfirmDialog(null, "Confirmar email " + email + " para o cliente " + apelido + "?", "Confirmar email", JOptionPane.OK_CANCEL_OPTION);
+                    if (i == 0) {
+                        new ClienteDAO().updateEmail(apelido, email);
+                        String nome = new ClienteDAO().getCliente(apelido).getNome();
+                        String assunto = new AssuntosEmail().emailAtualizado();
+                        String corpo = new MensagensEmail().atualizarEmail(nome);
+                        new EmailConfig.EmailService(email, assunto, corpo).sendEmail(apelido);
+                        JOptionPane.showMessageDialog(null, "Email atualizado");
+                    }
+
                 }
             });
             menu.add(adicionarIncidente);
             menu.add(reenviar);
+            menu.add(atualizarEmail);
             menu.show(this, evt.getX(), evt.getY());
         }
     }//GEN-LAST:event_jTableVendasMouseClicked

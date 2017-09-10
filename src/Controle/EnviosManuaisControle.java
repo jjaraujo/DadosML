@@ -16,7 +16,7 @@ import Entidades.Cliente;
 import Entidades.Incidentes;
 import Entidades.Vendas;
 import Visao.InternalFrameVendas;
-import com.email.EmailService;
+import  EmailConfig.EmailService;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -41,7 +41,6 @@ public class EnviosManuaisControle {
         Incidentes inc = new Incidentes();
         int i = jTableVendas.getSelectedRow();
         inc.setId_venda(idvenda);
-
         int motivo = InternalFrameVendas.motivo;
         if (motivo > 0) {
             Date date = new Date(System.currentTimeMillis());
@@ -53,37 +52,23 @@ public class EnviosManuaisControle {
             inc.setMotivo(motivo);
             inc.setAnotacoes(jTextFieldInformacaoAdicional.getText());
             inc.setId_codigo(new CodigoDAO().getCodigosPorCodigo(codigo).getId());
-                new IncidentesDAO().addIncidente(inc);
+            if (new IncidentesDAO().addIncidente(inc, idvenda)) {
                 try {
                     Vendas v = new VendaDAO().getUmaVenda(inc.getId_venda());
-                    Cliente c = new ClienteDAO().buscaCliente(v.getApelido_comprador());
+                    Cliente c = new ClienteDAO().getCliente(v.getApelido_comprador());
                     String assunto = new AssuntosEmail().assuntoAberturaIncidente(inc.getId());
                     String corpo = new MensagensEmail().mensagemIncidenteAdicionado(c.getNome(), inc.getId());
-                    new EmailService(c.getEmail(), assunto, corpo).sendEmail();
+                    new EmailService(c.getEmail(), assunto, corpo).sendEmail(v.getApelido_comprador());
                     JOptionPane.showMessageDialog(null, "Incidente adicionado!");
                 } catch (Exception e) {
                     new IncidentesDAO().deleteIncidente(inc.getId());
                     JOptionPane.showMessageDialog(null, "O email não foi enviado para o cliente do incidente " + inc.getId());
                     e.printStackTrace();
                 }
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Motivo inválido");
         }
     }
 
-
-    
-    public void reenviarCodigo(String idVenda) {
-        int opcao = JOptionPane.showConfirmDialog(null, "Reenviar códigos da venda " + idVenda + "?", "Confirmar reenvio", JOptionPane.YES_NO_OPTION);
-        if (opcao == 0) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    System.out.println("reenviando email venda " + idVenda);
-                    ArrayList listChv = new Codigos_has_vendasDAO().getCodigoHasVendas(idVenda);
-                    new EnviarCodigos().reenviarEmail(new VendaDAO().getUmaVenda(idVenda), listChv);
-                }
-            }).start();
-        }
-    }
 }

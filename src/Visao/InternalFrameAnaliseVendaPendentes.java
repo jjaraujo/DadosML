@@ -13,12 +13,13 @@ import DAO.VendaDAO;
 import DAO.VendasPendentesDAO;
 import Entidades.Vendas;
 import Entidades.VendasPendentes;
-import com.email.EmailService;
+import  EmailConfig.EmailService;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.MessagingException;
 import javax.swing.JOptionPane;
+import org.apache.commons.mail.EmailException;
 
 /**
  *
@@ -68,7 +69,6 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
         jLabel4 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jButtonCarregar = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -257,22 +257,16 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
                                         .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jTextFieldProduto)
                                         .addComponent(jTextFieldPagamento)))))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabelMensagem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(89, 89, 89))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(35, 35, 35)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabelMensagem, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
+                        .addGap(89, 89, 89))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBoxDialogVendasPendentes, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButtonCarregar)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jComboBoxDialogVendasPendentes, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(4, 4, 4)
+                        .addComponent(jButtonCarregar, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -292,8 +286,7 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
-                            .addComponent(jTextFieldId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jTextFieldId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -326,7 +319,7 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
                             .addComponent(jButtonDeletar))
                         .addGap(18, 18, 18)
                         .addComponent(jLabelMensagemProgresso)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         pack();
@@ -358,12 +351,8 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    new EmailService(ven.getEmail(), "Contato Pendente", "Para que seu código seja enviado, por favor entre em contato pelo whastapp 91980452185. Essa verificação está informada no anúncio e é bem rápida. Aguardo :)").sendEmail();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                } catch (MessagingException ex) {
-ex.printStackTrace();                }
+                String corpo = "Para que seu código seja enviado, por favor entre em contato pelo whastapp 91980452185. Essa verificação está informada no anúncio e é bem rápida. Aguardo :)";
+                new EmailService(ven.getEmail(), "Contato Pendente",corpo ).sendEmail(ven.getApelido());
             }
         }).start();
     }//GEN-LAST:event_jButtonSolicitarContatoActionPerformed
@@ -377,7 +366,7 @@ ex.printStackTrace();                }
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    new EnviarCodigos().setCodigoNaVenda(v);
+                    new EnviarCodigos().setCodigoNaVendaNoBanco(v);
                     new EnviarCodigos().enviarCodigoUmaVenda(v, false, null, null);
                 }
             }).start();
@@ -433,7 +422,7 @@ ex.printStackTrace();                }
     private void jCheckBoxNumeroConfirmadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxNumeroConfirmadoActionPerformed
         int i = JOptionPane.showConfirmDialog(null, "Deseja mesmo confirmar o número?", "Confirmar numero", JOptionPane.YES_NO_OPTION);        // TODO add your handling code here:
         if (i == 0) {
-            String s = JOptionPane.showInputDialog("Numero :" + new ClienteDAO().buscaCliente(ven.getApelido()).getTelefone()+ "\nDeseja adicionar outro?");
+            String s = JOptionPane.showInputDialog("Numero :" + new ClienteDAO().getCliente(ven.getApelido()).getTelefone()+ "\nDeseja adicionar outro?");
             if(null == s){
                 
             } else switch (s) {
@@ -521,7 +510,6 @@ ex.printStackTrace();                }
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextFieldApelido;
     private javax.swing.JTextField jTextFieldCodigo;
     private javax.swing.JTextField jTextFieldEmail;
@@ -590,11 +578,10 @@ ex.printStackTrace();                }
     }
 
     private void preencheCamposAnaliseVendas() {
-        jTextField1.setText(new VendaDAO().getUmaVenda(ven.getId_venda()).getValor()+"");
         jTextFieldObservacoes.setText(ven.getObservacoes());
         jTextFieldApelido.setText(ven.getApelido());
         jTextFieldEmail.setText(ven.getEmail());
-        jTextFieldProduto.setText(ven.getProduto());
+        jTextFieldProduto.setText(VariaveisDeControle.mapProd.get(ven.getIdProduto()).getNomeProdutoQtdTotal(ven.getQtd()));
         jTextFieldPagamento.setText(ven.getPagamento());
         jTextFieldCodigo.setText(ven.getCodigo());
         jTextFieldId.setText(ven.getId_venda());

@@ -108,18 +108,7 @@ public class VendasPendentes {
         this.codigo = codigo;
     }
 
-    public String getProduto() {
-        Produtos p = VariaveisDeControle.mapProd.get(idProduto);
-        String server = "";
-        
-        if(p.getTipo().toLowerCase().equals("small") && p.getServer() > 1){
-            server = p.getServer() + " servers ";
-        } else{
-            server = p.getServer() + " server ";
-        }
-        produto = p.getTipo() + " " + qtd * p.getQtd() + " Dispositivo(s) " + server + " " +  p.getAnos() + " ano(s)";
-        return produto;
-    }
+    
 
     public void setEmail(String email) {
         this.email = email;
@@ -147,7 +136,7 @@ public class VendasPendentes {
 
     @Override
     public String toString() {
-        return id_venda + " - "  + apelido + " - " + pagamento +" - " + produto;
+        return id_venda + " - "  + apelido + " - " + pagamento +" - " + VariaveisDeControle.mapProd.get(idProduto).getNomeProdutoQtdTotal(qtd);
     }
 
     @Override

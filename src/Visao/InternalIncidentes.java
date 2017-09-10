@@ -5,28 +5,16 @@
  */
 package Visao;
 
-import DAO.ClienteDAO;
-import DAO.CodigoDAO;
 import DAO.IncidentesDAO;
-import DAO.VendaDAO;
-import EmailConfig.AssuntosEmail;
-import EmailConfig.MensagensEmail;
-import Entidades.Cliente;
-import Entidades.Codigos;
 import Entidades.Incidentes;
-import Entidades.Vendas;
-import com.email.EmailService;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
-import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.table.DefaultTableModel;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;

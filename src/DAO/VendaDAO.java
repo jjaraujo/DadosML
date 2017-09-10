@@ -7,6 +7,7 @@ package DAO;
 
 import Controle.VariaveisDeControle;
 import Entidades.Cliente;
+import Entidades.EmailNomeTipoproduto;
 import Entidades.Produtos;
 import Entidades.Vendas;
 import Entidades.VendasPendentes;
@@ -19,9 +20,11 @@ import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -30,6 +33,7 @@ import javax.swing.JOptionPane;
 public class VendaDAO {
 
     private static Connection con;
+    private JTextArea textArea = VariaveisDeControle.textArea;
 
     public VendaDAO() {
         con = VariaveisDeControle.CON;
@@ -65,7 +69,7 @@ public class VendaDAO {
                 public void run() {
                     try { // verifica se nao tem a venda em vendasPendentes
                         VendasPendentes vp = new VendasPendentes();
-                        Cliente cliente = new ClienteDAO().buscaCliente(v.getApelido_comprador());
+                        Cliente cliente = new ClienteDAO().getCliente(v.getApelido_comprador());
                         double valor = v.getValor() * v.getQtd();
                         double valorpordispositivo;
                         double valordesconto;
@@ -107,6 +111,7 @@ public class VendaDAO {
                                 stmt.setDate(12, data);
                                 stmt.setString(13, hora);
                                 System.out.println("Venda cadastrada: " + v.getId());
+                                textArea.setText(textArea.getText() + "Venda cadastrada: " + v.getId() + "\n");
                                 stmt.executeUpdate();
                                 stmt.close();
 
@@ -137,8 +142,9 @@ public class VendaDAO {
 
                         }
                     } catch (Exception e) {
-                        System.err.println("Erro ao adicionar a venda " +v.getId() +": "+ e.getMessage());
-                        e.printStackTrace(); 
+                        System.err.println("Erro ao adicionar a venda " + v.getId() + " " + v.getApelido_comprador() + ": " + e.getMessage());
+                        textArea.setText(textArea.getText() + "Erro ao adicionar a venda " + v.getId() + " " + v.getApelido_comprador() + ": " + e.getMessage()+"\n");
+                        e.printStackTrace();
                     }
                 }
             };
@@ -165,7 +171,7 @@ public class VendaDAO {
     public void insertVendas(Vendas v) {
         ProdutosDAO prodDAO = new ProdutosDAO();
         VendasPendentes vp = new VendasPendentes();
-        Cliente cliente = new ClienteDAO().buscaCliente(v.getApelido_comprador());
+        Cliente cliente = new ClienteDAO().getCliente(v.getApelido_comprador());
         double valor = v.getValor();
         if (v.getFormaAquisicao().equals("MP")) {
             valor = (valor - (valor * 4.99) / 100);
@@ -174,9 +180,16 @@ public class VendaDAO {
         Produtos produto = prodDAO.retornaProduto(v.getIdProduto());
         int qtddispproduto = produto.getQtd();
         int qtdProdutosVenda = v.getQtd();
-        int qtdTotalDispositivos = qtdProdutosVenda * qtddispproduto;
-        double valorpordispositivodescont = valor / qtdTotalDispositivos;
-        double valorpordispositivo = valor / qtdTotalDispositivos;
+        int qtdTotalDispositivos;
+        if (qtddispproduto == 0) {
+            qtdTotalDispositivos = qtdProdutosVenda * 1;
+        } else {
+            qtdTotalDispositivos = qtdProdutosVenda * qtddispproduto;
+        }
+        double valorpordispositivodescont = valordesconto / qtdTotalDispositivos;
+        double valorpordispositivo;
+        valorpordispositivo = valor / qtdTotalDispositivos;
+
         System.out.println("valorpordispositivo: " + valorpordispositivo);
         System.out.println("valor: " + valor);
         System.out.println("qtdTotalDispositivos: " + qtdTotalDispositivos);
@@ -209,11 +222,14 @@ public class VendaDAO {
             new VendasPendentesDAO().insereVendas(vp);
             stmt.close();
             JOptionPane.showMessageDialog(null, "Venda " + v.getId() + " cadastrada");
+            textArea.setText(textArea.getText() + "Venda cadastrada: " + v.getId()+ "\n");
         } catch (SQLException ex) {
             System.err.println("Erro ao adicionar a venda " + v.getId() + ": " + ex.getMessage());
+            textArea.setText(textArea.getText() + "Erro ao adicionar a venda " + v.getId() + ": " + ex.getMessage()+ "\n");
             ex.printStackTrace();
 
         } catch (NullPointerException ex) {
+             textArea.setText(textArea.getText() + "tem erro de nulo: " + ex.getMessage()+ "\n");
             System.err.println(v.getId() + " tem erro de nulo: " + ex.getMessage());
             ex.printStackTrace();
         }
@@ -270,10 +286,10 @@ public class VendaDAO {
         }
     }
 
-    public void updateIdProdutoVenda(String id, int idProd) {
+    public void updateIdProdutoVenda(String id, String idProd) {
         try {
             PreparedStatement stmt = con.prepareCall("update vendas set id_produto = ? where id like ?; ");
-            stmt.setInt(1, idProd);
+            stmt.setString(1, idProd);
             stmt.setString(2, id);
             stmt.executeUpdate();
         } catch (SQLException ex) {
@@ -283,9 +299,12 @@ public class VendaDAO {
 
     public void updateQtdVenda(String id, int qtd) {
         try {
-            PreparedStatement stmt = con.prepareCall("update vendas set qtd = ? where id like ?; ");
+            PreparedStatement stmt = con.prepareCall("update vendas set qtd = ?,vaalor = valorpordispositivo * ?,valor_desconto = valorprodispositivo_descont * ? where id like ?; ");
             stmt.setInt(1, qtd);
-            stmt.setString(2, id);
+            stmt.setInt(2, qtd);
+            stmt.setInt(3, qtd);
+            stmt.setInt(4, qtd);
+            stmt.setString(5, id);
             stmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(VendaDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -303,5 +322,28 @@ public class VendaDAO {
             System.err.println("Não foi possivel adicionar a data de envio do código para a venda " + id + "\n" + ex.getMessage());
             ex.printStackTrace();
         }
+    }
+
+    public ArrayList<EmailNomeTipoproduto> getEmailVendasKisTotal() {
+        ArrayList<EmailNomeTipoproduto> list = new ArrayList<>();
+        System.out.println("Vai buscar os dados dos clientes");
+        try {
+            PreparedStatement stmt = con.prepareStatement("select distinct c.email,c.nome,cd.tipo,c.apelido from clientes_ml c join vendas v on v.apelido_comprador = c.apelido\n"
+                    + "join codigos_has_vendas chv on v.id = chv.id_venda join codigos cd on chv.id_codigo = cd.id \n"
+                    + "where c.inativo is null and (cd.tipo = 'TOTAL' or cd.tipo = 'KIS') order by c.email limit 5136, 1000;");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                EmailNomeTipoproduto ent = new EmailNomeTipoproduto();
+                ent.email = rs.getString("c.email");
+                ent.nome = rs.getString("c.nome");
+                ent.tipo = rs.getString("cd.tipo");
+                ent.apelido = rs.getString("c.apelido");
+                list.add(ent);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(VendaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("Terminou de buscar os dados dos clientes");
+        return list;
     }
 }

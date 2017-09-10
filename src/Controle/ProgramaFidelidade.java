@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.mail.EmailException;
 
 /**
  *
@@ -38,7 +39,7 @@ public class ProgramaFidelidade {
             }
         });
         Set setKey = map.keySet();
-        setKey.forEach((v) -> {
+        setKey.forEach((Object v) -> {
             String assunto = "Programa de fidelidade - " + apelido + ""
                     + " - Ciclo " + ciclo;
             String corpo = "Sua venda acumulou no seu ciclo. Suas vendas acumuladas são estas: "
@@ -46,11 +47,6 @@ public class ProgramaFidelidade {
                     + "\n"
                     + "\n"
                     ;
-            try {
-                new com.email.EmailService(email, assunto, corpo);
-            } catch (IOException ex) {
-                Logger.getLogger(ProgramaFidelidade.class.getName()).log(Level.SEVERE, null, ex);
-            }
         });
     }
 }

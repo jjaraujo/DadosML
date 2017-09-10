@@ -15,7 +15,7 @@ import EmailConfig.MensagensEmail;
 import Entidades.Cliente;
 import Entidades.Incidentes;
 import Entidades.Vendas;
-import com.email.EmailService;
+import  EmailConfig.EmailService;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
@@ -27,9 +27,8 @@ public class ControleIncidentes {
      public void encerrarIncidente(String id,String idVenda, boolean substituido) {
 
         Incidentes inc = new IncidentesDAO().getIncidente(id);
-
         Vendas v = new VendaDAO().getUmaVenda(inc.getId_venda());
-        Cliente c = new ClienteDAO().buscaCliente(v.getApelido_comprador());
+        Cliente c = new ClienteDAO().getCliente(v.getApelido_comprador());
         String assunto = new AssuntosEmail().assuntoEncerramentoIncidente(id);
         String codigo = new CodigoDAO().buscaUmCodigo(inc.getId_codigo()).getCodigo();
         String corpo = null;
@@ -42,10 +41,9 @@ public class ControleIncidentes {
         try {
             new IncidentesDAO().encerrarIncidente(id);
             try {
-                 new EmailService(c.getEmail(), assunto, corpo).sendEmail();
+                 new EmailService(c.getEmail(), assunto, corpo).sendEmail(v.getApelido_comprador());
                  if(substituido){
-                    ArrayList listChv = new Codigos_has_vendasDAO().getCodigoHasVendas(idVenda);
-                    new EnviarCodigos().reenviarEmail(new VendaDAO().getUmaVenda(idVenda), listChv);
+                    new EnviarCodigos().reenviarEmail(inc.getId_venda());
                  }
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null,"O email não foi enviado para o cliente do incidente "  + inc.getId());

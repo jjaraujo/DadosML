@@ -5,12 +5,14 @@
  */
 package Controle;
 
+import DAO.ProdutosDAO;
 import Entidades.Produtos;
 import Entidades.VendasPendentes;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -35,6 +37,8 @@ public class VariaveisDeControle {
     public static Connection CON ;
     public static HashMap<String,Produtos> mapProd;
     public static ArrayList<VendasPendentes> listVen = new ArrayList<>();
+    public static String email = "vendas@ksafe.com.br";
+    public static JTextArea textArea;
     
     public static DefaultComboBoxModel jComboBoxModelDialogVendasPendentes = new DefaultComboBoxModel<VendasPendentes>();
     
@@ -46,5 +50,9 @@ public class VariaveisDeControle {
         }
         new InsereCodigoNasVendasParaEnvio().carregaListaVendasPendentes(true);
         new InsereCodigoNasVendasParaEnvio().getCodigosUtilizaveis();
+    }
+
+    public static void atualizaMapProdutos() {
+        VariaveisDeControle.mapProd = new ProdutosDAO().getProdutosMap();
     }
 }

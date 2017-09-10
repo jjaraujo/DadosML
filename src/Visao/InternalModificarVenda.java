@@ -26,7 +26,7 @@ import javax.swing.JOptionPane;
  *
  * @author Joao
  */
-public class InternalModificarCodigoVenda extends javax.swing.JInternalFrame {
+public class InternalModificarVenda extends javax.swing.JInternalFrame {
 
     private int QtdSelecionadaDaVenda;
     private Vendas venda;
@@ -42,7 +42,7 @@ public class InternalModificarCodigoVenda extends javax.swing.JInternalFrame {
     /**
      * Creates new form InternalModificarCodigoVenda
      */
-    public InternalModificarCodigoVenda() {
+    public InternalModificarVenda() {
         initComponents();
         jButtonAtualizar.setEnabled(false);
         jButtonAdicionar.setEnabled(false);
@@ -86,6 +86,7 @@ public class InternalModificarCodigoVenda extends javax.swing.JInternalFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
 
         setClosable(true);
         setIconifiable(true);
@@ -237,15 +238,13 @@ public class InternalModificarCodigoVenda extends javax.swing.JInternalFrame {
                         .addContainerGap())))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(37, 37, 37)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                            .addGap(81, 81, 81)
                             .addComponent(jLabel38)
                             .addGap(2, 2, 2)
                             .addComponent(jTextFieldIdVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                            .addGap(37, 37, 37)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGap(18, 18, 18)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jButtonSubstituir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -324,6 +323,9 @@ public class InternalModificarCodigoVenda extends javax.swing.JInternalFrame {
             }
         });
         jMenu1.add(jMenuItem3);
+
+        jMenuItem4.setText("Modificar Valor");
+        jMenu1.add(jMenuItem4);
 
         jMenuBar1.add(jMenu1);
 
@@ -467,7 +469,7 @@ public class InternalModificarCodigoVenda extends javax.swing.JInternalFrame {
             if (s == null) {
 
             } else {
-                new VendaDAO().updateIdProdutoVenda(venda.getId(), Integer.parseInt(s));
+                new VendaDAO().updateIdProdutoVenda(venda.getId(),s);
 
             }
         }        // TODO add your handling code here:
@@ -515,6 +517,7 @@ public class InternalModificarCodigoVenda extends javax.swing.JInternalFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane9;

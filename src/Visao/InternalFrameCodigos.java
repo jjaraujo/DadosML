@@ -5,15 +5,21 @@
  */
 package Visao;
 
+import Controle.Datas;
 import Controle.VariaveisDeControle;
 import DAO.AtendentesDAO;
+import DAO.ClienteDAO;
 import DAO.CodigoDAO;
 import DAO.DesbloqueioDAO;
 import DAO.IncidentesDAO;
+import EmailConfig.AssuntosEmail;
+import EmailConfig.MensagensEmail;
 import Entidades.Atendentes;
+import Entidades.Cliente;
 import Entidades.Codigos;
 import Entidades.Desbloqueios;
 import Entidades.Incidentes;
+import Entidades.Vendas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -87,13 +93,15 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
         jRadioButton16 = new javax.swing.JRadioButton();
         jRadioButton17 = new javax.swing.JRadioButton();
         jLabel16 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
         jRadioButton18 = new javax.swing.JRadioButton();
+        jRadioButtonSim = new javax.swing.JRadioButton();
+        jRadioButton2 = new javax.swing.JRadioButton();
         jDialogGetDesbloqueios = new javax.swing.JDialog();
         jScrollPane6 = new javax.swing.JScrollPane();
         jTable3 = new javax.swing.JTable();
         jLabel26 = new javax.swing.JLabel();
+        buttonGroupResolvido = new javax.swing.ButtonGroup();
         jPanelCodigos = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTableCodigos = new javax.swing.JTable();
@@ -108,6 +116,7 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
         jRadioButton12 = new javax.swing.JRadioButton();
         jButton6 = new javax.swing.JButton();
         jRadioButton13 = new javax.swing.JRadioButton();
+        jRadioButtonExpirando = new javax.swing.JRadioButton();
 
         jDialogsetDesbloqueio.setMinimumSize(new java.awt.Dimension(700, 500));
         jDialogsetDesbloqueio.setModal(true);
@@ -182,6 +191,12 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
             }
         });
 
+        buttonGroupResolvido.add(jRadioButtonSim);
+        jRadioButtonSim.setText("SIM");
+
+        buttonGroupResolvido.add(jRadioButton2);
+        jRadioButton2.setText("NÃO");
+
         javax.swing.GroupLayout jDialogsetDesbloqueioLayout = new javax.swing.GroupLayout(jDialogsetDesbloqueio.getContentPane());
         jDialogsetDesbloqueio.getContentPane().setLayout(jDialogsetDesbloqueioLayout);
         jDialogsetDesbloqueioLayout.setHorizontalGroup(
@@ -194,35 +209,41 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jDialogsetDesbloqueioLayout.createSequentialGroup()
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
                         .addGroup(jDialogsetDesbloqueioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialogsetDesbloqueioLayout.createSequentialGroup()
-                                .addGroup(jDialogsetDesbloqueioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jDialogsetDesbloqueioLayout.createSequentialGroup()
-                                        .addGroup(jDialogsetDesbloqueioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jRadioButton16)
-                                            .addComponent(jRadioButton14))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addGroup(jDialogsetDesbloqueioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(jDialogsetDesbloqueioLayout.createSequentialGroup()
-                                                .addComponent(jRadioButton17)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(jRadioButton18))
-                                            .addComponent(jRadioButton15))
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jDialogsetDesbloqueioLayout.createSequentialGroup()
-                                        .addComponent(jLabel17)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(jDialogsetDesbloqueioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(jDialogsetDesbloqueioLayout.createSequentialGroup()
-                                                .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(0, 0, Short.MAX_VALUE))
-                                            .addComponent(jTextField1))))
-                                .addGap(26, 26, 26))
                             .addGroup(jDialogsetDesbloqueioLayout.createSequentialGroup()
-                                .addComponent(jLabel16)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                .addGap(18, 18, 18)
+                                .addGroup(jDialogsetDesbloqueioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialogsetDesbloqueioLayout.createSequentialGroup()
+                                        .addGroup(jDialogsetDesbloqueioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jDialogsetDesbloqueioLayout.createSequentialGroup()
+                                                .addGroup(jDialogsetDesbloqueioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jDialogsetDesbloqueioLayout.createSequentialGroup()
+                                                        .addGroup(jDialogsetDesbloqueioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                            .addComponent(jRadioButton16)
+                                                            .addComponent(jRadioButton14))
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                        .addGroup(jDialogsetDesbloqueioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                            .addGroup(jDialogsetDesbloqueioLayout.createSequentialGroup()
+                                                                .addComponent(jRadioButton17)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                                .addComponent(jRadioButton18))
+                                                            .addComponent(jRadioButton15)))
+                                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jDialogsetDesbloqueioLayout.createSequentialGroup()
+                                                        .addComponent(jLabel17)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addComponent(jRadioButtonSim)
+                                                        .addGap(18, 18, 18)
+                                                        .addComponent(jRadioButton2)))
+                                                .addGap(0, 0, Short.MAX_VALUE)))
+                                        .addGap(26, 26, 26))
+                                    .addGroup(jDialogsetDesbloqueioLayout.createSequentialGroup()
+                                        .addComponent(jLabel16)
+                                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialogsetDesbloqueioLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(59, 59, 59))))))
         );
         jDialogsetDesbloqueioLayout.setVerticalGroup(
             jDialogsetDesbloqueioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -250,11 +271,12 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
                         .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(jDialogsetDesbloqueioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel17))
+                            .addComponent(jLabel17)
+                            .addComponent(jRadioButtonSim)
+                            .addComponent(jRadioButton2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton9)
-                        .addGap(0, 23, Short.MAX_VALUE))))
+                        .addGap(0, 24, Short.MAX_VALUE))))
         );
 
         jDialogGetDesbloqueios.setMinimumSize(new java.awt.Dimension(900, 500));
@@ -384,7 +406,12 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
             }
         });
 
-        jComboBoxTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "KIS", "TOTAL", "SMALL" }));
+        jComboBoxTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "KIS", "TOTAL", "SMALL", "ANTIVIRUS", "ANDROID" }));
+        jComboBoxTipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxTipoActionPerformed(evt);
+            }
+        });
 
         jComboBoxAnos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1 ano", "2 anos", "3 anos", "4 anos", "5 anos" }));
         jComboBoxAnos.setSelectedItem("Ano");
@@ -417,6 +444,9 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
             }
         });
 
+        buttonGroupSituacaoCodigo.add(jRadioButtonExpirando);
+        jRadioButtonExpirando.setText("Expirando");
+
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
@@ -432,9 +462,11 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
                 .addComponent(jRadioButton12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jRadioButton13)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jRadioButtonExpirando)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                 .addComponent(jButton6)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -446,7 +478,8 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
                     .addComponent(jComboBoxAnos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jRadioButton12)
                     .addComponent(jButton6)
-                    .addComponent(jRadioButton13))
+                    .addComponent(jRadioButton13)
+                    .addComponent(jRadioButtonExpirando))
                 .addContainerGap())
         );
 
@@ -494,7 +527,7 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
                     .addComponent(jPanelCodigos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(12, Short.MAX_VALUE)))
+                    .addContainerGap(16, Short.MAX_VALUE)))
         );
 
         pack();
@@ -554,14 +587,18 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
         des.setLocal(local);
         des.setPais(listAtendentes.get(jList1.getSelectedIndex()).getPais());
         des.setMotivo(jTextArea1.getText());
-        des.setResolvido(jTextField1.getText().toUpperCase());
+        if (jRadioButtonSim.isSelected()) {
+            des.setResolvido("SIM");
+        } else {
+            des.setResolvido("NÂO");
+        }
         try {
             new DesbloqueioDAO().setDesbloqueio(des);
             JOptionPane.showMessageDialog(null, "Dados salvos com sucesso!");
             ArrayList<Incidentes> array = new IncidentesDAO().getIncidentesPorIdCodigo(idCodigo);
             array.forEach(inc -> {
                 new Thread(() -> {
-                   new Controle.ControleIncidentes().encerrarIncidente(inc.getId(),null,false);
+                    new Controle.ControleIncidentes().encerrarIncidente(inc.getId(), null, false);
                 }).start();
             });
             jDialogsetDesbloqueio.dispose();
@@ -590,9 +627,13 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
         if ((evt.getModifiers() & MouseEvent.BUTTON3_MASK) != 0 && jTableCodigos.getSelectedRowCount() == 1) {
             int i = jTableCodigos.getSelectedRow();
             idCodigo = (int) jTableCodigos.getValueAt(i, 0);
+            int dias_restantes = (int) jTableCodigos.getValueAt(i, 4);
+            String codigo = (String) jTableCodigos.getValueAt(i, 1);
             JPopupMenu jpop = new JPopupMenu();
             JMenuItem registrarDesbloqueio = new JMenuItem("Registrar Desbloqueio");
             JMenuItem pesquisarDesbloqueios = new JMenuItem("Pesquisar Desbloqueio");
+            JMenuItem mudarSituacaoCodigo = new JMenuItem("Modificar Situação");
+            JMenuItem enviarEmailClientesExpiracao = new JMenuItem("Enviar Email Clientes");
             registrarDesbloqueio.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
@@ -607,16 +648,56 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
                     jDialogGetDesbloqueios.setVisible(true);
                 }
             });
+            mudarSituacaoCodigo.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+                    int i = JOptionPane.showConfirmDialog(null, "Deseja modificar a situação do código para reposição?", "Confirmar", JOptionPane.YES_NO_OPTION);
+                    if (i == 0) {
+                        new CodigoDAO().setSituacaoCodigo("REPOSICAO", idCodigo);
+                        JOptionPane.showMessageDialog(null, "Situação modificada!");
+                    }
+                }
+            });
+
+            enviarEmailClientesExpiracao.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+                    new Thread(() -> {
+
+                        int i = JOptionPane.showConfirmDialog(null, "Enviar email para os clientes avisando da expiração?", "Confirmar", JOptionPane.YES_NO_OPTION);
+                        if (i == 0) {
+                            ArrayList<Object[]> list = new ClienteDAO().getClientePorCodigo(idCodigo);
+                            list.forEach((o) -> {
+                                Cliente c = (Cliente) o[0];
+                                Vendas v = (Vendas) o[1];
+                                String corpo = new MensagensEmail().emailAvisoExpirando(c.getNome(), dias_restantes + "", v, codigo);
+                                String assunto = new AssuntosEmail().lembreteExpiracao(v.getId());
+                                new EmailConfig.EmailService(c.getEmail(), assunto, corpo).sendEmail(c.getApelido());
+                            });
+                        }
+                    }).start();
+                }
+            });
+
             jpop.add(registrarDesbloqueio);
             jpop.add(pesquisarDesbloqueios);
+            jpop.add(mudarSituacaoCodigo);
+            if (jRadioButtonExpirando.isSelected()) {
+                jpop.add(enviarEmailClientesExpiracao);
+            }
             jpop.show(this, evt.getX(), evt.getY());
         }
     }//GEN-LAST:event_jTableCodigosMouseClicked
+
+    private void jComboBoxTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxTipoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxTipoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroupDiaDesbloqueio;
     private javax.swing.ButtonGroup buttonGroupLocalDesbloquei;
+    private javax.swing.ButtonGroup buttonGroupResolvido;
     private javax.swing.ButtonGroup buttonGroupSituacaoCodigo;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
@@ -642,6 +723,9 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
     private javax.swing.JRadioButton jRadioButton16;
     private javax.swing.JRadioButton jRadioButton17;
     private javax.swing.JRadioButton jRadioButton18;
+    private javax.swing.JRadioButton jRadioButton2;
+    private javax.swing.JRadioButton jRadioButtonExpirando;
+    private javax.swing.JRadioButton jRadioButtonSim;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
@@ -649,7 +733,6 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
     private javax.swing.JTable jTable3;
     private javax.swing.JTable jTableCodigos;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextFieldEntradaCodigo;
     // End of variables declaration//GEN-END:variables
 
@@ -659,8 +742,8 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
         String entrada = jTextFieldEntradaCodigo.getText().replaceAll("^\\s+", "");
         entrada = entrada.replaceAll("\\s+$", "");
         Codigos c = dao.getCodigosPorCodigo(entrada);
-        int dias = getDiasRestantes(c.getData_expiracao());
-        modelo.addRow(new Object[]{c.getId(), c.getCodigo(), c.getPedido(), c.getData_compra(),dias,
+        int dias = new Datas().getDiasRestantesPartirHoje(c.getData_expiracao());
+        modelo.addRow(new Object[]{c.getId(), c.getCodigo(), c.getPedido(), c.getData_compra(), dias,
             c.getQtd_usada(), c.getTipo(), c.getDispositivos(), c.getDuracao(), c.getNome(),
             c.getEmail(), c.getSuspeito(), c.getSenha_mykaspersky()});
         idCodigo = c.getId();
@@ -671,10 +754,17 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
     public void pesquisarTodosCodigosPorTipo(DefaultTableModel modelo) {
         modelo.setNumRows(0);
         CodigoDAO dao = new CodigoDAO();
-        ArrayList<Codigos> list = dao.buscaTodosOsCodigos(jComboBoxTipo.getSelectedItem().toString(), situacao, jComboBoxAnos.getSelectedIndex() + 1);
+        ArrayList<Codigos> list;
+        if (jRadioButtonExpirando.isSelected()) {
+            list = dao.getCodigosProximosExpirar();
+        } else {
+            list = dao.buscaTodosOsCodigos(jComboBoxTipo.getSelectedItem().toString(), situacao, jComboBoxAnos.getSelectedIndex() + 1);
+        }
+
         if (list != null) {
             for (Codigos c : list) {
-                int dias = getDiasRestantes(c.getData_expiracao());
+
+                int dias = new Datas().getDiasRestantesPartirHoje(c.getData_expiracao());
                 modelo.addRow(new Object[]{c.getId(), c.getCodigo(), c.getPedido(), c.getData_compra(), dias,
                     c.getQtd_usada(), c.getTipo(), c.getDispositivos(), c.getDuracao(), c.getNome(),
                     c.getEmail(), c.getSuspeito(), c.getSenha_mykaspersky()});
@@ -708,11 +798,4 @@ public class InternalFrameCodigos extends javax.swing.JInternalFrame {
         jLabel26.setText("O código deve ter no máximo " + qtdMaxima + " em até um mês da compra, com o resolvido 'SIM'. Caso não tenha passado um mês e ele está excedido, me avisa");
     }
 
-    private int getDiasRestantes(String expiracao) {
-        Date date = new Date(System.currentTimeMillis());
-        SimpleDateFormat formatarDate = new SimpleDateFormat("yyyy-MM-dd");
-        LocalDate hoje = LocalDate.parse(formatarDate.format(date));
-        LocalDate dataFim = LocalDate.parse(expiracao);
-        return Days.daysBetween( hoje, dataFim).getDays();
-    }
 }

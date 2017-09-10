@@ -23,8 +23,10 @@ import javax.swing.JOptionPane;
  */
 public class IncidentesDAO {
 
-    public void addIncidente(Incidentes inc) {
+    public boolean addIncidente(Incidentes inc,String id) {
+        boolean sucesso = false;
         try {
+            if(!getIncidenteAbertoPorIdvenda(id)){
             PreparedStatement stmt = VariaveisDeControle.CON.prepareStatement("insert into incidentes values (?,?,?,?,?,?,?,?); ");
             stmt.setString(1, inc.getId());
             stmt.setString(2, inc.getId_venda());
@@ -35,11 +37,15 @@ public class IncidentesDAO {
             stmt.setString(7, inc.getAnotacoes());
             stmt.setString(8, null);
             stmt.executeUpdate();
-
+            sucesso = true;
+            } else{
+                JOptionPane.showMessageDialog(null, "Já há um incidente aberto na venda "+ id );
+            }
         } catch (SQLException ex) {
             System.err.println("Não foi possível adiicionar o incidente");
             ex.printStackTrace();
         }
+        return sucesso;
     }
 
     public ArrayList<Incidentes> getIncidentes() {
@@ -147,6 +153,22 @@ public class IncidentesDAO {
             Logger.getLogger(IncidentesDAO.class.getName()).log(Level.SEVERE, null, ex);
             return 0;
         }
+    }
+    
+    public boolean getIncidenteAbertoPorIdvenda(String id) {
+        boolean contains = false;
+        try {
+            PreparedStatement stmt = VariaveisDeControle.CON.prepareStatement("select id  from incidentes where id like ? and situacao ='ABERTO'");
+            stmt.setString(1, "%"+id+"%");
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                contains = true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(IncidentesDAO.class.getName()).log(Level.SEVERE, null, ex);  
+        }
+        return contains;
     }
 
     public void encerrarIncidente(String id) {

@@ -7,20 +7,13 @@ package DAO;
 
 import Controle.VariaveisDeControle;
 import Entidades.Cliente;
-import Visao.Principal;
-import com.email.EmailService;
-import com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException;
-import java.io.IOException;
+import Entidades.Vendas;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.TreeSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.mail.MessagingException;
 import javax.swing.JOptionPane;
 
 /**
@@ -32,12 +25,13 @@ public class ClienteDAO {
     private PreparedStatement stmt;
     private Connection con;
     private ResultSet rs;
+    private Cliente cc;
 
     public ClienteDAO() {
         con = VariaveisDeControle.CON;
     }
 
-    public Cliente buscaCliente(String apelido) {
+    public Cliente getCliente(String apelido) {
 
         try {
             stmt = con.prepareStatement("select nome, email,telefone,inativo,confirmado,revendedor_assistencia from clientes_ml where apelido like '" + apelido + "';");
@@ -54,6 +48,34 @@ public class ClienteDAO {
             rs.close();
             stmt.close();
             return cliente;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage() + "\n Abra o programa novamente!", "Erro", JOptionPane.WARNING_MESSAGE);
+            ex.printStackTrace();
+            System.exit(0);
+            return null;
+        }
+    }
+    public ArrayList<Object[]> getClientePorCodigo(int id) {
+        ArrayList<Object[]> list = new ArrayList<>();
+        
+        try {
+            stmt = con.prepareStatement("select c.nome,c.email,v.data,v.id,v.id_produto from clientes_ml c join vendas v on c.apelido = v.apelido_comprador join codigos_has_vendas cv on v.id = cv.id_venda where id_codigo = ?;");
+            stmt.setString(1, id + "");
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                Cliente cliente = new Cliente();
+                Vendas v = new Vendas();
+                cliente.setNome(rs.getString("c.nome"));
+                cliente.setEmail(rs.getString("c.email"));
+                v.setData(rs.getString("v.data"));
+                v.setId(rs.getString("id"));
+                v.setIdProduto(rs.getString("v.id_produto"));
+                Object[] obj = {cliente,v};
+                list.add(obj);
+            }
+            rs.close();
+            stmt.close();
+            return list;
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage() + "\n Abra o programa novamente!", "Erro", JOptionPane.WARNING_MESSAGE);
             ex.printStackTrace();
@@ -98,18 +120,19 @@ public class ClienteDAO {
         }
     }
 
-    public void cadastrarCliente(Cliente c) {
+    public void insertCliente(Cliente c) {
         HashSet<Cliente> hs = new HashSet<>();
         hs.add(c);
-        cadastrarCliente(hs);
+        insertCliente(hs);
     }
 
-    public void cadastrarCliente(HashSet<Cliente> c) {
+    public void insertCliente(HashSet<Cliente> c) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     for (Cliente clt : c) {
+                        cc = clt;
                         if (!verificaClienteCadastrado(clt.getApelido())) {
                             stmt = con.prepareStatement("insert into clientes_ml(apelido,nome,email,cpf,estado,telefone) values(?,?,?,?,?,?);");
                             stmt.setString(1, clt.getApelido());
@@ -119,13 +142,18 @@ public class ClienteDAO {
                             stmt.setString(5, clt.getEstado());
                             stmt.setString(6, clt.getTelefone());
                             stmt.executeUpdate();
+                            VariaveisDeControle.textArea.setText(VariaveisDeControle.textArea.getText() + " Ciente cadastradoo: " + clt.getApelido() +"\n");
                         }
                     }
                     JOptionPane.showMessageDialog(null, "Clientes cadastrados com sucesso");
 
-                } catch (SQLException ex) {
+                } catch (SQLException ex ) {
                     JOptionPane.showMessageDialog(null, "Erro na transação! DAO.ClienteDAO().cadastrarCliente: " + ex.getMessage());
                     System.exit(0);
+                } catch(NumberFormatException exN){
+                    System.out.println("Erro na transação! DAO.ClienteDAO().cadastrarCliente: "  + exN.getMessage());
+                    VariaveisDeControle.textArea.setText(VariaveisDeControle.textArea.getText() + "Erro na transação! DAO.ClienteDAO().cadastrarCliente: "+cc.getApelido() + " - "  + exN.getMessage() + "\n");
+                    exN.printStackTrace();
                 }
             }
         }).start();
@@ -147,29 +175,8 @@ public class ClienteDAO {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro na transação! DAO.ClienteDAO().getClientesRevendedores: " + ex.getMessage());
             System.exit(0);
-//        } catch (IOException ex) {
-//            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (MessagingException ex) {
-//            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        for (Cliente c : set) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    String corpo = "Olá, " + c.getNome() + "(" + c.getApelido() + "), boa noite! Temos uma grande novidade para você: o nosso programa de fidelidades voltou!!! A cada 5 compras de produtos Kaspersky, você ganha um produto igual. Sem sorteio, sem pegadinha. Comprou, ganhou! :D\n"
-                            + "Você pode verificar o regulamento aqui no Google Driver: https://drive.google.com/open?id=0B1fHjqINGZdoWHpLSDFGQktWcHM (se não conseguir, informe-nos). Qualquer dúvida, estamos a disposição!";
-                    try {
-                        EmailService email = new EmailService(c.getEmail(), "Novo programa de fidelidade para revendedores Kaspersky ", corpo);
-                        email.sendEmail();
-                    } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Erro na transação! DAO.ClienteDAO().getClientesRevendedores: " + ex.getMessage());
-                        System.exit(0);
-                    } catch (MessagingException ex) {
-                        Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }).start();
-        }
+
         return set;
     }
 
@@ -181,6 +188,18 @@ public class ClienteDAO {
             stmt.executeUpdate();
         }  catch (SQLException ex) {
             System.err.println("Erro ao adicionar numero confirmado no cliente " + apelido +"\n" + ex.getMessage());
+            System.exit(0);
+        }
+    }
+    
+    public void updateEmail(String apelido, String email) {
+        try {
+            PreparedStatement stmt = con.prepareStatement("UPDATE clientes_ml SET email = ?  WHERE apelido like ?;");
+            stmt.setString(1,email);
+            stmt.setString(2, apelido);
+            stmt.executeUpdate();
+        }  catch (SQLException ex) {
+            System.err.println("Erro ao modificar email do cliente " + apelido +"\n" + ex.getMessage());
             System.exit(0);
         }
     }

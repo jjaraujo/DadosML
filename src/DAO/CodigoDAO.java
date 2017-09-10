@@ -100,11 +100,9 @@ public class CodigoDAO {
         try {
             PreparedStatement stmt = con.prepareCall("select * from codigos where id = " + id + ";");
             ResultSet rs = stmt.executeQuery();
-            Codigos codigo = new Codigos();
+            Codigos codigo = null;
             while (rs.next()) {
-                codigo.setId(rs.getInt("id"));
-                codigo.setCodigo(rs.getString("codigo"));
-                codigo.setTipo(rs.getString("tipo"));
+             codigo =   pegaDadosCodigos(rs);
             }
             rs.close();
             stmt.close();
@@ -125,13 +123,7 @@ public class CodigoDAO {
             stmt = con.prepareStatement("select * from codigos;");
             rs = stmt.executeQuery();
             while (rs.next()) {
-                Codigos cod = new Codigos();
-                cod.setId(rs.getInt("id"));
-                cod.setCodigo(rs.getString("codigo"));
-                cod.setPedido(rs.getString("pedido"));
-                listCod.add(cod);
-                rs.close();
-                stmt.close();
+                listCod.add(pegaDadosCodigos(rs));
             }
             return listCod;
         } catch(MySQLNonTransientConnectionException e){
@@ -151,10 +143,7 @@ public class CodigoDAO {
             stmt = con.prepareStatement("select * from codigos;");
             rs = stmt.executeQuery();
             while (rs.next()) {
-                Codigos cod = new Codigos();
-                cod.setId(rs.getInt("id"));
-                cod.setCodigo(rs.getString("codigo"));
-                cod.setPedido(rs.getString("pedido"));
+                Codigos cod = pegaDadosCodigos(rs);
                 mapCod.put(cod.getId(),cod);
             }
             return mapCod;
@@ -175,24 +164,7 @@ public class CodigoDAO {
             stmt.setInt(2, anos);
             rs = stmt.executeQuery();
             while (rs.next()) {
-                Codigos cod = new Codigos();
-                cod.setId(rs.getInt("id"));
-                cod.setCodigo(rs.getString("codigo"));
-                cod.setPedido(rs.getString("pedido"));
-                cod.setQtd_usada(rs.getInt("qtd_usada"));
-                cod.setData_compra(rs.getString("data_compra"));
-                cod.setData_expiracao(rs.getString("data_expiracao"));
-                cod.setQtd_usada(rs.getInt("qtd_usada"));
-                cod.setTipo(rs.getString("tipo"));
-                cod.setDispositivos(rs.getInt("dispositivos"));
-                cod.setDuracao(rs.getInt("duracao"));
-                cod.setNome(rs.getString("nome"));
-                cod.setEmail(rs.getString("email"));
-                cod.setSuspeito(rs.getString("suspeito_de_revenda"));
-                cod.setSenha_mykaspersky(rs.getString("senha_mykaspersky"));
-
-                listCod.add(cod);
-
+                listCod.add(pegaDadosCodigos(rs));
             }
             stmt.close();
             rs.close();
@@ -214,20 +186,7 @@ public class CodigoDAO {
             ResultSet rs = stmt.executeQuery();
             Codigos cod = new Codigos();
             while (rs.next()) {
-                cod.setId(rs.getInt("id"));
-                cod.setCodigo(rs.getString("codigo"));
-                cod.setPedido(rs.getString("pedido"));
-                cod.setQtd_usada(rs.getInt("qtd_usada"));
-                cod.setData_compra(rs.getString("data_compra"));
-                cod.setData_expiracao(rs.getString("data_expiracao"));
-                cod.setQtd_usada(rs.getInt("qtd_usada"));
-                cod.setTipo(rs.getString("tipo"));
-                cod.setDispositivos(rs.getInt("dispositivos"));
-                cod.setDuracao(rs.getInt("duracao"));
-                cod.setNome(rs.getString("nome"));
-                cod.setEmail(rs.getString("email"));
-                cod.setSuspeito(rs.getString("suspeito_de_revenda"));
-                cod.setSenha_mykaspersky(rs.getString("senha_mykaspersky"));
+            cod = pegaDadosCodigos(rs);
             }
             rs.close();
             stmt.close();
@@ -242,23 +201,15 @@ public class CodigoDAO {
     }
 
     public ArrayList<Codigos> getCodigosUtilizaveis() {
-        Codigos cod = new Codigos();
         ArrayList<Codigos> listCodUtilizaveis = new ArrayList<>();
         ArrayList<Codigos> listTodosCod1 = new ArrayList<>();
         ArrayList<Codigos> listTodosCod2;
         QtdUsoCodigos qtdUso = new QtdUsoCodigosDAO().getQtdUsada();
         try {
-            PreparedStatement stmt = con.prepareStatement("select id,codigo,tipo,qtd_usada,data_expiracao,duracao from codigos where situacao like 'UTILIZANDO';");
+            PreparedStatement stmt = con.prepareStatement("select * from codigos where situacao like 'UTILIZANDO';");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                cod = new Codigos();
-                cod.setCodigo(rs.getString("codigo"));
-                cod.setId(rs.getInt("id"));
-                cod.setDuracao(rs.getInt("duracao"));
-                cod.setTipo(rs.getString("tipo"));
-                cod.setQtd_usada(rs.getInt("qtd_usada"));
-                cod.setData_expiracao(rs.getString("data_expiracao"));
-                listTodosCod1.add(cod);
+                listTodosCod1.add(pegaDadosCodigos(rs));
             }
 
             listTodosCod2 = verificaDesbloqueioEQuantidadeUsada(listTodosCod1);
@@ -472,5 +423,50 @@ public class CodigoDAO {
             System.err.println("Erro na transação de adicionar qtd do código " + id + ":" + ex1.getMessage());
             ex1.printStackTrace();
         }
+    }
+    public ArrayList<Codigos> getCodigosProximosExpirar(){
+       ArrayList list = new ArrayList();
+       try {
+            PreparedStatement stmt = con.prepareStatement("select * from codigos where data_expiracao = ? or data_expiracao = ?;");
+            stmt.setString(1, somaDias(5));
+            stmt.setString(2, somaDias(15));
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                list.add(pegaDadosCodigos(rs));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CodigoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+    
+    private String somaDias(int dias) {
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat formatarDate = new SimpleDateFormat("yyyy-MM-dd");
+        LocalDate hoje = LocalDate.parse(formatarDate.format(date));
+        return hoje.plusDays(dias).toString();
+    }
+    
+    private Codigos pegaDadosCodigos(ResultSet rs){
+        Codigos cod = new Codigos();
+        try {            
+            cod.setId(rs.getInt("id"));
+            cod.setCodigo(rs.getString("codigo"));
+            cod.setPedido(rs.getString("pedido"));
+            cod.setQtd_usada(rs.getInt("qtd_usada"));
+            cod.setData_compra(rs.getString("data_compra"));
+            cod.setData_expiracao(rs.getString("data_expiracao"));
+            cod.setQtd_usada(rs.getInt("qtd_usada"));
+            cod.setTipo(rs.getString("tipo"));
+            cod.setDispositivos(rs.getInt("dispositivos"));
+            cod.setDuracao(rs.getInt("duracao"));
+            cod.setNome(rs.getString("nome"));
+            cod.setEmail(rs.getString("email"));
+            cod.setSuspeito(rs.getString("suspeito_de_revenda"));
+            cod.setSenha_mykaspersky(rs.getString("senha_mykaspersky"));
+        } catch (SQLException ex) {
+            Logger.getLogger(CodigoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return cod;
     }
 }

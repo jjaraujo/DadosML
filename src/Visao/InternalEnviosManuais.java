@@ -318,18 +318,15 @@ public class InternalEnviosManuais extends javax.swing.JInternalFrame {
             jSpinnerQTD.setValue(ven.getQtd() * map.get(ven.getIdProduto()).getQtd());
             jTextFieldApelidoEnvioManual.setText(ven.getApelido());
             jTextFieldObservacaoEnvioManual.setText(ven.getObservacoes());
-            jTextFieldProdutoEnvioManual.setText(ven.getProduto());
+            jTextFieldProdutoEnvioManual.setText(VariaveisDeControle.mapProd.get(ven.getIdProduto()).getNomeProdutoQtdTotal(ven.getQtd()));
         }
     }//GEN-LAST:event_jComboBoxDialogCodigoManualmenteActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         QtdSelecionadaDaVenda = QtdSelecionadaDaVenda + (int) jSpinnerQTD.getValue();
-        if (QtdSelecionadaDaVenda <= ven.getQtd() * map.get(ven.getIdProduto()).getQtd()) {
-            jTextAreaCodigosSelecionados.setText(jTextAreaCodigosSelecionados.getText() + jTextFieldIdCodigo.getText() + " - " + jSpinnerQTD.getValue() + " - " + jSpinnerQTDServer.getValue() + " server\n");
+        jTextAreaCodigosSelecionados.setText(jTextAreaCodigosSelecionados.getText() + jTextFieldIdCodigo.getText() + " - " + jSpinnerQTD.getValue() + " - " + jSpinnerQTDServer.getValue() + " server\n");
             inserirEAlterarCodigoVendaManualmente(Integer.parseInt(jTextFieldIdCodigo.getText()), (int) jSpinnerQTD.getValue(), (int) jSpinnerQTDServer.getValue());
-        } else {
-            JOptionPane.showMessageDialog(null, "Quantidade de dispositivos maior que a da venda");
-        }        // TODO add your handling code here:
+      // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed

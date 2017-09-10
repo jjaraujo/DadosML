@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Set;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -28,8 +29,11 @@ public class InsereCodigoNasVendasParaEnvio {
     private HashMap<Integer, Codigos> total2Anos = new HashMap<>();
     private HashMap<Integer, Codigos> total3Anos = new HashMap<>();
     private HashMap<Integer, Codigos> kis1ano = new HashMap<>();
+    private HashMap<Integer, Codigos> android1ano = new HashMap<>();
     private HashMap<Integer, Codigos> small1ano = new HashMap<>();
     private HashMap<Integer, Codigos> small2anos = new HashMap<>();
+    private HashMap<Integer, Codigos> antivirus1ano = new HashMap<>();
+    private JTextArea textArea = VariaveisDeControle.textArea;
 
 
     public void carregaListaVendasPendentes(boolean primeiroCarregamento) {
@@ -37,7 +41,9 @@ public class InsereCodigoNasVendasParaEnvio {
         if (VariaveisDeControle.listVen.isEmpty() && primeiroCarregamento && !VariaveisDeControle.listaCarregando) {
             VariaveisDeControle.listaCarregando = true;
             System.out.println("list carregando: " + VariaveisDeControle.listaCarregando);
+            textArea.setText(textArea.getText() + "Carregando lista de vendas\n");
             VariaveisDeControle.listVen = new VendasPendentesDAO().retornaVendasPendentes();
+            textArea.setText(textArea.getText() + "Lista de vendas carregada\n");
         }
     }
 
@@ -45,6 +51,7 @@ public class InsereCodigoNasVendasParaEnvio {
         VariaveisDeControle.carregandoCodigosNasVendas = true;
         CodigoDAO codDAO = new CodigoDAO();
         System.out.println("Vai iniciar a leitura dos codigos utilizaveis");
+        textArea.setText(textArea.getText() + " Vai iniciar a leitura dos codigos utilizaveis \n");
         ArrayList<Codigos> listCod = codDAO.getCodigosUtilizaveis();
         int ano;
         int idCod;
@@ -61,12 +68,17 @@ public class InsereCodigoNasVendasParaEnvio {
                             total1Ano.put(idCod, cod);
                             break;
                         case "kis":
-                        case "android":
                             kis1ano.put(idCod, cod);
                             break;
                         case "small":
                             small1ano.put(idCod, cod);
+                            break;                        
+                        case "android":
+                            android1ano.put(idCod, cod);
                             break;
+                        case "antivirus":
+                            antivirus1ano.put(idCod, cod);
+                            break;    
                     }
                     break;
                 case 2:
@@ -95,6 +107,7 @@ public class InsereCodigoNasVendasParaEnvio {
         for (VendasPendentes v : VariaveisDeControle.listVen) {
             Produtos prod = mapProd.get(v.getIdProduto());
             System.out.println("Carregando código na venda VendasPendentes: " + v.getId_venda() + ". Tipo: " + prod.getTipo() + " Anos " + prod.getAnos());
+            textArea.setText(textArea.getText() + "Carregando código na venda VendasPendentes: " + v.getId_venda() + "\n");
             int ano = prod.getAnos();
             ArrayList<Codigos> setCodEnviados = new Codigos_has_vendasDAO().getCodigosJaEnviadosParaOCliente(v.getApelido());
             //condicionais que adicionam o codigo na venda de acordo com o tipo de ID
@@ -104,9 +117,14 @@ public class InsereCodigoNasVendasParaEnvio {
                         case "total":                            
                             verificaSeOCodigoPodeSerAdicionadoNaVenda(v, total1Ano, setCodEnviados);
                             break;
-                        case "kis":
-                        case "android":
+                        case "kis":                        
                             verificaSeOCodigoPodeSerAdicionadoNaVenda(v, kis1ano, setCodEnviados);
+                            break;
+                        case "android":
+                            verificaSeOCodigoPodeSerAdicionadoNaVenda(v, android1ano, setCodEnviados);
+                            break;
+                        case "antivirus":
+                            verificaSeOCodigoPodeSerAdicionadoNaVenda(v, antivirus1ano, setCodEnviados);
                             break;
                         case "small":
                             verificaSeOCodigoPodeSerAdicionadoNaVenda(v, small1ano, setCodEnviados);
@@ -116,8 +134,10 @@ public class InsereCodigoNasVendasParaEnvio {
                 case 2:
                     switch (prod.getTipo().toLowerCase()) {
                         case "total":
+                        case "kis":
                             verificaSeOCodigoPodeSerAdicionadoNaVenda(v, total2Anos, setCodEnviados);
                             break;
+                          
                         case "small":
                             verificaSeOCodigoPodeSerAdicionadoNaVenda(v, small2anos, setCodEnviados);
                             break;

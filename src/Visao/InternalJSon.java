@@ -106,7 +106,7 @@ public class InternalJSon extends javax.swing.JInternalFrame {
             vendaDAO.insertVenda(json.lerJsonVendas("[" + jTextAreaJson.getText() + "]"));
         } else {
             ClienteDAO clienteDAO = new ClienteDAO();
-            clienteDAO.cadastrarCliente(json.lerJsonClientes("[" + jTextAreaJson.getText() + "]"));
+            clienteDAO.insertCliente(json.lerJsonClientes("[" + jTextAreaJson.getText() + "]"));
         }
         jTextAreaJson.setText("");
     }//GEN-LAST:event_jButton4ActionPerformed

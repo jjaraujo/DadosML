@@ -5,6 +5,8 @@
  */
 package Entidades;
 
+import Controle.VariaveisDeControle;
+
 /**
  *
  * @author HP
@@ -86,6 +88,39 @@ public class Produtos {
         }
         return true;
     }
+    public String getNomeProduto() {
+        String server = "";
+        
+        if(getTipo().toLowerCase().equals("small")){
+            if( getServer() > 1){
+            server = getServer() + " servers ";
+        } else{
+            server = getServer() + " server ";
+        }
+        }
+        String produto = "Kaspersky " + getTipo() + " " +  getQtd() + " Dispositivo(s) " + server + " " +  getAnos() + " ano(s)";
+
+        if(getId().equals("KIS1D1A1A")){
+            produto = produto  +" + Android";
+        }
+        return produto;
+    }
     
+    public String getNomeProdutoQtdTotal(int QtdTotal) {
+        String server = "";
+        
+        if(getTipo().toLowerCase().equals("small")){
+            if( getServer() > 1){
+            server = getServer() + " servers ";
+        } else{
+            server = getServer() + " server ";
+        }
+        }
+        String produto ="Kaspersky " + getTipo() + " " + QtdTotal * getQtd() + " Dispositivo(s) " + server + " " +  getAnos() + " ano(s)";
+        if(id.equals("KIS1D1A1A")){
+            produto = produto  + QtdTotal +" + Android";
+        }
+        return produto;
+    }
     
 }
