@@ -18,7 +18,7 @@ public class ConnectionFactory {
     public ConnectionFactory(){
     }
     
-    public java.sql.Connection getConnection() {
+    public java.sql.Connection getConnection() throws SQLException {
         try {
             Connection con;
             DriverManager.registerDriver(new com.mysql.jdbc.Driver());
@@ -26,12 +26,19 @@ public class ConnectionFactory {
             String usuario = VariaveisDeControle.user;
             con = DriverManager.getConnection(
                     "jdbc:mysql://35.188.13.37/dados_ml", usuario, senha);
-            
             return con;
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            Connection con;
+            String senha = VariaveisDeControle.senha;
+            String usuario = VariaveisDeControle.user;
+            con = DriverManager.getConnection(
+                    "jdbc:mysql://35.188.13.37/dados_ml", usuario, senha);
+            if(con == null){
+                 System.err.println(e.getMessage());
             JOptionPane.showMessageDialog(null, e.getMessage() + "\nAbra o programa novamente");
             System.exit(0);
+            }
+           
         }
         return null;
     }

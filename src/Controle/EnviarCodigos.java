@@ -55,7 +55,7 @@ public class EnviarCodigos {
         String assunto = new AssuntosEmail().enviarEmail(corpo, ven.getId_venda());
         EmailService email = new EmailService(ven.getEmail(), assunto, corpo);
         email.sendEmail(ven.getApelido());
-        new EmailService(ven.getEmail(),"Seu código acaba de ser enviado!", msgEmail.AvisarCodigoEnviado(c.getNome(), assunto)).sendEmail(c.getApelido());
+        new EmailService(ven.getEmail(),"Seu código acaba de ser enviado!", msgEmail.AvisarCodigoEnviado(c.getNome(), assunto,codigo)).sendEmail(c.getApelido());
 
     }
 
@@ -95,10 +95,10 @@ public class EnviarCodigos {
                         String assunto =  new AssuntosEmail().enviarEmail(nomeProduto, v.getId_venda());
                         EmailService email = new EmailService(v.getEmail(),assunto, corpo);
                         email.sendEmail(v.getApelido());
-                        new EmailService(v.getEmail(),"Seu código acaba de ser enviado!", msgEmail.AvisarCodigoEnviado(c.getNome(), assunto)).sendEmail(c.getApelido());
+                        new EmailService(v.getEmail(),"Seu código acaba de ser enviado!", msgEmail.AvisarCodigoEnviado(c.getNome(), assunto,codigo)).sendEmail(c.getApelido());
                         setCodigoNaVendaNoBanco(v);
                         VariaveisDeControle.listVen.remove(v);
-                        VariaveisDeControle.jComboBoxModelDialogVendasPendentes.removeElement(v);
+                        VariaveisDeControle.jComboBoxModelDialogVendasPendentes.removeElement(v.toString());
                         if (c.getRevendedor_assitencia() != null) {
                             if (c.getRevendedor_assitencia().equals("sim")) {
                                 // new ProgramaFidelidade().verificaQtdProdutos(v.getApelido(), corpo);

@@ -10,32 +10,20 @@ import Controle.EnviarCodigos;
 import Controle.InsereCodigoNasVendasParaEnvio;
 import Controle.VariaveisDeControle;
 import DAO.CodigoDAO;
-import DAO.Codigos_has_vendasDAO;
-;import DAO.IncidentesDAO;
-import DAO.ProdutosDAO;
-import DAO.VendaDAO;
-import EmailConfig.MensagensEmail;
-import Entidades.EmailNomeTipoproduto;
-import  EmailConfig.EmailService;
+import DAO.IncidentesDAO;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.mail.MessagingException;
 import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextPane;
 
 /**
  *
  * @author Joao
  */
-
-
 public class Principal extends javax.swing.JFrame {
 
     /**
@@ -47,18 +35,17 @@ public class Principal extends javax.swing.JFrame {
         Dimension scrnsize = toolkit.getScreenSize();
         dialogAutenticacao();
         VariaveisDeControle.atualizaMapProdutos();
-        VariaveisDeControle.textArea = jTextAreaSaida;
         this.setSize(scrnsize);
         int i = new IncidentesDAO().getCountIncidentesAbertos();
         if (i > 0) {
-            
+
             jLabel3.setText("Há " + i + " incidente(s) abertos");
             jDialog2.setVisible(true);
         }
-           if(!new CodigoDAO().getCodigosProximosExpirar().isEmpty()){
-              jLabel3.setText("Há códigos próximos de expirar. Verifique a lista de códigos para enviar emails");
-           jDialog2.setVisible(true);
-           }
+        if (!new CodigoDAO().getCodigosProximosExpirar().isEmpty()) {
+            jLabel3.setText("Há códigos próximos de expirar. Verifique a lista de códigos para enviar emails");
+            jDialog2.setVisible(true);
+        }
     }
 
     /**
@@ -79,8 +66,8 @@ public class Principal extends javax.swing.JFrame {
         jDialog2 = new javax.swing.JDialog();
         jLabel3 = new javax.swing.JLabel();
         jDesktopPane1 = new javax.swing.JDesktopPane();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextAreaSaida = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextPaneSaida = new javax.swing.JTextPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -104,6 +91,9 @@ public class Principal extends javax.swing.JFrame {
         jMenu5 = new javax.swing.JMenu();
         jMenuItem12 = new javax.swing.JMenuItem();
         jMenuItem16 = new javax.swing.JMenuItem();
+        jMenu6 = new javax.swing.JMenu();
+        jMenuItem14 = new javax.swing.JMenuItem();
+        jMenuItem18 = new javax.swing.JMenuItem();
 
         jDialog1.setAlwaysOnTop(true);
         jDialog1.setMinimumSize(new java.awt.Dimension(256, 183));
@@ -161,27 +151,26 @@ public class Principal extends javax.swing.JFrame {
 
         jDesktopPane1.setBackground(new java.awt.Color(82, 144, 180));
 
-        jTextAreaSaida.setColumns(20);
-        jTextAreaSaida.setRows(5);
-        jScrollPane1.setViewportView(jTextAreaSaida);
+        jTextPaneSaida.setEditable(false);
+        jScrollPane2.setViewportView(jTextPaneSaida);
 
-        jDesktopPane1.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jScrollPane2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
         jDesktopPane1Layout.setHorizontalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
-                .addContainerGap(40, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 642, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24))
+            .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                .addContainerGap(45, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 651, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addGap(30, 30, 30)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(101, Short.MAX_VALUE))
         );
 
         jMenu1.setText("Vendas");
@@ -336,6 +325,26 @@ public class Principal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu5);
 
+        jMenu6.setText("Configurações");
+
+        jMenuItem14.setText("Modificar Email da Sessão");
+        jMenuItem14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem14ActionPerformed(evt);
+            }
+        });
+        jMenu6.add(jMenuItem14);
+
+        jMenuItem18.setText("Visualizar email atual");
+        jMenuItem18.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem18ActionPerformed(evt);
+            }
+        });
+        jMenu6.add(jMenuItem18);
+
+        jMenuBar1.add(jMenu6);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -361,7 +370,11 @@ public class Principal extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         VariaveisDeControle.user = jTextFieldUser.getText().toUpperCase();
         VariaveisDeControle.senha = jPasswordFieldSenha.getText();
-        VariaveisDeControle.CON = new ConnectionFactory().getConnection();// TODO add your handling code here:
+        try {
+            VariaveisDeControle.CON = new ConnectionFactory().getConnection();// TODO add your handling code here:
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
         jDialog1.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -502,6 +515,19 @@ public class Principal extends javax.swing.JFrame {
 //        }
     }//GEN-LAST:event_jMenuItem17ActionPerformed
 
+    private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
+        String email = JOptionPane.showInputDialog("Informe o novo email");
+        int i = JOptionPane.showConfirmDialog(null, "Confirmar novo email? " + email, "Confirmar", JOptionPane.YES_NO_OPTION);
+        if (i == 0) {
+            VariaveisDeControle.email = email;
+        }
+        setTextArea("Email atual: " + VariaveisDeControle.email + "\n");
+    }//GEN-LAST:event_jMenuItem14ActionPerformed
+
+    private void jMenuItem18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem18ActionPerformed
+setTextArea("Email atual: " + VariaveisDeControle.email+"\n");        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem18ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -546,6 +572,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
+    private javax.swing.JMenu jMenu6;
     private javax.swing.JMenu jMenu8;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
@@ -553,9 +580,11 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem11;
     private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem13;
+    private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem15;
     private javax.swing.JMenuItem jMenuItem16;
     private javax.swing.JMenuItem jMenuItem17;
+    private javax.swing.JMenuItem jMenuItem18;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
@@ -565,9 +594,9 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPasswordField jPasswordFieldSenha;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextAreaSaida;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTextFieldUser;
+    private static javax.swing.JTextPane jTextPaneSaida;
     // End of variables declaration//GEN-END:variables
 
     public void dialogAutenticacao() {
@@ -579,5 +608,12 @@ public class Principal extends javax.swing.JFrame {
             jDesktopPane1.add(ifr);
             ifr.setVisible(true);// TODO add your handling code here:            
         }
+    }
+
+    public static void setTextArea(String texto) {
+        JTextPane tp = jTextPaneSaida;
+        jTextPaneSaida.setText(jTextPaneSaida.getText() + texto);
+        int len = tp.getDocument().getLength();
+        tp.setCaretPosition(len);
     }
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Controle;
 
 import DAO.ProdutosDAO;
@@ -11,14 +6,14 @@ import Entidades.VendasPendentes;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javax.swing.AbstractListModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
 import javax.swing.JTextArea;
+import org.apache.commons.mail.HtmlEmail;
 
-/**
- *
- * @author Joao
- */
-public class VariaveisDeControle {
+public abstract class VariaveisDeControle {
 
     public static boolean codigosCarregadosListVen;
     public static boolean carregandoCodigosNasVendas;
@@ -34,14 +29,18 @@ public class VariaveisDeControle {
     public static boolean frameCadVenOutroMeioAberto;
     public static String user = "";
     public static String senha = "";
-    public static Connection CON ;
-    public static HashMap<String,Produtos> mapProd;
-    public static ArrayList<VendasPendentes> listVen = new ArrayList<>();
+    public static Connection CON;
+    public static HashMap<String, Produtos> mapProd;
+    public static ArrayList<VendasPendentes> listVen = new ArrayList();
     public static String email = "vendas@ksafe.com.br";
-    public static JTextArea textArea;
+    public static DefaultComboBoxModel jComboBoxModelDialogVendasPendentes = new DefaultComboBoxModel();
+    public static DefaultListModel jModelList = new DefaultListModel();
+    public static int indexItemSelecionado;
+    public static VendasPendentes vendaSelecionado;
     
-    public static DefaultComboBoxModel jComboBoxModelDialogVendasPendentes = new DefaultComboBoxModel<VendasPendentes>();
-    
+    public VariaveisDeControle() {
+    }
+
     public static void carregarVendasPendentesECodigos() {
         if (!listVen.isEmpty()) {
             codigosCarregadosListVen = false;
@@ -52,7 +51,10 @@ public class VariaveisDeControle {
         new InsereCodigoNasVendasParaEnvio().getCodigosUtilizaveis();
     }
 
+    public static HtmlEmail htmlEmail;
+
     public static void atualizaMapProdutos() {
-        VariaveisDeControle.mapProd = new ProdutosDAO().getProdutosMap();
+        mapProd = new ProdutosDAO().getProdutosMap();
     }
+    
 }

@@ -6,20 +6,18 @@
 package Visao;
 
 import Controle.EnviarCodigos;
-import Controle.InsereCodigoNasVendasParaEnvio;
 import Controle.VariaveisDeControle;
 import DAO.ClienteDAO;
-import DAO.VendaDAO;
 import DAO.VendasPendentesDAO;
-import Entidades.Vendas;
 import Entidades.VendasPendentes;
-import  EmailConfig.EmailService;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.mail.MessagingException;
+import EmailConfig.EmailService;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import org.apache.commons.mail.EmailException;
+import javax.swing.JPopupMenu;
 
 /**
  *
@@ -32,7 +30,6 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
     public InternalFrameAnaliseVendaPendentes() {
         initComponents();
         bloqueiaComponentes();
-
     }
 
     /**
@@ -45,33 +42,25 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
     private void initComponents() {
 
         jLabel6 = new javax.swing.JLabel();
-        jComboBoxDialogVendasPendentes = new javax.swing.JComboBox<>();
         jTextFieldPagamento = new javax.swing.JTextField();
         jLabel30 = new javax.swing.JLabel();
-        jButtonSolicitarContato = new javax.swing.JButton();
         jTextFieldObservacoes = new javax.swing.JTextField();
-        jButtonEnviar = new javax.swing.JButton();
-        jButtonProximo = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jButtonDeletar = new javax.swing.JButton();
         jTextFieldCodigo = new javax.swing.JTextField();
         jCheckBoxNumeroConfirmado = new javax.swing.JCheckBox();
         jTextFieldApelido = new javax.swing.JTextField();
-        jLabelMensagem = new javax.swing.JLabel();
         jLabel34 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabelMensagemProgresso = new javax.swing.JLabel();
         jTextFieldEmail = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jTextFieldProduto = new javax.swing.JTextField();
         jTextFieldId = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         jButtonCarregar = new javax.swing.JButton();
+        jScrollvendasPendentes = new javax.swing.JScrollPane();
+        jListVendasPendentes = new javax.swing.JList<>();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
 
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
         setClosable(true);
@@ -100,49 +89,15 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
 
         jLabel6.setText("Pagamento:");
 
-        jComboBoxDialogVendasPendentes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBoxDialogVendasPendentesActionPerformed(evt);
-            }
-        });
-
         jTextFieldPagamento.setEditable(false);
 
         jLabel30.setText("Observação:");
 
-        jButtonSolicitarContato.setText("Solicitar Contato");
-        jButtonSolicitarContato.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonSolicitarContatoActionPerformed(evt);
-            }
-        });
-
         jTextFieldObservacoes.setEditable(false);
-
-        jButtonEnviar.setText("Enviar");
-        jButtonEnviar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonEnviarActionPerformed(evt);
-            }
-        });
-
-        jButtonProximo.setText("Próximo");
-        jButtonProximo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonProximoActionPerformed(evt);
-            }
-        });
 
         jLabel7.setText("Código:");
 
         jLabel2.setText("Apelido:");
-
-        jButtonDeletar.setText("Excluir");
-        jButtonDeletar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonDeletarActionPerformed(evt);
-            }
-        });
 
         jTextFieldCodigo.setEditable(false);
         jTextFieldCodigo.addActionListener(new java.awt.event.ActionListener() {
@@ -160,13 +115,9 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
 
         jTextFieldApelido.setEditable(false);
 
-        jLabelMensagem.setText(" ");
-
         jLabel34.setText("Numero confirmado:");
 
         jLabel3.setText("Email:");
-
-        jLabelMensagemProgresso.setText(" ");
 
         jTextFieldEmail.setEditable(false);
         jTextFieldEmail.addActionListener(new java.awt.event.ActionListener() {
@@ -188,8 +139,6 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
 
         jLabel4.setText("Produto:");
 
-        jLabel8.setText("Venda Específica:");
-
         jButtonCarregar.setText("Carregar");
         jButtonCarregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -197,17 +146,18 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
             }
         });
 
-        jMenu1.setText("Opções");
-
-        jMenuItem1.setText("Iniciar Carregamento");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+        jListVendasPendentes.setModel(VariaveisDeControle.jModelList);
+        jListVendasPendentes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jListVendasPendentesMouseClicked(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
-
-        jMenuBar1.add(jMenu1);
+        jListVendasPendentes.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                jListVendasPendentesValueChanged(evt);
+            }
+        });
+        jScrollvendasPendentes.setViewportView(jListVendasPendentes);
 
         setJMenuBar(jMenuBar1);
 
@@ -215,11 +165,29 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jScrollvendasPendentes)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(54, 54, 54)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel30, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jTextFieldCodigo, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jTextFieldObservacoes)
+                                    .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextFieldProduto)
+                                    .addComponent(jTextFieldPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -227,193 +195,58 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jTextFieldApelido)
-                                    .addComponent(jTextFieldId, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                        .addGap(24, 24, 24)
-                                        .addComponent(jButtonSolicitarContato)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButtonEnviar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addComponent(jLabelMensagemProgresso, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonProximo, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel34, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel30, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jCheckBoxNumeroConfirmado)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jTextFieldCodigo, javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jTextFieldObservacoes)
-                                        .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jTextFieldProduto)
-                                        .addComponent(jTextFieldPagamento)))))
+                                    .addComponent(jTextFieldId, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabelMensagem, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
-                        .addGap(89, 89, 89))
+                        .addComponent(jButtonCarregar, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel8)
+                        .addComponent(jLabel34)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBoxDialogVendasPendentes, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(4, 4, 4)
-                        .addComponent(jButtonCarregar, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addComponent(jCheckBoxNumeroConfirmado)))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(jComboBoxDialogVendasPendentes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(jTextFieldApelido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonCarregar))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelMensagem)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(jTextFieldApelido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(jTextFieldId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextFieldProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(jTextFieldPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7)
-                            .addComponent(jTextFieldCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel30)
-                            .addComponent(jTextFieldObservacoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(9, 9, 9)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jCheckBoxNumeroConfirmado)
-                            .addComponent(jLabel34))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButtonSolicitarContato)
-                            .addComponent(jButtonEnviar)
-                            .addComponent(jButtonProximo)
-                            .addComponent(jButtonDeletar))
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabelMensagemProgresso)))
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jTextFieldId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(11, 11, 11)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jTextFieldPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jTextFieldCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel30)
+                    .addComponent(jTextFieldObservacoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(7, 7, 7)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCheckBoxNumeroConfirmado)
+                    .addComponent(jLabel34))
+                .addGap(29, 29, 29)
+                .addComponent(jScrollvendasPendentes, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jComboBoxDialogVendasPendentesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxDialogVendasPendentesActionPerformed
-        ven = (VendasPendentes) VariaveisDeControle.jComboBoxModelDialogVendasPendentes.getSelectedItem();
-        limparCampos();
-        if (VariaveisDeControle.jComboBoxModelDialogVendasPendentes.getSelectedItem() == null) {
-
-        } else {
-            preencheCamposAnaliseVendas();
-        }
-    }//GEN-LAST:event_jComboBoxDialogVendasPendentesActionPerformed
-
-    private void jButtonSolicitarContatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSolicitarContatoActionPerformed
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (new VendasPendentesDAO().marcaComoPendente(ven.getId_venda(), "Contato solicitado e aguardando")) {
-                    limparCampos();
-                    VariaveisDeControle.listVen.remove(ven);
-                    jLabelMensagemProgresso.setText("");
-                    jComboBoxDialogVendasPendentes.removeItem(ven);
-                    carregarDadosVendasPendentes(false);
-                }
-            }
-        }).start();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String corpo = "Para que seu código seja enviado, por favor entre em contato pelo whastapp 91980452185. Essa verificação está informada no anúncio e é bem rápida. Aguardo :)";
-                new EmailService(ven.getEmail(), "Contato Pendente",corpo ).sendEmail(ven.getApelido());
-            }
-        }).start();
-    }//GEN-LAST:event_jButtonSolicitarContatoActionPerformed
-
-    private void jButtonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEnviarActionPerformed
-        VendasPendentes v = ven;
-        jLabelMensagemProgresso.setText("Gravando...");
-        if (v.getCodigo() == null || v.getIdCodigo() == 0) {
-            JOptionPane.showMessageDialog(null, "A venda não pode ser enviada pois não possui código válido");
-        } else {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    new EnviarCodigos().setCodigoNaVendaNoBanco(v);
-                    new EnviarCodigos().enviarCodigoUmaVenda(v, false, null, null);
-                }
-            }).start();
-            jLabelMensagemProgresso.setText("");
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {                    
-                    VariaveisDeControle.listVen.remove(v);
-                    VariaveisDeControle.jComboBoxModelDialogVendasPendentes.removeElement(v);
-                    carregarDadosVendasPendentes(false);
-                }
-            }).start();
-        }
-    }//GEN-LAST:event_jButtonEnviarActionPerformed
-
-    private void jButtonProximoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonProximoActionPerformed
-        VendasPendentes ven = this.ven;
-        limparCampos();
-        VariaveisDeControle.listVen.remove(ven);
-        VariaveisDeControle.jComboBoxModelDialogVendasPendentes.removeElement(ven);
-        jLabelMensagemProgresso.setText("");
-        Runnable rr = () -> {
-            carregarDadosVendasPendentes(false);
-        };
-        Thread tt = new Thread(rr);
-        tt.start();
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonProximoActionPerformed
-
-    private void jButtonDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeletarActionPerformed
-        VendasPendentes ven = this.ven;
-        int opcao = JOptionPane.showConfirmDialog(null, "Excluir a venda " + ven.getId_venda() + "?", "Excluir venda?", JOptionPane.YES_NO_OPTION);
-        if (opcao == 0) {
-            limparCampos();
-            jLabelMensagemProgresso.setText("");
-            System.err.println(ven.getId_venda());
-            new VendasPendentesDAO().remove(ven.getId_venda());
-            VariaveisDeControle.listVen.remove(ven);
-            VariaveisDeControle.jComboBoxModelDialogVendasPendentes.removeElement(ven);
-            Runnable rr = () -> {
-                carregarDadosVendasPendentes(false);
-            };
-            Thread tt = new Thread(rr);
-            tt.start();
-        }
-    }//GEN-LAST:event_jButtonDeletarActionPerformed
 
     private void jTextFieldCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldCodigoActionPerformed
         // TODO add your handling code here:
@@ -422,18 +255,20 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
     private void jCheckBoxNumeroConfirmadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxNumeroConfirmadoActionPerformed
         int i = JOptionPane.showConfirmDialog(null, "Deseja mesmo confirmar o número?", "Confirmar numero", JOptionPane.YES_NO_OPTION);        // TODO add your handling code here:
         if (i == 0) {
-            String s = JOptionPane.showInputDialog("Numero :" + new ClienteDAO().getCliente(ven.getApelido()).getTelefone()+ "\nDeseja adicionar outro?");
-            if(null == s){
-                
-            } else switch (s) {
-                case "":
-                    new ClienteDAO().setNumeroConfimado(ven.getApelido(),s);
-                    break;
-                default:
-                    new ClienteDAO().setNumeroConfimado(ven.getApelido(),"|"+s);
-                    break;
+            String s = JOptionPane.showInputDialog("Numero :" + new ClienteDAO().getCliente(ven.getApelido()).getTelefone() + "\nDeseja adicionar outro?");
+            if (null == s) {
+
+            } else {
+                switch (s) {
+                    case "":
+                        new ClienteDAO().setNumeroConfimado(ven.getApelido(), s);
+                        break;
+                    default:
+                        new ClienteDAO().setNumeroConfimado(ven.getApelido(), "|" + s);
+                        break;
+                }
             }
-            
+
         }
     }//GEN-LAST:event_jCheckBoxNumeroConfirmadoActionPerformed
 
@@ -445,57 +280,71 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldProdutoActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        VendasPendentes ven = this.ven;
-        if (VariaveisDeControle.listaCarregando) {
-            JOptionPane.showMessageDialog(null, "A lista está sendo carregada, aguarde!");
-        } else {
-            if (VariaveisDeControle.listVen.isEmpty()) {
-                new InsereCodigoNasVendasParaEnvio().carregaListaVendasPendentes(true);
-                if (!VariaveisDeControle.codigosCarregadosListVen && !VariaveisDeControle.carregandoCodigosNasVendas && VariaveisDeControle.listaCarregando) {
-                    new InsereCodigoNasVendasParaEnvio().getCodigosUtilizaveis();
-                }
-            } else {
-                int i = JOptionPane.showConfirmDialog(null, "Deseja carregar a lista novamente?", "Confirmar", JOptionPane.YES_NO_OPTION);
-                if (i == 0) {
-                    VariaveisDeControle.carregarVendasPendentesECodigos();
-                }
-            }
-        }
-        if (VariaveisDeControle.listVen.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Não há vendas pendentes no momento!");
-        }
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
     private void jButtonCarregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCarregarActionPerformed
-        if (VariaveisDeControle.listaCarregando) {
-            JOptionPane.showMessageDialog(null, "A lista está sendo carregada, aguarde!");
-        } else if (VariaveisDeControle.jComboBoxModelDialogVendasPendentes.getSize() == 0) {
-            jComboBoxDialogVendasPendentes.setModel(VariaveisDeControle.jComboBoxModelDialogVendasPendentes);
-            for (int i = 0; i < VariaveisDeControle.listVen.size(); i++) {
-                VariaveisDeControle.jComboBoxModelDialogVendasPendentes.insertElementAt(VariaveisDeControle.listVen.get(i), i);
+        new Thread(() -> {
+            if (VariaveisDeControle.listaCarregando) {
+                JOptionPane.showMessageDialog(null, "A lista está sendo carregada, aguarde!");
+            } else if (VariaveisDeControle.jModelList.getSize() == 0) {
+                VariaveisDeControle.carregarVendasPendentesECodigos();
+                for (int i = 0; i < VariaveisDeControle.listVen.size(); ++i) {
+                    VariaveisDeControle.jModelList.insertElementAt(VariaveisDeControle.listVen.get(i), i);
+                }
+                this.desbloqueiaComponentes();
+                jListVendasPendentes.setSelectedIndex(0);
+            } else {
+                jListVendasPendentes.setModel(VariaveisDeControle.jModelList);
+                this.desbloqueiaComponentes();
+                jListVendasPendentes.setSelectedIndex(0);
             }
-            desbloqueiaComponentes();
-        } else {
-            jComboBoxDialogVendasPendentes.setModel(VariaveisDeControle.jComboBoxModelDialogVendasPendentes);
-            desbloqueiaComponentes();
-        }
+        }).start();
+        //   ---
     }//GEN-LAST:event_jButtonCarregarActionPerformed
 
     private void closing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_closing
         VariaveisDeControle.frameAnaliseVendasAberto = false;
     }//GEN-LAST:event_closing
 
+    private void jListVendasPendentesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListVendasPendentesValueChanged
+        if (VariaveisDeControle.jModelList.getSize() != 0 && jListVendasPendentes.getSelectedIndex() > -1) {
+                VariaveisDeControle.indexItemSelecionado = jListVendasPendentes.getSelectedIndex();
+                ven = VariaveisDeControle.listVen.get(VariaveisDeControle.indexItemSelecionado);
+                preencheCamposAnaliseVendas();
+        }
+    }//GEN-LAST:event_jListVendasPendentesValueChanged
+
+    private void jListVendasPendentesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListVendasPendentesMouseClicked
+        if ((evt.getModifiers() & MouseEvent.BUTTON3_MASK) != 0) {
+            JPopupMenu menu = new JPopupMenu();
+            JMenuItem enviar = new JMenuItem("Enviar");
+            JMenuItem excluir = new JMenuItem("Excluir");
+            JMenuItem solicitarContato = new JMenuItem("Solicitar Contato");
+            enviar.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent ae) {
+                    enviarVenda(ven);
+                }
+            });
+            excluir.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent ae) {
+                    excluirVenda(ven);
+                }
+            });
+            solicitarContato.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent ae) {
+                    solicitarContato(ven);
+                }
+            });
+            menu.add(enviar);
+            menu.add(excluir);
+            menu.add(solicitarContato);
+            menu.show(this, evt.getX(), evt.getY());
+        }
+// TODO add your handling code here:
+    }//GEN-LAST:event_jListVendasPendentesMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCarregar;
-    private javax.swing.JButton jButtonDeletar;
-    private javax.swing.JButton jButtonEnviar;
-    private javax.swing.JButton jButtonProximo;
-    private javax.swing.JButton jButtonSolicitarContato;
     private javax.swing.JCheckBox jCheckBoxNumeroConfirmado;
-    private javax.swing.JComboBox<String> jComboBoxDialogVendasPendentes;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
@@ -504,12 +353,9 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabelMensagem;
-    private javax.swing.JLabel jLabelMensagemProgresso;
-    private javax.swing.JMenu jMenu1;
+    private static javax.swing.JList<String> jListVendasPendentes;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JScrollPane jScrollvendasPendentes;
     private javax.swing.JTextField jTextFieldApelido;
     private javax.swing.JTextField jTextFieldCodigo;
     private javax.swing.JTextField jTextFieldEmail;
@@ -522,14 +368,11 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
     public void carregarDadosVendasPendentes(boolean primeiroCarregamento) {
         if (!VariaveisDeControle.listaCarregando) {
             if (!VariaveisDeControle.listVen.isEmpty()) {
-                System.out.println("List isEmpty: " + VariaveisDeControle.listVen.isEmpty());
                 ven = VariaveisDeControle.listVen.get(0);
-                jComboBoxDialogVendasPendentes.setSelectedIndex(0);
+                jListVendasPendentes.setSelectedIndex(0);
+                InternalEnviosManuais.getJList().setSelectedIndex(0);
                 System.out.println(ven);
-
-                if (VariaveisDeControle.carregamentoCodigoManual) {
-                    VariaveisDeControle.carregamentoCodigoManual = false;
-                }
+                VariaveisDeControle.carregamentoCodigoManual = false;
                 preencheCamposAnaliseVendas();
                 desbloqueiaComponentes();
 
@@ -541,7 +384,8 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
                     JOptionPane.showMessageDialog(null, "Não há vendas pendentes no momento");
                     VariaveisDeControle.codigosCarregadosListVen = false;
                     VariaveisDeControle.listVen.clear();
-                    VariaveisDeControle.jComboBoxModelDialogVendasPendentes.removeAllElements();
+                    jListVendasPendentes.removeAll();
+                    InternalEnviosManuais.getJList().removeAll();
                     bloqueiaComponentes();
                 }
             }
@@ -549,24 +393,14 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
     }
 
     private void desbloqueiaComponentes() {
-        jButtonEnviar.setEnabled(true);
-        jButtonSolicitarContato.setEnabled(true);
-        jButtonProximo.setEnabled(true);
-        jButtonDeletar.setEnabled(true);
-        jComboBoxDialogVendasPendentes.setEnabled(true);
+        jListVendasPendentes.setEnabled(true);
     }
 
     private void bloqueiaComponentes() {
-        jComboBoxDialogVendasPendentes.setEnabled(false);
-        jButtonProximo.setEnabled(false);
-        jButtonSolicitarContato.setEnabled(false);
-        jButtonEnviar.setEnabled(false);
-        jButtonDeletar.setEnabled(false);
+        jListVendasPendentes.setEnabled(false);
     }
 
     private void limparCampos() {
-        jLabelMensagemProgresso.setText("");
-        jLabelMensagem.setText("");
         jTextFieldApelido.setText("");
         jTextFieldId.setText("");
         jTextFieldEmail.setText("");
@@ -578,6 +412,7 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
     }
 
     private void preencheCamposAnaliseVendas() {
+        VendasPendentes ven = this.ven;
         jTextFieldObservacoes.setText(ven.getObservacoes());
         jTextFieldApelido.setText(ven.getApelido());
         jTextFieldEmail.setText(ven.getEmail());
@@ -585,6 +420,75 @@ public class InternalFrameAnaliseVendaPendentes extends javax.swing.JInternalFra
         jTextFieldPagamento.setText(ven.getPagamento());
         jTextFieldCodigo.setText(ven.getCodigo());
         jTextFieldId.setText(ven.getId_venda());
+        if (InternalEnviosManuais.getJList() != null) {
+            InternalEnviosManuais.getJList().setSelectedIndex(VariaveisDeControle.indexItemSelecionado);
+        }
     }
 
+    private void excluirDaLista(VendasPendentes v) {
+        VendasPendentes ven = new VendasPendentes();
+        VariaveisDeControle.listVen.remove(VariaveisDeControle.indexItemSelecionado);
+        VariaveisDeControle.jModelList.removeElementAt(VariaveisDeControle.indexItemSelecionado);
+    }
+
+    public static JList getJList() {
+        return jListVendasPendentes;
+    }
+
+    private void excluirVenda(VendasPendentes ven) {
+        int opcao = JOptionPane.showConfirmDialog(null, "Excluir a venda " + ven.getId_venda() + "?", "Excluir venda?", JOptionPane.YES_NO_OPTION);
+        if (opcao == 0) {
+            limparCampos();
+            new VendasPendentesDAO().remove(ven.getId_venda());
+            excluirDaLista(ven);
+            Runnable rr = () -> {
+                carregarDadosVendasPendentes(false);
+            };
+            Thread tt = new Thread(rr);
+            tt.start();
+        }
+    }
+
+    private void enviarVenda(VendasPendentes ven) {
+        VendasPendentes v = ven;
+        if (v.getCodigo() == null || v.getIdCodigo() == 0) {
+            JOptionPane.showMessageDialog(null, "A venda não pode ser enviada pois não possui código válido");
+        } else {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    new EnviarCodigos().setCodigoNaVendaNoBanco(v);
+                    new EnviarCodigos().enviarCodigoUmaVenda(v, false, null, null);
+                }
+            }).start();
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    excluirDaLista(v);
+                    carregarDadosVendasPendentes(false);
+                }
+            }).start();
+        }
+    }
+
+    private void solicitarContato(VendasPendentes ven) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (new VendasPendentesDAO().marcaComoPendente(ven.getId_venda(), "Contato solicitado e aguardando")) {
+                    limparCampos();
+                    excluirDaLista(ven);
+                    carregarDadosVendasPendentes(false);
+                }
+            }
+        }).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String corpo = "Para que seu código seja enviado, por favor entre em contato pelo whastapp 91980452185. Essa verificação está informada no anúncio e é bem rápida. Aguardo :)";
+                new EmailService(ven.getEmail(), "Contato Pendente", corpo).sendEmail(ven.getApelido());
+            }
+        }).start();
+    }
 }
